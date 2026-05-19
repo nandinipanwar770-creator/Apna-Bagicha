@@ -83,11 +83,15 @@
     <div class="mx-6 mb-4 flex bg-gray-100 rounded-xl p-1 gap-1">
       <button id="tabOtp" onclick="switchAuthTab('otp')"
         class="flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all tab-active">
-        📱 Mobile OTP
+        📱 OTP
       </button>
       <button id="tabPass" onclick="switchAuthTab('pass')"
         class="flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all tab-inactive">
-        🔑 Password
+        🔑 Login
+      </button>
+      <button id="tabReg" onclick="switchAuthTab('reg')"
+        class="flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all tab-inactive">
+        ✏️ Register
       </button>
     </div>
 
@@ -239,6 +243,42 @@
 
     </div>
 
+    <!-- ── Register panel ── -->
+    <div id="regPanel" class="px-6 pb-7 hidden">
+      <div class="mb-5">
+        <h2 class="text-xl font-bold text-gray-800">Create Account</h2>
+        <p class="text-sm text-gray-500 mt-1">It's free — takes less than a minute</p>
+      </div>
+      <form method="POST" action="/register" class="space-y-3">
+        <input type="hidden" name="next" value="{{ next }}">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
+          <input type="text" name="name" class="form-input" placeholder="Ramesh Kumar" required autofocus>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address <span class="text-red-400">*</span></label>
+          <input type="email" name="email" class="form-input" placeholder="you@email.com" required>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Mobile Number <span class="text-xs font-normal text-gray-400">(optional)</span></label>
+          <input type="tel" name="phone" class="form-input" placeholder="98765 43210">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password <span class="text-red-400">*</span></label>
+          <input type="password" name="password" class="form-input" placeholder="Minimum 6 characters" required minlength="6">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Confirm Password <span class="text-red-400">*</span></label>
+          <input type="password" name="confirm_password" class="form-input" placeholder="Repeat your password" required>
+        </div>
+        <button type="submit" class="btn-primary !mt-4">Create Account →</button>
+      </form>
+      <p class="text-center text-sm text-gray-500 mt-4">
+        Already have an account?
+        <button onclick="switchAuthTab('pass')" class="text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans">Sign in</button>
+      </p>
+    </div>
+
     <!-- Footer -->
     <div class="border-t border-gray-100 py-3 text-center">
       <a href="/" class="text-xs text-gray-400 hover:text-gray-600 transition-colors no-underline">← Back to Website</a>
@@ -254,12 +294,13 @@ var nextUrl      = '{{ next }}' || '/';
 
 /* ── Tab switching ── */
 function switchAuthTab(tab) {
-  var isOtp = tab === 'otp';
-  document.getElementById('tabOtp').className   = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (isOtp  ? 'tab-active' : 'tab-inactive');
-  document.getElementById('tabPass').className  = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (!isOtp ? 'tab-active' : 'tab-inactive');
-  document.getElementById('step1').classList.toggle('hidden', !isOtp);
+  document.getElementById('tabOtp').className  = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (tab === 'otp'  ? 'tab-active' : 'tab-inactive');
+  document.getElementById('tabPass').className = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (tab === 'pass' ? 'tab-active' : 'tab-inactive');
+  document.getElementById('tabReg').className  = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (tab === 'reg'  ? 'tab-active' : 'tab-inactive');
+  document.getElementById('step1').classList.toggle('hidden', tab !== 'otp');
   document.getElementById('step2').classList.add('hidden');
-  document.getElementById('passPanel').classList.toggle('hidden', isOtp);
+  document.getElementById('passPanel').classList.toggle('hidden', tab !== 'pass');
+  document.getElementById('regPanel').classList.toggle('hidden', tab !== 'reg');
   hideMsg();
 }
 
@@ -461,8 +502,7 @@ function showLoginForm() {
 
 // Auto-show register form if ?mode=register in URL
 if (new URLSearchParams(window.location.search).get('mode') === 'register') {
-  switchAuthTab('pass');
-  showRegisterForm();
+  switchAuthTab('reg');
 }
 
 function goBack() {
