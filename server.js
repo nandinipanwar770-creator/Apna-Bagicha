@@ -25,10 +25,9 @@ const uploadStorage = multer.diskStorage({
 });
 const upload = multer({ storage: uploadStorage });
 
-const razorpay = new Razorpay({
-  key_id:     process.env.RAZORPAY_KEY_ID     || '',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || '',
-});
+const razorpay = (process.env.RAZORPAY_KEY_ID && !process.env.RAZORPAY_KEY_ID.includes('xxx'))
+  ? new Razorpay({ key_id: process.env.RAZORPAY_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET || '' })
+  : null;
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -292,6 +291,7 @@ app.get('/order-success/:order_id', async (req, res) => {
 
 // ── Razorpay: Create Order ────────────────────────────────────────────────────
 app.post('/create-razorpay-order', async (req, res) => {
+  if (!razorpay) return res.status(503).json({ error: 'Payment gateway not configured.' });
   const { amount } = req.body;
   if (!amount || isNaN(amount))
     return res.status(400).json({ error: 'Invalid amount' });
