@@ -1,0 +1,484 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Apna Bagicha</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/contact.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'green-dark': '#2d5a27',
+            'green-main': '#3a7032',
+            'green-light': '#4a8a3a',
+            'gold': '#d4a843',
+            'cream': '#f5f0e8',
+            'cream-light': '#fdf8f0',
+          },
+          fontFamily: {
+            'sans': ['DM Sans', 'sans-serif'],
+            'dancing': ['Dancing Script', 'cursive'],
+            'playfair': ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/common.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=DM+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* Ticker animation (matches index.html) */
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex;
+      gap: 80px;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      animation: marquee 28s linear infinite;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      background: #fafafa;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .form-input:focus {
+      border-color: #3a7032;
+      box-shadow: 0 0 0 3px rgba(58, 112, 50, 0.1);
+      background: #fff;
+    }
+
+    .form-input::placeholder {
+      color: #b0b8b0;
+    }
+
+    textarea.form-input {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* ── Thank You Overlay ───────────────────────────────── */
+    @keyframes tyCirclePop {
+      0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+      65%  { transform: scale(1.18) rotate(6deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg);   opacity: 1; }
+    }
+    @keyframes tyFadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes tySparkFloat {
+      0%,100% { transform: translateY(0) rotate(0deg) scale(1);   opacity: 0.5; }
+      50%     { transform: translateY(-24px) rotate(210deg) scale(1.4); opacity: 1; }
+    }
+    @keyframes tyRingPulse {
+      0%   { box-shadow: 0 0 0 0 rgba(58,112,50,0.45); }
+      70%  { box-shadow: 0 0 0 18px rgba(58,112,50,0); }
+      100% { box-shadow: 0 0 0 0 rgba(58,112,50,0); }
+    }
+    @keyframes tyOverlayIn  { from { opacity:0; } to { opacity:1; } }
+    @keyframes tyOverlayOut { from { opacity:1; } to { opacity:0; } }
+
+    #contactThankYou         { animation: tyOverlayIn  0.35s ease forwards; }
+    #contactThankYou.ty-out  { animation: tyOverlayOut 0.45s ease forwards; }
+
+    .ty-circle.go  { animation: tyCirclePop  0.65s cubic-bezier(.175,.885,.32,1.275) 0.08s forwards,
+                                tyRingPulse  1.2s ease 0.7s infinite; }
+    .ty-heading.go { animation: tyFadeUp 0.5s ease 0.40s forwards; }
+    .ty-subtext.go { animation: tyFadeUp 0.5s ease 0.54s forwards; }
+    .ty-emoji.go   { animation: tyFadeUp 0.5s ease 0.68s forwards; }
+    .ty-spark      { position: absolute; border-radius: 50%; opacity: 0; }
+    .ty-spark.go   { animation: tySparkFloat var(--dur,2s) ease var(--del,0s) infinite; }
+  </style>
+</head>
+
+<body class="m-0 font-sans bg-cream-light overflow-x-hidden">
+
+  <!-- TOPBAR: scrolling announcement ticker -->
+  <div class="fixed top-0 w-full z-[1001] bg-gradient-to-r from-green-dark to-green-main text-white overflow-hidden"
+       style="height:32px; display:flex; align-items:center;">
+    <div style="display:flex; gap:80px; white-space:nowrap; font-size:11px; font-weight:600; letter-spacing:0.06em; animation:marquee 28s linear infinite;">
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:-2px;margin-right:5px"><path d="M12 20v-8" stroke="#a7f3d0" stroke-width="2.5" stroke-linecap="round"/><path d="M12 12c0-3.5-2.5-6-6.5-7 0 3.5 2.5 6.5 6.5 7z" fill="#a7f3d0"/><path d="M12 12c0-3.5 2.5-6 6.5-7 0 3.5-2.5 6.5-6.5 7z" fill="#6ee7b7"/></svg>Apna Bagicha — Your Partner in Smart Farming</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:-2px;margin-right:5px"><path d="M6.6 10.8C8.2 13.9 10.1 15.8 13.2 17.4L15.2 15.4C15.5 15.1 16 15 16.4 15.1C17.6 15.5 18.8 15.7 20 15.7C20.6 15.7 21 16.1 21 16.7V20C21 20.6 20.6 21 20 21C10.6 21 3 13.4 3 4C3 3.4 3.4 3 4 3H7.3C7.9 3 8.3 3.4 8.3 4C8.3 5.2 8.5 6.4 8.9 7.6C9 8 8.9 8.5 8.6 8.8L6.6 10.8Z" fill="#a7f3d0"/></svg>Free Agronomist Helpline: +91 9876543210</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:-2px;margin-right:5px"><rect x="1" y="8" width="12" height="9" rx="1.5" fill="#93c5fd"/><path d="M13 11h4l3 3v4h-7v-7z" fill="#60a5fa"/><circle cx="4.5" cy="18.5" r="1.5" fill="#1e3a5f"/><circle cx="16.5" cy="18.5" r="1.5" fill="#1e3a5f"/></svg>Pan-India Delivery Available</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:-2px;margin-right:5px"><rect x="3" y="5" width="18" height="14" rx="2" fill="#fdba74"/><path d="M3 7L12 13L21 7" stroke="#c2410c" stroke-width="2" fill="none"/></svg>support@apnabagicha.com</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:-2px;margin-right:5px"><path d="M12 20v-8" stroke="#a7f3d0" stroke-width="2.5" stroke-linecap="round"/><path d="M12 12c0-3.5-2.5-6-6.5-7 0 3.5 2.5 6.5 6.5 7z" fill="#a7f3d0"/><path d="M12 12c0-3.5 2.5-6 6.5-7 0 3.5-2.5 6.5-6.5 7z" fill="#6ee7b7"/></svg>Apna Bagicha — Your Partner in Smart Farming</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:-2px;margin-right:5px"><path d="M6.6 10.8C8.2 13.9 10.1 15.8 13.2 17.4L15.2 15.4C15.5 15.1 16 15 16.4 15.1C17.6 15.5 18.8 15.7 20 15.7C20.6 15.7 21 16.1 21 16.7V20C21 20.6 20.6 21 20 21C10.6 21 3 13.4 3 4C3 3.4 3.4 3 4 3H7.3C7.9 3 8.3 3.4 8.3 4C8.3 5.2 8.5 6.4 8.9 7.6C9 8 8.9 8.5 8.6 8.8L6.6 10.8Z" fill="#a7f3d0"/></svg>Free Agronomist Helpline: +91 9876543210</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:-2px;margin-right:5px"><rect x="1" y="8" width="12" height="9" rx="1.5" fill="#93c5fd"/><path d="M13 11h4l3 3v4h-7v-7z" fill="#60a5fa"/><circle cx="4.5" cy="18.5" r="1.5" fill="#1e3a5f"/><circle cx="16.5" cy="18.5" r="1.5" fill="#1e3a5f"/></svg>Pan-India Delivery Available</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:-2px;margin-right:5px"><rect x="3" y="5" width="18" height="14" rx="2" fill="#fdba74"/><path d="M3 7L12 13L21 7" stroke="#c2410c" stroke-width="2" fill="none"/></svg>support@apnabagicha.com</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <div id="navbar"
+       class="fixed top-[32px] w-full z-[1000] bg-white/96 flex justify-between items-center py-3 px-6 transition-all duration-300 navbar border-b border-gray-100">
+
+    <a href="index.html" class="flex items-center gap-2.5 no-underline">
+      <img src="/images/logo.svg" onerror="this.src='/images/logo.png'"
+           alt="Apna Bagicha Logo" class="w-[46px] h-[46px] object-contain hover:scale-105 transition-transform duration-300">
+      <span class="font-dancing text-[1.8rem] font-bold leading-none cursor-pointer">
+        <span class="text-green-800">Apna</span>
+        <span class="text-orange-500">Bagicha</span>
+      </span>
+    </a>
+
+    <div class="menu hidden md:flex items-center">
+      <a href="index.html"    class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Home</a>
+      <a href="products.html" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Products</a>
+      <a href="about.html"    class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">About</a>
+      <a href="blog.html"     class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Blog</a>
+      <a href="contact.html"  class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium active">Contact</a>
+      <div id="navAuthArea" class="inline-flex items-center"></div>
+      <a href="contact.html"
+         class="nav-cta ml-3 bg-green-main text-white px-5 py-2 rounded-full text-[13px] font-semibold hover:bg-green-dark transition-all no-underline shadow-sm">
+        Get Quote
+      </a>
+    </div>
+
+    <button class="menu-toggle block md:hidden p-1.5 rounded-lg hover:bg-gray-100 transition-colors bg-transparent border-0 cursor-pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2.5" stroke-linecap="round">
+        <line x1="3" y1="7"  x2="21" y2="7"  />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="17" x2="21" y2="17" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="pt-[90px]"></div>
+
+  <!-- ========== HERO BANNER ========== -->
+  <div
+    class="relative bg-gradient-to-br from-[#1b5e20] via-green-dark to-[#2d6b28] text-white text-center hidden py-[88px] px-6 overflow-hidden">
+    <svg class="absolute right-0 top-0 opacity-[0.06] pointer-events-none" width="380" height="380"
+      viewBox="0 0 380 380" fill="none">
+      <circle cx="320" cy="60" r="250" stroke="white" stroke-width="65" />
+      <circle cx="320" cy="60" r="130" stroke="white" stroke-width="30" />
+    </svg>
+    <svg class="absolute left-[-50px] bottom-[-40px] opacity-[0.05] pointer-events-none" width="240" height="240"
+      viewBox="0 0 240 240" fill="none">
+      <circle cx="0" cy="240" r="170" stroke="white" stroke-width="50" />
+    </svg>
+
+    <div class="relative z-10 max-w-[600px] mx-auto">
+      <div
+        class="inline-flex items-center gap-2 border border-white/30 rounded-full px-4 py-1.5 text-[11px] font-semibold tracking-widest uppercase mb-6 text-white/80 bg-white/8">
+        <span class="w-[6px] h-[6px] rounded-full bg-gold inline-block"></span>
+        Get In Touch
+      </div>
+      <h1 class="font-playfair text-[clamp(1.9rem,4.5vw,3rem)] mb-4 fade-up leading-[1.15]">
+        Grow Something <em class="text-gold italic">Beautiful</em>
+      </h1>
+      <p class="text-[15px] text-white/65 fade-up leading-relaxed">From soil to success — connect with our expert team
+        today.</p>
+    </div>
+
+    <div class="absolute bottom-0 left-0 w-full leading-[0]">
+      <svg viewBox="0 0 1440 55" preserveAspectRatio="none" class="block w-full">
+        <path d="M0,0 C480,55 960,55 1440,0 L1440,55 L0,55 Z" fill="#fdf8f0" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- ========== CONTACT CARDS ========== -->
+  <section class="py-[64px] px-[6vw] bg-cream-light">
+    <div class="max-w-[900px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div
+        class="bg-white rounded-[20px] p-7 shadow-[0_4px_24px_rgba(0,0,0,0.08)] text-center hover:-translate-y-2 hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-all border-b-4 border-green-main">
+        <div class="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center mx-auto mb-4">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 21c-4.418 0-8-4-8-9a8 8 0 1116 0c0 5-3.582 9-8 9z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-[15px] text-gray-800 mb-2">Our Location</h3>
+        <p class="text-[13.5px] text-gray-500 leading-relaxed">Muzaffarnagar,<br>Uttar Pradesh, India</p>
+      </div>
+
+      <div
+        class="bg-white rounded-[20px] p-7 shadow-[0_4px_24px_rgba(0,0,0,0.08)] text-center hover:-translate-y-2 hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-all border-b-4 border-gold">
+        <div class="w-14 h-14 rounded-2xl bg-yellow-50 flex items-center justify-center mx-auto mb-4">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#d4a843" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.63a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-[15px] text-gray-800 mb-2">Call Us</h3>
+        <a href="tel:+7417002360"
+          class="text-[13.5px] text-gray-500 hover:text-green-main transition-colors no-underline leading-relaxed">+91
+          9876543210<br><span class="text-[12px] text-gray-400">Mon–Sat, 9 AM – 6 PM</span></a>
+      </div>
+
+      <div
+        class="bg-white rounded-[20px] p-7 shadow-[0_4px_24px_rgba(0,0,0,0.08)] text-center hover:-translate-y-2 hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-all border-b-4 border-[#4a8a3a]">
+        <div class="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center mx-auto mb-4">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-[15px] text-gray-800 mb-2">Email Us</h3>
+        <a href="mailto:support@apnabagicha.com"
+          class="text-[13.5px] text-gray-500 hover:text-green-main transition-colors no-underline leading-relaxed">support@apnabagicha.com<br><span
+            class="text-[12px] text-gray-400">Reply within 24 hours</span></a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== FORM + INFO ========== -->
+  <section class="py-[64px] px-[6vw] bg-cream">
+    <div class="max-w-[1000px] mx-auto flex flex-col md:flex-row gap-8">
+
+      <!-- FORM -->
+      <div class="flex-1 bg-white rounded-[24px] p-8 shadow-[0_4px_28px_rgba(0,0,0,0.08)]" style="position:relative;overflow:hidden;">
+        <div class="section-badge mb-6">
+          <span class="w-2 h-2 rounded-full bg-green-main inline-block"></span>Send a Message
+        </div>
+        <h2 class="font-playfair text-[1.6rem] text-green-dark font-bold mb-6">We're Here to Listen</h2>
+
+        <input type="text" id="name" placeholder="Your Full Name" class="form-input">
+        <input type="email" id="email" placeholder="Your Email Address" class="form-input">
+        <input type="tel" id="phone" placeholder="Phone Number (Optional)" class="form-input">
+        <textarea id="msg" placeholder="Your message or query..." class="form-input"></textarea>
+
+        <button id="send"
+          class="w-full bg-green-main text-white py-3.5 rounded-full text-[14.5px] font-semibold hover:bg-green-dark transition-all cursor-pointer border-0 flex items-center justify-center gap-2 shadow-md hover:-translate-y-0.5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+            stroke-linecap="round">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+          </svg>
+          Send Message
+        </button>
+        <p id="result" class="mt-4 text-[13.5px] font-semibold text-center"></p>
+
+        <!-- Thank You Overlay -->
+        <div id="contactThankYou" style="display:none;position:absolute;inset:0;border-radius:24px;background:#fff;z-index:20;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 32px;overflow:hidden;">
+          <div class="ty-spark" style="width:13px;height:13px;background:#d4a843;top:16%;left:12%;--dur:2.1s;--del:0.1s;"></div>
+          <div class="ty-spark" style="width:8px; height:8px; background:#3a7032;top:20%;right:10%;--dur:2.6s;--del:0.4s;"></div>
+          <div class="ty-spark" style="width:11px;height:11px;background:#4a8a3a;bottom:26%;left:16%;--dur:1.9s;--del:0.7s;"></div>
+          <div class="ty-spark" style="width:9px; height:9px; background:#d4a843;bottom:20%;right:14%;--dur:2.4s;--del:0.2s;"></div>
+          <div class="ty-spark" style="width:6px; height:6px; background:#f59e0b;top:38%;left:7%; --dur:2.8s;--del:0.9s;"></div>
+          <div class="ty-spark" style="width:7px; height:7px; background:#10b981;bottom:38%;right:7%;--dur:2.0s;--del:0.6s;"></div>
+          <div class="ty-circle" style="width:86px;height:86px;border-radius:50%;background:linear-gradient(135deg,#3a7032,#5aaa4a);display:flex;align-items:center;justify-content:center;margin-bottom:22px;opacity:0;flex-shrink:0;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3 class="ty-heading" style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:#2d5a27;margin:0 0 10px;opacity:0;">Thank You! 🌱</h3>
+          <p class="ty-subtext" style="font-size:14px;color:#6b7280;line-height:1.75;margin:0 0 18px;opacity:0;">Your message has been received.<br>Our agri-experts will reach out to you<br><strong style="color:#3a7032;">within 24 hours.</strong></p>
+          <div class="ty-emoji" style="font-size:22px;letter-spacing:10px;opacity:0;">🌿 💚 🌾</div>
+        </div>
+      </div>
+
+      <!-- INFO PANEL -->
+      <div class="flex-1 flex flex-col gap-5">
+
+        <div class="bg-gradient-to-br from-green-dark to-green-main rounded-[24px] p-7 text-white">
+          <h3 class="font-playfair text-[1.3rem] font-bold mb-3">Why Contact Us?</h3>
+          <p class="text-white/65 text-[13.5px] leading-relaxed mb-5">Our agri-experts help you choose the right
+            products for your soil type, crop variety, and season — for free.</p>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 text-[13.5px]">
+              <span
+                class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-gold text-[11px] font-bold shrink-0">✓</span>
+              <span class="text-white/80">Free expert agronomist advice</span>
+            </div>
+            <div class="flex items-center gap-3 text-[13.5px]">
+              <span
+                class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-gold text-[11px] font-bold shrink-0">✓</span>
+              <span class="text-white/80">Custom bulk order pricing</span>
+            </div>
+            <div class="flex items-center gap-3 text-[13.5px]">
+              <span
+                class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-gold text-[11px] font-bold shrink-0">✓</span>
+              <span class="text-white/80">Fast delivery tracking support</span>
+            </div>
+            <div class="flex items-center gap-3 text-[13.5px]">
+              <span
+                class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-gold text-[11px] font-bold shrink-0">✓</span>
+              <span class="text-white/80">Product certification queries</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[24px] p-6 shadow-[0_4px_24px_rgba(0,0,0,0.07)]">
+          <h4 class="font-bold text-[14.5px] text-gray-800 mb-4">Business Hours</h4>
+          <div class="space-y-2.5">
+            <div class="flex justify-between text-[13.5px]">
+              <span class="text-gray-500">Monday – Friday</span>
+              <span class="font-semibold text-gray-700">9:00 AM – 6:00 PM</span>
+            </div>
+            <div class="flex justify-between text-[13.5px]">
+              <span class="text-gray-500">Saturday</span>
+              <span class="font-semibold text-gray-700">9:00 AM – 4:00 PM</span>
+            </div>
+            <div class="flex justify-between text-[13.5px]">
+              <span class="text-gray-500">Sunday</span>
+              <span class="font-semibold text-red-400">Closed</span>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100">
+            <a href="https://wa.me/7417002360" target="_blank" rel="noopener"
+              class="flex items-center gap-2.5 text-[13.5px] font-semibold text-[#25d366] hover:text-[#1da855] transition-colors no-underline">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <iframe class="w-full block border-0" style="height:300px;"
+    src="https://maps.google.com/maps?q=muzaffarnagar&t=&z=13&ie=UTF8&iwloc=&output=embed" loading="lazy"
+    title="Apna Bagicha Location Map"></iframe>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-[#1a2f17] text-white pt-[60px] pb-[24px] px-[6vw]">
+    <div class="max-w-[1200px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-[48px]">
+        <div>
+          <div class="flex items-center gap-2.5 mb-4">
+            <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Apna Bagicha"
+              class="w-[42px] h-[42px]">
+            <span class="font-dancing text-[1.65rem] font-bold"><span class="text-green-400">Apna</span> <span
+                class="text-orange-400">Bagicha</span></span>
+          </div>
+          <p class="text-white/50 text-[13px] leading-relaxed mb-5 max-w-[260px]">Trusted partner for 12,000+ farmers.
+            Delivering quality agricultural inputs since 2006.</p>
+          <div class="flex gap-2.5">
+            <a href="#"
+              class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">WA</a>
+            <a href="#"
+              class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">FB</a>
+            <a href="#"
+              class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">IG</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-[13px] uppercase tracking-wider mb-5">Quick Links</h4>
+          <a href="index.html" class="footer-link" style="display:flex; align-items:center; gap:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 3L2.5 10.5C2.2 10.7 2 11.1 2 11.5C2 12.3 2.7 13 3.5 13H5V19C5 20.1 5.9 21 7 21H17C18.1 21 19 20.1 19 19V13H20.5C21.3 13 22 12.3 22 11.5C22 11.1 21.8 10.7 21.5 10.5L12 3Z"
+                fill="#4CAF50" />
+              <rect x="6" y="11" width="12" height="9" rx="2" fill="#81C784" />
+              <rect x="10" y="14" width="4" height="6" rx="1" fill="#2E7D32" />
+            </svg>
+            Home
+          </a>
+          <a href="products.html" class="footer-link" style="display:flex; align-items:center; gap:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <!-- Stem -->
+              <rect x="11" y="10" width="2" height="10" rx="1" fill="#2E7D32" />
+
+              <!-- Left leaf -->
+              <path d="M12 10C8 10 6 7 6 5C9 5 12 6.5 12 10Z" fill="#66BB6A" />
+
+              <!-- Right leaf -->
+              <path d="M12 10C16 10 18 7 18 5C15 5 12 6.5 12 10Z" fill="#4CAF50" />
+            </svg>
+            Our Products
+          </a>
+          <a href="about.html" class="footer-link" style="display:flex; align-items:center; gap:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <!-- Back person -->
+              <circle cx="9" cy="8" r="3" fill="#CE93D8" />
+              <path d="M4 18C4 15.5 6.5 14 9 14C11.5 14 14 15.5 14 18V19H4V18Z" fill="#CE93D8" />
+
+              <!-- Front person -->
+              <circle cx="15" cy="9" r="3" fill="#9C27B0" />
+              <path d="M10 19C10 16.5 12.5 15 15 15C17.5 15 20 16.5 20 19V20H10V19Z" fill="#9C27B0" />
+            </svg>
+            About Us
+          </a>
+          <a href="contact.html" class="footer-link" style="display:flex; align-items:center; gap:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M6.6 10.8C8.2 13.9 10.1 15.8 13.2 17.4L15.2 15.4C15.5 15.1 16 15 16.4 15.1C17.6 15.5 18.8 15.7 20 15.7C20.6 15.7 21 16.1 21 16.7V20C21 20.6 20.6 21 20 21C10.6 21 3 13.4 3 4C3 3.4 3.4 3 4 3H7.3C7.9 3 8.3 3.4 8.3 4C8.3 5.2 8.5 6.4 8.9 7.6C9 8 8.9 8.5 8.6 8.8L6.6 10.8Z"
+                fill="#F44336" />
+            </svg>
+            Contact
+          </a>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-[13px] uppercase tracking-wider mb-5">Contact Us</h4>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2.5 text-[13px] text-white/55">
+              <span class="shrink-0 mt-0.5">
+                <svg width="16" height="16" viewBox="0 0 24 24">
+                  <path d="M12 2C8.7 2 6 4.7 6 8C6 12.5 12 22 12 22C12 22 18 12.5 18 8C18 4.7 15.3 2 12 2Z"
+                    fill="#E53935" />
+                  <circle cx="12" cy="8" r="2.5" fill="#FFCDD2" />
+                </svg>
+              </span>
+              <span>Muzaffarnagar, Uttar Pradesh, India</span>
+            </div>
+            <div class="flex items-center gap-2.5 text-[13px] text-white/55"><span> <svg width="18" height="18"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M6.6 10.8C8.2 13.9 10.1 15.8 13.2 17.4L15.2 15.4C15.5 15.1 16 15 16.4 15.1C17.6 15.5 18.8 15.7 20 15.7C20.6 15.7 21 16.1 21 16.7V20C21 20.6 20.6 21 20 21C10.6 21 3 13.4 3 4C3 3.4 3.4 3 4 3H7.3C7.9 3 8.3 3.4 8.3 4C8.3 5.2 8.5 6.4 8.9 7.6C9 8 8.9 8.5 8.6 8.8L6.6 10.8Z"
+                    fill="#F44336" />
+                </svg></span><a href="tel:+7417002360"
+                class="text-white/55 hover:text-gold no-underline transition-colors">+91 9876543210</a></div>
+            <div class="flex items-center gap-2.5 text-[13px] text-white/55"><span><svg width="16" height="16"
+                  viewBox="0 0 24 24">
+                  <rect x="3" y="5" width="18" height="14" rx="2" fill="#FF9800" />
+                  <path d="M3 7L12 13L21 7" fill="none" stroke="#E65100" stroke-width="2" />
+                </svg></span><a href="mailto:support@apnabagicha.com"
+                class="text-white/55 hover:text-gold no-underline transition-colors">support@apnabagicha.com</a></div>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-5 flex flex-col md:flex-row items-center justify-between gap-3">
+        <p class="text-white/35 text-[12px]">© 2026 <span class="text-gold font-semibold">Apna Bagicha</span>. All
+          Rights Reserved.</p>
+        <div class="flex gap-5">
+          <a href="#" class="text-white/30 text-[12px] hover:text-white/55 no-underline transition-colors">Privacy
+            Policy</a>
+          <a href="#" class="text-white/30 text-[12px] hover:text-white/55 no-underline transition-colors">Terms of
+            Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/7417002360" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  </a>
+
+</body>
+
+</html>

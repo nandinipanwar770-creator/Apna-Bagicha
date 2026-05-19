@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — Apna Bagicha</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'green-dark':  '#2d5a27',
+            'green-main':  '#3a7032',
+            'green-light': '#4a8a3a',
+            'gold':        '#d4a843',
+            'cream':       '#f5f0e8',
+            'cream-light': '#fdf8f0',
+          },
+          fontFamily: {
+            'sans':     ['DM Sans', 'sans-serif'],
+            'dancing':  ['Dancing Script', 'cursive'],
+            'playfair': ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/common.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-12px); }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex; gap: 80px; white-space: nowrap;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      animation: marquee 28s linear infinite;
+    }
+    .timeline-line {
+      position: absolute; left: 50%; top: 0; bottom: 0;
+      width: 2px; background: rgba(58,112,50,0.2);
+      transform: translateX(-50%);
+    }
+    .offer-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.11); }
+    .offer-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+  </style>
+</head>
+
+<body class="m-0 font-sans bg-cream-light overflow-x-hidden">
+
+  <!-- TOPBAR -->
+  <div class="fixed top-0 w-full z-[1001] bg-gradient-to-r from-green-dark to-green-main text-white overflow-hidden"
+       style="height:32px;display:flex;align-items:center;">
+    <div class="ticker-track">
+      <span>🌱 100% Certified Organic Inputs</span>
+      <span>🚚 Pan-India Delivery Available</span>
+      <span>🏅 PGS-India &amp; FSSAI Certified</span>
+      <span>📞 Free Agronomist Helpline: +91 9876543210</span>
+      <span>🌾 Trusted by 12,000+ Farmers Across India</span>
+      <span>🌱 100% Certified Organic Inputs</span>
+      <span>🚚 Pan-India Delivery Available</span>
+      <span>🏅 PGS-India &amp; FSSAI Certified</span>
+      <span>📞 Free Agronomist Helpline: +91 9876543210</span>
+      <span>🌾 Trusted by 12,000+ Farmers Across India</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <div class="fixed top-[32px] w-full z-[1000] bg-white/96 flex justify-between items-center py-3 px-6 transition-all duration-300 navbar border-b border-gray-100">
+    <a href="/" class="flex items-center gap-2.5 no-underline">
+      <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Apna Bagicha Logo"
+           class="w-[46px] h-[46px] object-contain hover:scale-105 transition-transform duration-300">
+      <span class="font-dancing text-[1.8rem] font-bold leading-none cursor-pointer">
+        <span class="text-green-800">Apna</span> <span class="text-orange-500">Bagicha</span>
+      </span>
+    </a>
+    <div class="menu hidden md:flex items-center">
+      <a href="/"             class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Home</a>
+      <a href="/products"     class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Products</a>
+      <a href="/about.html"   class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium active">About</a>
+      <a href="/blog.html"    class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Blog</a>
+      <a href="/contact.html" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Contact</a>
+      <div id="navAuthArea" class="inline-flex items-center ml-3"></div>
+      <a href="/contact.html"
+         class="nav-cta ml-3 bg-green-main text-white px-5 py-2 rounded-full text-[13px] font-semibold hover:bg-green-dark transition-all no-underline shadow-sm">
+        Get Quote
+      </a>
+    </div>
+    <button class="menu-toggle block md:hidden p-1.5 rounded-lg hover:bg-gray-100 transition-colors bg-transparent border-0 cursor-pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2.5" stroke-linecap="round">
+        <line x1="3" y1="7"  x2="21" y2="7" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="17" x2="21" y2="17" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="pt-[90px]"></div>
+
+  <!-- WHO WE ARE -->
+  <section class="py-[72px] px-[6vw] bg-cream-light">
+    <div class="max-w-[1100px] mx-auto">
+      <div class="text-center mb-[52px]">
+        <div class="section-badge" style="margin:0 auto 20px;">
+          <span class="w-2 h-2 rounded-full bg-green-main inline-block"></span>Who We Are
+        </div>
+        <h2 class="font-playfair text-[clamp(1.7rem,3vw,2.5rem)] text-green-dark font-bold mb-4">
+          Apna Bagicha — The Farmer's Trusted Partner
+        </h2>
+        <p class="text-[15px] text-gray-500 max-w-[620px] mx-auto leading-relaxed">
+          We are a trusted agricultural inputs company based in Muzaffarnagar, UP — dedicated to making farming more
+          productive, sustainable, and profitable for every Indian farmer and home gardener.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-[20px] p-7 shadow-[0_4px_24px_rgba(0,0,0,0.07)] border-t-4 border-green-main hover:-translate-y-2 hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-all duration-300">
+          <div class="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center text-[22px] mb-5">🌱</div>
+          <h3 class="font-bold text-[16px] text-gray-800 mb-3">Our Mission</h3>
+          <p class="text-[13.5px] text-gray-500 leading-relaxed">To improve farming productivity and soil health by providing accessible, certified, and affordable agricultural inputs to every farmer across India.</p>
+        </div>
+        <div class="bg-white rounded-[20px] p-7 shadow-[0_4px_24px_rgba(0,0,0,0.07)] border-t-4 border-gold hover:-translate-y-2 hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-all duration-300">
+          <div class="w-12 h-12 rounded-2xl bg-yellow-50 flex items-center justify-center text-[22px] mb-5">🌾</div>
+          <h3 class="font-bold text-[16px] text-gray-800 mb-3">Our Vision</h3>
+          <p class="text-[13.5px] text-gray-500 leading-relaxed">To be India's most trusted agri-inputs brand — empowering 1 lakh+ farmers with modern, sustainable, and science-backed farming solutions by 2030.</p>
+        </div>
+        <div class="bg-white rounded-[20px] p-7 shadow-[0_4px_24px_rgba(0,0,0,0.07)] border-t-4 border-green-light hover:-translate-y-2 hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-all duration-300">
+          <div class="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center text-[22px] mb-5">🤝</div>
+          <h3 class="font-bold text-[16px] text-gray-800 mb-3">Our Values</h3>
+          <p class="text-[13.5px] text-gray-500 leading-relaxed">Quality without compromise, trust built from day one, transparent pricing, and continuous support — we grow only when our farmers grow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BANNER -->
+  <section class="py-[72px] px-[6vw] bg-gradient-to-r from-[#1b5e20] to-[#4a8a3a] text-white relative overflow-hidden">
+    <svg class="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice">
+      <circle cx="100" cy="150" r="250" fill="white" />
+      <circle cx="700" cy="50"  r="180" fill="white" />
+    </svg>
+    <div class="max-w-[1000px] mx-auto relative">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-[24px] mx-auto mb-3">👨‍🌾</div>
+          <div class="font-playfair text-[2.2rem] font-bold text-white mb-1">500+</div>
+          <div class="text-white/60 text-[13px]">Happy Customers</div>
+        </div>
+        <div>
+          <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-[24px] mx-auto mb-3">🌱</div>
+          <div class="font-playfair text-[2.2rem] font-bold text-white mb-1">100+</div>
+          <div class="text-white/60 text-[13px]">Products Available</div>
+        </div>
+        <div>
+          <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-[24px] mx-auto mb-3">🚚</div>
+          <div class="font-playfair text-[2.2rem] font-bold text-white mb-1">28</div>
+          <div class="text-white/60 text-[13px]">States Delivered To</div>
+        </div>
+        <div>
+          <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-[24px] mx-auto mb-3">⭐</div>
+          <div class="font-playfair text-[2.2rem] font-bold text-white mb-1">4.8</div>
+          <div class="text-white/60 text-[13px]">Average Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOURNEY TIMELINE -->
+  <section class="py-[80px] px-[6vw] bg-cream">
+    <div class="max-w-[900px] mx-auto">
+      <div class="text-center mb-[52px]">
+        <div class="section-badge" style="margin:0 auto 20px;">
+          <span class="w-2 h-2 rounded-full bg-green-main inline-block"></span>Our Journey
+        </div>
+        <h2 class="font-playfair text-[clamp(1.7rem,3vw,2.4rem)] text-green-dark font-bold">
+          From an Idea to a Growing Green Startup
+        </h2>
+        <p class="text-[14px] text-gray-500 mt-3 max-w-[520px] mx-auto">We are just getting started — here's how Apna Bagicha came to life.</p>
+      </div>
+
+      <div class="relative">
+        <div class="timeline-line hidden md:block"></div>
+
+        <!-- 2023 — The Idea -->
+        <div class="flex flex-col md:flex-row items-center gap-6 mb-12">
+          <div class="md:w-1/2 md:text-right md:pr-12">
+            <div class="text-gold font-playfair text-[2rem] font-bold">2023</div>
+            <h3 class="font-bold text-[15px] text-gray-800 mb-2">The Spark</h3>
+            <p class="text-[13.5px] text-gray-500 leading-relaxed">The idea was born — to build an accessible online platform where home gardeners and small farmers could find quality organic seeds, plants, and tools all in one place.</p>
+          </div>
+          <div class="relative flex items-center justify-center z-10">
+            <div class="w-12 h-12 rounded-full bg-green-main flex items-center justify-center text-white text-[20px] shadow-[0_0_0_6px_rgba(58,112,50,0.15)]">💡</div>
+          </div>
+          <div class="md:w-1/2 hidden md:block"></div>
+        </div>
+
+        <!-- Early 2024 — Built & Launched -->
+        <div class="flex flex-col md:flex-row items-center gap-6 mb-12">
+          <div class="md:w-1/2 hidden md:block"></div>
+          <div class="relative flex items-center justify-center z-10">
+            <div class="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-white text-[20px] shadow-[0_0_0_6px_rgba(212,168,67,0.15)]">🚀</div>
+          </div>
+          <div class="md:w-1/2 md:pl-12">
+            <div class="text-gold font-playfair text-[2rem] font-bold">Early 2024</div>
+            <h3 class="font-bold text-[15px] text-gray-800 mb-2">We Launched</h3>
+            <p class="text-[13.5px] text-gray-500 leading-relaxed">Apna Bagicha went live with our first catalogue of garden plants, seeds, grow bags, and tools. Our first customers placed orders and shared their feedback — and we loved every moment.</p>
+          </div>
+        </div>
+
+        <!-- Mid 2024 — First Milestone -->
+        <div class="flex flex-col md:flex-row items-center gap-6 mb-12">
+          <div class="md:w-1/2 md:text-right md:pr-12">
+            <div class="text-gold font-playfair text-[2rem] font-bold">Mid 2024</div>
+            <h3 class="font-bold text-[15px] text-gray-800 mb-2">First Milestones</h3>
+            <p class="text-[13.5px] text-gray-500 leading-relaxed">Crossed our first 100 happy customers. Added more product categories, improved delivery, and launched our free agronomist helpline to support buyers with expert guidance.</p>
+          </div>
+          <div class="relative flex items-center justify-center z-10">
+            <div class="w-12 h-12 rounded-full bg-green-light flex items-center justify-center text-white text-[20px] shadow-[0_0_0_6px_rgba(74,138,58,0.15)]">🌿</div>
+          </div>
+          <div class="md:w-1/2 hidden md:block"></div>
+        </div>
+
+        <!-- 2025 — Growing -->
+        <div class="flex flex-col md:flex-row items-center gap-6 mb-12">
+          <div class="md:w-1/2 hidden md:block"></div>
+          <div class="relative flex items-center justify-center z-10">
+            <div class="w-12 h-12 rounded-full bg-green-dark flex items-center justify-center text-white text-[20px] shadow-[0_0_0_6px_rgba(45,90,39,0.15)]">📦</div>
+          </div>
+          <div class="md:w-1/2 md:pl-12">
+            <div class="text-gold font-playfair text-[2rem] font-bold">2025</div>
+            <h3 class="font-bold text-[15px] text-gray-800 mb-2">Growing Fast</h3>
+            <p class="text-[13.5px] text-gray-500 leading-relaxed">Expanded pan-India delivery, introduced online ordering and payment, and built a growing community of home gardeners and farmers who trust Apna Bagicha.</p>
+          </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="flex flex-col md:flex-row items-center gap-6">
+          <div class="md:w-1/2 md:text-right md:pr-12">
+            <div class="text-gold font-playfair text-[2rem] font-bold">Next</div>
+            <h3 class="font-bold text-[15px] text-gray-800 mb-2">What's Ahead</h3>
+            <p class="text-[13.5px] text-gray-500 leading-relaxed">Mobile app, subscription boxes, farmer training programs, and partnerships with organic certification bodies — the best of Apna Bagicha is still to come. 🌱</p>
+          </div>
+          <div class="relative flex items-center justify-center z-10">
+            <div class="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-white text-[20px] shadow-[0_0_0_6px_rgba(212,168,67,0.2)]" style="animation:float 3s ease-in-out infinite;">⭐</div>
+          </div>
+          <div class="md:w-1/2 hidden md:block"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT WE OFFER -->
+  <section class="py-[72px] px-[6vw] bg-cream-light">
+    <div class="max-w-[1100px] mx-auto">
+      <div class="text-center mb-[52px]">
+        <div class="section-badge" style="margin:0 auto 20px;">
+          <span class="w-2 h-2 rounded-full bg-gold inline-block"></span>What We Offer
+        </div>
+        <h2 class="font-playfair text-[clamp(1.7rem,3vw,2.5rem)] text-green-dark font-bold mb-4">
+          Everything Your Garden Needs
+        </h2>
+        <p class="text-[15px] text-gray-500 max-w-[560px] mx-auto leading-relaxed">
+          From certified seeds to premium grow bags — we have the right products for every farmer and home gardener.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="offer-card bg-white rounded-[20px] p-6 text-center shadow-[0_4px_20px_rgba(0,0,0,0.07)] border border-gray-50">
+          <div class="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center text-[28px] mx-auto mb-4">🌿</div>
+          <h3 class="font-bold text-[15px] text-gray-800 mb-2">Garden Plants</h3>
+          <p class="text-[13px] text-gray-500 leading-relaxed">Healthy, nursery-grown plants for your kitchen garden, terrace, or farm.</p>
+        </div>
+        <div class="offer-card bg-white rounded-[20px] p-6 text-center shadow-[0_4px_20px_rgba(0,0,0,0.07)] border border-gray-50">
+          <div class="w-14 h-14 rounded-2xl bg-yellow-50 flex items-center justify-center text-[28px] mx-auto mb-4">🌾</div>
+          <h3 class="font-bold text-[15px] text-gray-800 mb-2">Seeds</h3>
+          <p class="text-[13px] text-gray-500 leading-relaxed">Certified hybrid and open-pollinated seeds for vegetables, fruits, and flowers.</p>
+        </div>
+        <div class="offer-card bg-white rounded-[20px] p-6 text-center shadow-[0_4px_20px_rgba(0,0,0,0.07)] border border-gray-50">
+          <div class="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center text-[28px] mx-auto mb-4">🪴</div>
+          <h3 class="font-bold text-[15px] text-gray-800 mb-2">Grow Bags</h3>
+          <p class="text-[13px] text-gray-500 leading-relaxed">Premium UV-resistant grow bags in all sizes — perfect for terrace and balcony gardens.</p>
+        </div>
+        <div class="offer-card bg-white rounded-[20px] p-6 text-center shadow-[0_4px_20px_rgba(0,0,0,0.07)] border border-gray-50">
+          <div class="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-[28px] mx-auto mb-4">🛠️</div>
+          <h3 class="font-bold text-[15px] text-gray-800 mb-2">Garden Tools</h3>
+          <p class="text-[13px] text-gray-500 leading-relaxed">Durable, ergonomic tools for digging, pruning, watering, and everyday garden care.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-10">
+        <p class="text-[14px] text-gray-400 italic">More products coming soon — we're growing our catalogue. 🌱</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section class="py-[64px] px-[6vw] bg-cream">
+    <div class="max-w-[900px] mx-auto text-center">
+      <div class="section-badge" style="margin:0 auto 20px;">
+        <span class="w-2 h-2 rounded-full bg-gold inline-block"></span>Certifications &amp; Licenses
+      </div>
+      <h2 class="font-playfair text-[clamp(1.5rem,2.5vw,2.1rem)] text-green-dark font-bold mb-3">
+        Quality You Can Trust
+      </h2>
+      <p class="text-[14px] text-gray-500 mb-10 max-w-[480px] mx-auto">
+        Every product we sell is backed by national certifications and regulatory approvals.
+      </p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div class="bg-white rounded-[16px] p-5 shadow-[0_3px_16px_rgba(0,0,0,0.07)] text-center hover:-translate-y-1 transition-all">
+          <div class="text-[32px] mb-3">🏅</div>
+          <div class="text-[13px] font-bold text-gray-800 mb-1">PGS-India</div>
+          <div class="text-[11.5px] text-gray-400">Organic Certified</div>
+        </div>
+        <div class="bg-white rounded-[16px] p-5 shadow-[0_3px_16px_rgba(0,0,0,0.07)] text-center hover:-translate-y-1 transition-all">
+          <div class="text-[32px] mb-3">🔰</div>
+          <div class="text-[13px] font-bold text-gray-800 mb-1">FSSAI</div>
+          <div class="text-[11.5px] text-gray-400">Food Safety Licensed</div>
+        </div>
+        <div class="bg-white rounded-[16px] p-5 shadow-[0_3px_16px_rgba(0,0,0,0.07)] text-center hover:-translate-y-1 transition-all">
+          <div class="text-[32px] mb-3">⭐</div>
+          <div class="text-[13px] font-bold text-gray-800 mb-1">ISO 9001</div>
+          <div class="text-[11.5px] text-gray-400">Quality Management</div>
+        </div>
+        <div class="bg-white rounded-[16px] p-5 shadow-[0_3px_16px_rgba(0,0,0,0.07)] text-center hover:-translate-y-1 transition-all">
+          <div class="text-[32px] mb-3">🌿</div>
+          <div class="text-[13px] font-bold text-gray-800 mb-1">Govt. Registered</div>
+          <div class="text-[11.5px] text-gray-400">State Agri. Dept.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING NOTE -->
+  <section class="py-[64px] px-[6vw] bg-gradient-to-br from-green-dark to-green-light text-white text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5 pointer-events-none"
+         style="background-image:radial-gradient(circle at 20% 50%,white 1px,transparent 1px),radial-gradient(circle at 80% 20%,white 1px,transparent 1px);background-size:40px 40px;"></div>
+    <div class="relative z-10 max-w-[580px] mx-auto">
+      <div class="text-[44px] mb-4">🌿</div>
+      <h2 class="font-playfair text-[clamp(1.6rem,3vw,2.2rem)] font-bold mb-4">
+        We Grow When You Grow
+      </h2>
+      <p class="text-white/75 text-[15px] leading-relaxed">
+        Apna Bagicha was built with one simple belief — every gardener and farmer deserves the best quality inputs, honest advice, and a platform they can trust. Thank you for being part of our journey.
+      </p>
+      <div class="mt-8 flex justify-center gap-6 text-white/50 text-[13px]">
+        <span>🌱 Organic First</span>
+        <span>🤝 Farmer Focused</span>
+        <span>💚 Made with Love</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#1a2f17] text-white pt-[60px] pb-[24px] px-[6vw]">
+    <div class="max-w-[1200px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-[48px]">
+        <div>
+          <div class="flex items-center gap-2.5 mb-4">
+            <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Apna Bagicha" class="w-[42px] h-[42px]">
+            <span class="font-dancing text-[1.65rem] font-bold">
+              <span class="text-green-400">Apna</span> <span class="text-orange-400">Bagicha</span>
+            </span>
+          </div>
+          <p class="text-white/50 text-[13px] leading-relaxed mb-5 max-w-[260px]">Trusted partner for 12,000+ farmers across India. Delivering quality agricultural inputs since 2006.</p>
+          <div class="flex gap-2.5">
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">WA</a>
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">FB</a>
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">IG</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-[13px] uppercase tracking-wider mb-5">Quick Links</h4>
+          <a href="/"             class="footer-link">Home</a>
+          <a href="/products"     class="footer-link">Our Products</a>
+          <a href="/about.html"   class="footer-link">About Us</a>
+          <a href="/reviews"      class="footer-link">Farmer Reviews</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-[13px] uppercase tracking-wider mb-5">Contact Us</h4>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2.5 text-[13px] text-white/55">
+              <span class="shrink-0 mt-0.5">📍</span>
+              <span>Muzaffarnagar, Uttar Pradesh, India</span>
+            </div>
+            <div class="flex items-center gap-2.5 text-[13px] text-white/55">
+              <span>📞</span>
+              <a href="tel:+919876543210" class="text-white/55 hover:text-gold no-underline transition-colors">+91 9876543210</a>
+            </div>
+            <div class="flex items-center gap-2.5 text-[13px] text-white/55">
+              <span>✉️</span>
+              <a href="mailto:support@apnabagicha.com" class="text-white/55 hover:text-gold no-underline transition-colors">support@apnabagicha.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-5 flex flex-col md:flex-row items-center justify-between gap-3">
+        <p class="text-white/35 text-[12px]">© 2026 <span class="text-gold font-semibold">Apna Bagicha</span>. All Rights Reserved.</p>
+        <div class="flex gap-5">
+          <a href="#" class="text-white/30 text-[12px] hover:text-white/55 no-underline transition-colors">Privacy Policy</a>
+          <a href="#" class="text-white/30 text-[12px] hover:text-white/55 no-underline transition-colors">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/7417002360" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+</body>
+</html>

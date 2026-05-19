@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed — Apna Bagicha</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/common.js"></script>
+  <link rel="stylesheet" href="/css/common.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'green-dark':  '#2d5a27',
+            'green-main':  '#3a7032',
+            'gold':        '#d4a843',
+            'cream-light': '#fdf8f0',
+          },
+          fontFamily: {
+            'sans':     ['DM Sans', 'sans-serif'],
+            'dancing':  ['Dancing Script', 'cursive'],
+            'playfair': ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @keyframes checkPop {
+      0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+      70%  { transform: scale(1.15) rotate(3deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    @keyframes ringPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(58,112,50,0.3); }
+      50%       { box-shadow: 0 0 0 18px rgba(58,112,50,0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .check-circle {
+      animation: checkPop 0.6s 0.15s cubic-bezier(.175,.885,.32,1.275) both,
+                 ringPulse 2s 0.8s ease-in-out 3;
+    }
+    .fade-1 { opacity:0; animation: fadeUp 0.55s 0.75s ease both; }
+    .fade-2 { opacity:0; animation: fadeUp 0.55s 0.92s ease both; }
+    .fade-3 { opacity:0; animation: fadeUp 0.55s 1.08s ease both; }
+    .fade-4 { opacity:0; animation: fadeUp 0.55s 1.22s ease both; }
+
+    @keyframes countdown {
+      from { width: 100%; }
+      to   { width: 0%; }
+    }
+    .countdown-bar {
+      animation: countdown 5s 1.5s linear forwards;
+    }
+    @keyframes pageExit {
+      0%   { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.94) translateY(30px); }
+    }
+    .page-exit {
+      animation: pageExit 0.55s ease forwards;
+    }
+  </style>
+</head>
+
+<body class="m-0 font-sans bg-cream-light min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <div class="fixed top-0 w-full z-[1000] bg-white/96 flex justify-between items-center py-3 px-6 transition-all duration-300 navbar border-b border-gray-100">
+    <a href="/" class="flex items-center gap-2.5 no-underline">
+      <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Apna Bagicha Logo" class="w-[46px] h-[46px] object-contain hover:scale-105 transition-transform duration-300">
+      <span class="font-dancing text-[1.8rem] font-bold leading-none cursor-pointer">
+        <span class="text-green-800">Apna</span> <span class="text-orange-500">Bagicha</span>
+      </span>
+    </a>
+    <div class="menu hidden md:flex items-center">
+      <a href="/" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Home</a>
+      <a href="/products" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Products</a>
+      <a href="/about" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">About</a>
+      <a href="/blog" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Blog</a>
+      <a href="/contact" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Contact</a>
+      <div id="navAuthArea" class="inline-flex items-center"></div>
+    </div>
+    <button class="menu-toggle block md:hidden p-1.5 rounded-lg hover:bg-gray-100 transition-colors bg-transparent border-0 cursor-pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2.5" stroke-linecap="round">
+        <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
+      </svg>
+    </button>
+  </div>
+  <div class="pt-[70px]"></div>
+
+  <!-- Step Indicator -->
+  <div class="flex items-center justify-center gap-0 px-4 py-5 bg-white border-b border-gray-100">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-full bg-green-main text-white flex items-center justify-center text-xs font-bold">✓</div>
+      <span class="text-sm font-semibold text-green-main hidden sm:block">Browse</span>
+    </div>
+    <div class="h-[2px] w-10 sm:w-16 bg-green-main mx-2 sm:mx-3"></div>
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-full bg-green-main text-white flex items-center justify-center text-xs font-bold">✓</div>
+      <span class="text-sm font-semibold text-green-main hidden sm:block">Checkout</span>
+    </div>
+    <div class="h-[2px] w-10 sm:w-16 bg-green-main mx-2 sm:mx-3"></div>
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-full bg-green-main text-white flex items-center justify-center text-xs font-bold">✓</div>
+      <span class="text-sm font-semibold text-green-main hidden sm:block">Confirmed</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-1 flex items-start justify-center px-4 py-10">
+    <div class="w-full max-w-[520px]">
+
+      <!-- Success Icon -->
+      <div class="text-center mb-6">
+        <div class="check-circle w-24 h-24 rounded-full bg-green-50 border-4 border-green-main flex items-center justify-center mx-auto mb-5">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div class="fade-1">
+          <h1 style="font-family:'Playfair Display',serif;" class="text-[2rem] font-bold text-green-dark mb-2">Order Placed!</h1>
+          <p class="text-gray-500 text-sm">Thank you for choosing Apna Bagicha</p>
+          <div class="inline-block mt-3 bg-amber-50 border border-amber-200 text-amber-800 font-mono font-bold text-sm px-5 py-2.5 rounded-full tracking-wider">
+            {{ order.order_id if order else 'AB-XXXXXXXX' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Details Card -->
+      <div class="fade-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-4">
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Order Details</h3>
+        {% if order %}
+        <div class="space-y-3">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Product</span>
+            <span class="font-semibold text-gray-800 text-right max-w-[60%] leading-snug">{{ order.product_name }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Quantity</span>
+            <span class="font-medium text-gray-800">{{ order.quantity }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Payment Method</span>
+            <span class="font-medium text-gray-800">{{ order.payment_method }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Deliver to</span>
+            <span class="font-medium text-gray-800 text-right">{{ order.customer_city }}, {{ order.customer_state }} – {{ order.customer_pincode }}</span>
+          </div>
+          <div class="flex justify-between items-center pt-3 border-t border-gray-100">
+            <span class="font-semibold text-gray-800">Total Paid</span>
+            <span class="font-bold text-green-main text-xl">₹{{ order.total_amount | format_int }}</span>
+          </div>
+        </div>
+        {% else %}
+        <p class="text-gray-400 text-sm text-center py-4">Order details not available.</p>
+        {% endif %}
+      </div>
+
+      <!-- Next Steps -->
+      <div class="fade-3 bg-green-50 border border-green-100 rounded-2xl p-5 mb-5">
+        <h3 class="font-bold text-green-dark text-sm mb-3">What happens next?</h3>
+        <div class="space-y-2.5">
+          <div class="flex items-start gap-3 text-sm text-gray-700">
+            <span class="w-5 h-5 rounded-full bg-green-main text-white text-[10px] flex items-center justify-center font-bold flex-shrink-0 mt-0.5">1</span>
+            Our team will call or WhatsApp you within <strong>24 hours</strong> to confirm the order
+          </div>
+          <div class="flex items-start gap-3 text-sm text-gray-700">
+            <span class="w-5 h-5 rounded-full bg-green-main text-white text-[10px] flex items-center justify-center font-bold flex-shrink-0 mt-0.5">2</span>
+            Product dispatched within <strong>2 business days</strong>
+          </div>
+          <div class="flex items-start gap-3 text-sm text-gray-700">
+            <span class="w-5 h-5 rounded-full bg-green-main text-white text-[10px] flex items-center justify-center font-bold flex-shrink-0 mt-0.5">3</span>
+            Delivery across India in <strong>2–5 days</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Countdown bar -->
+      <div class="fade-4 mb-4">
+        <div class="flex items-center justify-between text-xs text-gray-400 mb-1.5">
+          <span>Redirecting to products page…</span>
+          <span id="countdownNum" class="font-bold text-green-main">5s</span>
+        </div>
+        <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div class="countdown-bar h-full bg-green-main rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="fade-4 flex flex-col sm:flex-row gap-3">
+        <a href="/products"
+          class="flex-1 bg-green-main hover:bg-green-dark text-white font-bold py-3.5 px-5 rounded-xl text-center transition-all duration-200 text-sm shadow-sm hover:shadow">
+          Browse More Products
+        </a>
+        <a href="https://wa.me/919876543210?text=Hi!+I+just+placed+order+{{ order.order_id if order else '' }}+on+Apna+Bagicha.+Can+you+confirm+it%3F"
+          target="_blank"
+          class="flex-1 border-2 border-green-main text-green-main hover:bg-green-50 font-bold py-3.5 px-5 rounded-xl text-center transition-all duration-200 text-sm flex items-center justify-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#3a7032"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Track on WhatsApp
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer note -->
+  <div class="text-center text-xs text-gray-400 py-6 border-t border-gray-100">
+    © 2024 Apna Bagicha — Your True Farming Partner
+  </div>
+
+  <script>
+    var secs = 5;
+    var numEl = document.getElementById('countdownNum');
+    var timer = setInterval(function() {
+      secs--;
+      if (numEl) numEl.textContent = secs + 's';
+      if (secs <= 0) {
+        clearInterval(timer);
+        // Fade + shrink the whole page, then redirect
+        document.body.classList.add('page-exit');
+        setTimeout(function() {
+          window.location.href = '/products';
+        }, 520);
+      }
+    }, 1000);
+
+    // Allow user to cancel auto-redirect by clicking CTA buttons
+    document.querySelectorAll('a[href="/products"]').forEach(function(a) {
+      a.addEventListener('click', function() { clearInterval(timer); });
+    });
+  </script>
+</body>
+</html>

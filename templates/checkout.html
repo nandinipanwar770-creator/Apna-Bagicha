@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Apna Bagicha</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'green-dark':  '#2d5a27',
+            'green-main':  '#3a7032',
+            'green-light': '#4a8a3a',
+            'gold':        '#d4a843',
+            'cream':       '#f5f0e8',
+            'cream-light': '#fdf8f0',
+          },
+          fontFamily: {
+            'sans':     ['DM Sans', 'sans-serif'],
+            'dancing':  ['Dancing Script', 'cursive'],
+            'playfair': ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/common.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #e0e7e0;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: #1f2937;
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .form-input:focus {
+      border-color: #3a7032;
+      box-shadow: 0 0 0 3px rgba(58,112,50,0.1);
+    }
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .payment-radio { display: none; }
+    .payment-label {
+      border: 1.5px solid #e0e7e0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+    }
+    .payment-radio:checked + .payment-label {
+      border-color: #3a7032;
+      background: #f0fdf4;
+      color: #2d5a27;
+    }
+    .qty-btn {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid #3a7032;
+      background: white;
+      color: #3a7032;
+      font-size: 20px; line-height: 1;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .qty-btn:hover { background: #3a7032; color: white; }
+    .section-card { background: white; border-radius: 18px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid #f3f4f6; }
+    .step-done { background:#3a7032; color:white; }
+    .step-active { background:#3a7032; color:white; }
+    .step-inactive { background:#e5e7eb; color:#9ca3af; }
+  </style>
+</head>
+
+<body class="m-0 font-sans bg-cream-light overflow-x-hidden">
+
+  <!-- TOPBAR -->
+  <div class="fixed top-0 w-full z-[1001] bg-gradient-to-r from-green-dark to-green-main text-white overflow-hidden" style="height:32px;display:flex;align-items:center;">
+    <div style="display:flex;gap:80px;animation:marquee 28s linear infinite;white-space:nowrap;font-size:11px;font-weight:600;letter-spacing:0.06em;">
+      <span>🌱 500+ Premium Agricultural Products</span>
+      <span>🚚 Pan-India Delivery in 2–5 Days</span>
+      <span>🏅 100% Certified &amp; Quality Tested</span>
+      <span>☎ Helpline: +91 9876543210</span>
+      <span>🌱 500+ Premium Agricultural Products</span>
+      <span>🚚 Pan-India Delivery in 2–5 Days</span>
+      <span>🏅 100% Certified &amp; Quality Tested</span>
+      <span>☎ Helpline: +91 9876543210</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <div class="fixed top-[32px] w-full z-[1000] bg-white/96 flex justify-between items-center py-3 px-6 transition-all duration-300 navbar border-b border-gray-100">
+    <a href="/" class="flex items-center gap-2.5 no-underline">
+      <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Apna Bagicha" class="w-[46px] h-[46px] object-contain hover:scale-105 transition-transform duration-300">
+      <span class="font-dancing text-[1.8rem] font-bold leading-none">
+        <span class="text-green-800">Apna</span> <span class="text-orange-500">Bagicha</span>
+      </span>
+    </a>
+    <div class="menu hidden md:flex items-center">
+      <a href="/" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Home</a>
+      <a href="/products" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Products</a>
+      <a href="/about" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">About</a>
+      <a href="/blog" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Blog</a>
+      <a href="/contact" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Contact</a>
+      <div id="navAuthArea" class="inline-flex items-center"></div>
+    </div>
+    <button class="menu-toggle block md:hidden p-1.5 rounded-lg hover:bg-gray-100 transition-colors bg-transparent border-0 cursor-pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2.5" stroke-linecap="round">
+        <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="pt-[90px]"></div>
+
+  <!-- BREADCRUMB + STEPS -->
+  <div class="px-[6vw] py-4 max-w-[1100px] mx-auto">
+    <div class="flex items-center gap-2 text-sm text-gray-500 mb-5">
+      <a href="/products" class="text-green-main hover:underline font-medium">Products</a>
+      <span class="text-gray-300">›</span>
+      <span class="text-gray-700 font-medium">Checkout</span>
+    </div>
+    <!-- Step Indicator -->
+    <div class="flex items-center justify-center gap-0 mb-8">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full step-done flex items-center justify-center text-xs font-bold">✓</div>
+        <span class="text-sm font-semibold text-green-main hidden sm:block">Browse</span>
+      </div>
+      <div class="h-[2px] w-10 sm:w-16 bg-green-main mx-2 sm:mx-3"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full step-active flex items-center justify-center text-xs font-bold">2</div>
+        <span class="text-sm font-semibold text-green-main hidden sm:block">Checkout</span>
+      </div>
+      <div class="h-[2px] w-10 sm:w-16 bg-gray-200 mx-2 sm:mx-3"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full step-inactive flex items-center justify-center text-xs font-bold">3</div>
+        <span class="text-sm font-medium text-gray-400 hidden sm:block">Confirmed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="px-[6vw] max-w-[1100px] mx-auto pb-16">
+    <form method="POST" action="/place-order" id="checkoutForm">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_370px] gap-6">
+
+        <!-- LEFT COLUMN: Forms -->
+        <div class="space-y-5">
+
+          <!-- Customer Details -->
+          <div class="section-card">
+            <h2 class="font-playfair text-xl font-bold text-green-dark mb-5 flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-green-main text-white text-xs flex items-center justify-center font-bold">1</span>
+              Customer Details
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">Full Name *</label>
+                <input type="text" name="customer_name" class="form-input" placeholder="Ramesh Kumar" required autocomplete="name"
+                  value="{{ user_data.name if user_data else '' }}">
+              </div>
+              <div>
+                <label class="form-label">Mobile Number *</label>
+                <input type="tel" name="customer_phone" class="form-input" placeholder="+91 98765 43210" pattern="[0-9+\s\-]{10,15}" required autocomplete="tel"
+                  value="{{ user_data.phone if user_data else '' }}">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="form-label">Email Address <span class="text-gray-400 font-normal text-xs">(optional — for order confirmation)</span></label>
+                <input type="email" name="customer_email" class="form-input" placeholder="ramesh@example.com" autocomplete="email"
+                  value="{{ user_data.email if user_data else '' }}">
+              </div>
+            </div>
+          </div>
+
+          <!-- Delivery Address -->
+          <div class="section-card">
+            <h2 class="font-playfair text-xl font-bold text-green-dark mb-5 flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-green-main text-white text-xs flex items-center justify-center font-bold">2</span>
+              Delivery Address
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2">
+                <label class="form-label">Street / Village / Colony *</label>
+                <textarea name="customer_address" class="form-input" rows="2" placeholder="House No., Street Name, Village / Area" required autocomplete="street-address">{{ user_data.address if user_data else '' }}</textarea>
+              </div>
+              <div>
+                <label class="form-label">City / District *</label>
+                <input type="text" name="customer_city" class="form-input" placeholder="Lucknow" required autocomplete="address-level2"
+                  value="{{ user_data.city if user_data else '' }}">
+              </div>
+              <div>
+                <label class="form-label">State *</label>
+                <select name="customer_state" class="form-input" required autocomplete="address-level1">
+                  <option value="">— Select State —</option>
+                  <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option>
+                  <option>Bihar</option><option>Chhattisgarh</option><option>Delhi</option>
+                  <option>Goa</option><option>Gujarat</option><option>Haryana</option>
+                  <option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option>
+                  <option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option>
+                  <option>Manipur</option><option>Meghalaya</option><option>Mizoram</option>
+                  <option>Nagaland</option><option>Odisha</option><option>Punjab</option>
+                  <option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option>
+                  <option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option>
+                  <option>Uttarakhand</option><option>West Bengal</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">PIN Code *</label>
+                <input type="text" name="customer_pincode" class="form-input" placeholder="226001" pattern="[0-9]{6}" maxlength="6" required autocomplete="postal-code"
+                  value="{{ user_data.pincode if user_data else '' }}">
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="section-card">
+            <h2 class="font-playfair text-xl font-bold text-green-dark mb-5 flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-green-main text-white text-xs flex items-center justify-center font-bold">3</span>
+              Payment Method
+            </h2>
+            <div class="space-y-3">
+              <div>
+                <input type="radio" name="payment_method" id="pay_cod" value="COD" class="payment-radio" checked>
+                <label for="pay_cod" class="payment-label">
+                  <span class="text-2xl">💵</span>
+                  <div>
+                    <div class="font-semibold text-[14px]">Cash on Delivery</div>
+                    <div class="text-xs text-gray-400 mt-0.5">Pay when you receive the product at your doorstep</div>
+                  </div>
+                  <span class="ml-auto text-xs bg-green-100 text-green-700 font-semibold px-2 py-0.5 rounded-full">Popular</span>
+                </label>
+              </div>
+              <div>
+                <input type="radio" name="payment_method" id="pay_online" value="Online" class="payment-radio">
+                <label for="pay_online" class="payment-label">
+                  <span class="text-2xl">💳</span>
+                  <div>
+                    <div class="font-semibold text-[14px]">Online Payment</div>
+                    <div class="text-xs text-gray-400 mt-0.5">UPI, Cards, Net Banking, Wallets via Razorpay — instant confirmation</div>
+                  </div>
+                  <span class="ml-auto text-xs bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full">Secure</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Special Instructions -->
+          <div class="section-card">
+            <h2 class="font-playfair text-xl font-bold text-green-dark mb-4 flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-green-main text-white text-xs flex items-center justify-center font-bold">4</span>
+              Special Instructions <span class="text-sm font-normal text-gray-400">(optional)</span>
+            </h2>
+            <textarea name="notes" class="form-input" rows="3" placeholder="Preferred delivery time, special packaging, or any other instructions..."></textarea>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: Order Summary (sticky) -->
+        <div>
+          <div class="section-card lg:sticky lg:top-[100px]">
+            <h2 class="font-playfair text-xl font-bold text-green-dark mb-5">Order Summary</h2>
+
+            <!-- Single product (direct buy) -->
+            <div id="singleProductSummary">
+              <div class="flex gap-3 mb-5 pb-5 border-b border-gray-100">
+                {% if product_img %}
+                <img src="/images/{{ product_img }}" alt="{{ product_name }}"
+                  class="w-[76px] h-[76px] object-cover rounded-xl border border-gray-100 flex-shrink-0"
+                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="w-[76px] h-[76px] rounded-xl bg-green-50 border border-green-100 items-center justify-center text-4xl flex-shrink-0" style="display:none">🌱</div>
+                {% else %}
+                <div class="w-[76px] h-[76px] rounded-xl bg-green-50 border border-green-100 flex items-center justify-center text-4xl flex-shrink-0">🌱</div>
+                {% endif %}
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-gray-800 text-sm leading-snug line-clamp-2">{{ product_name or 'Product' }}</p>
+                  <p class="text-green-main font-bold text-lg mt-1">₹{{ product_price }}</p>
+                  <p class="text-xs text-gray-400">per unit · Free Delivery</p>
+                </div>
+              </div>
+              <!-- Quantity Selector -->
+              <div class="flex items-center justify-between mb-5">
+                <span class="text-sm font-semibold text-gray-700">Quantity</span>
+                <div class="flex items-center gap-3">
+                  <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
+                  <span id="qtyDisplay" class="text-lg font-bold text-gray-800 w-6 text-center select-none">1</span>
+                  <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cart items (from cart) -->
+            <div id="cartItemsSummary" class="hidden mb-5 space-y-2 pb-5 border-b border-gray-100"></div>
+
+            <!-- Price Breakdown -->
+            <div class="space-y-2.5 pb-4 border-b border-gray-100 mb-4">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Subtotal</span>
+                <span class="font-medium text-gray-800" id="subtotalDisplay">₹{{ product_price }}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Delivery Charges</span>
+                <span class="text-green-600 font-semibold">FREE</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center font-bold text-base mb-5">
+              <span class="text-gray-800">Total Payable</span>
+              <span class="text-green-dark text-xl" id="totalDisplay">₹{{ product_price }}</span>
+            </div>
+
+            <!-- Hidden Form Fields -->
+            <input type="hidden" id="hiddenProductName" name="product_name" value="{{ product_name }}">
+            <input type="hidden" id="hiddenProductPrice" name="product_price" value="{{ product_price }}">
+            <input type="hidden" id="qtyInput" name="quantity" value="1">
+
+            <!-- Trust Indicators -->
+            <div class="space-y-1.5 mb-5 py-4 border-t border-gray-100">
+              <div class="flex items-center gap-2 text-xs text-gray-500">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                100% Certified &amp; Quality Products
+              </div>
+              <div class="flex items-center gap-2 text-xs text-gray-500">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Pan-India Delivery in 2–5 Days
+              </div>
+              <div class="flex items-center gap-2 text-xs text-gray-500">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Dedicated Post-Purchase Support
+              </div>
+            </div>
+
+            <!-- Place Order Button -->
+            <button type="submit" id="placeOrderBtn"
+              class="w-full bg-green-main hover:bg-green-dark text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 text-base shadow-sm hover:shadow-md">
+              Place Order →
+            </button>
+            <div id="paymentError" class="hidden mt-3 text-center text-sm text-red-600 font-medium"></div>
+            <a href="/products" class="block text-center text-sm text-gray-400 hover:text-gray-500 mt-3 transition-colors">
+              ← Continue Shopping
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- WhatsApp Float -->
+  <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    var unitPrice = parseFloat('{{ product_price }}') || 0;
+    var qty = 1;
+
+    // ── Cart mode ─────────────────────────────────────────────────────────────
+    (function() {
+      var fromCart = new URLSearchParams(window.location.search).get('from') === 'cart';
+      if (!fromCart) return;
+      var cart;
+      try { cart = JSON.parse(localStorage.getItem('apnaBagichaCart') || '[]'); } catch(e) { cart = []; }
+      if (!cart.length) { window.location.href = '/products'; return; }
+
+      // Hide single-product UI, show cart summary
+      document.getElementById('singleProductSummary').classList.add('hidden');
+      var summaryEl = document.getElementById('cartItemsSummary');
+      summaryEl.classList.remove('hidden');
+
+      var total = 0;
+      var names = [];
+      summaryEl.innerHTML = cart.map(function(item) {
+        var lineTotal = item.price * (item.qty || 1);
+        total += lineTotal;
+        names.push(item.name + ' ×' + (item.qty || 1) + ' @' + item.price);
+        return '<div class="flex items-start gap-2 py-2 border-b border-gray-100 last:border-0">' +
+          '<span class="text-lg flex-shrink-0 mt-0.5">🌱</span>' +
+          '<div class="flex-1 min-w-0">' +
+            '<p class="text-[13px] font-semibold text-gray-800 leading-snug">' + escHtmlCo(item.name) + '</p>' +
+            '<p class="text-[12px] text-gray-500 mt-0.5">Qty: ' + (item.qty || 1) + ' × ₹' + item.price.toLocaleString('en-IN') + '</p>' +
+          '</div>' +
+          '<span class="text-[13px] font-bold text-green-main flex-shrink-0">₹' + lineTotal.toLocaleString('en-IN') + '</span>' +
+        '</div>';
+      }).join('');
+
+      var fmt = '₹' + total.toLocaleString('en-IN');
+      document.getElementById('subtotalDisplay').textContent = fmt;
+      document.getElementById('totalDisplay').textContent = fmt;
+
+      // Set hidden fields
+      var combinedName = cart.length === 1
+        ? cart[0].name
+        : 'Cart Order (' + cart.length + ' items): ' + names.join(', ');
+      document.getElementById('hiddenProductName').value = combinedName;
+      document.getElementById('hiddenProductPrice').value = cart.length === 1 ? cart[0].price : total;
+      document.getElementById('qtyInput').value = cart.length === 1 ? (cart[0].qty || 1) : 1;
+
+      // Override unitPrice so Razorpay uses cart total
+      unitPrice = total;
+      qty = 1;
+    })();
+
+    function escHtmlCo(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function changeQty(delta) {
+      qty = Math.max(1, qty + delta);
+      document.getElementById('qtyDisplay').textContent = qty;
+      document.getElementById('qtyInput').value = qty;
+      var total = unitPrice * qty;
+      var fmt = '₹' + total.toLocaleString('en-IN');
+      document.getElementById('subtotalDisplay').textContent = fmt;
+      document.getElementById('totalDisplay').textContent = fmt;
+    }
+
+    // Update button text based on payment method
+    document.querySelectorAll('.payment-radio').forEach(function(r) {
+      r.addEventListener('change', function() {
+        var btn = document.getElementById('placeOrderBtn');
+        btn.textContent = this.value === 'Online' ? 'Pay Now →' : 'Place Order →';
+      });
+    });
+
+    // Form submit handler
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      var method = document.querySelector('input[name="payment_method"]:checked').value;
+      if (method !== 'Online') { localStorage.removeItem('apnaBagichaCart'); return; } // COD: submit normally
+
+      e.preventDefault();
+      var form = this;
+      var total = unitPrice * qty;
+      var btn = document.getElementById('placeOrderBtn');
+      var errDiv = document.getElementById('paymentError');
+      errDiv.classList.add('hidden');
+      btn.disabled = true;
+      btn.textContent = 'Initiating Payment…';
+
+      // Step 1: Create Razorpay order
+      fetch('/create-razorpay-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: total })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.error) throw new Error(data.error);
+
+        // Collect form data
+        var fd = {};
+        new FormData(form).forEach(function(v, k) { fd[k] = v; });
+        fd.quantity = qty;
+
+        // Step 2: Open Razorpay checkout
+        var options = {
+          key:         data.keyId,
+          amount:      data.amount,
+          currency:    data.currency,
+          name:        'Apna Bagicha',
+          description: fd.product_name || 'Plant Order',
+          order_id:    data.orderId,
+          prefill: {
+            name:    fd.customer_name  || '',
+            email:   fd.customer_email || '',
+            contact: fd.customer_phone || ''
+          },
+          theme: { color: '#3a7032' },
+          handler: function(response) {
+            // Step 3: Verify payment and save order
+            fetch('/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id:   response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature:  response.razorpay_signature,
+                formData: fd
+              })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+              if (res.success) {
+                localStorage.removeItem('apnaBagichaCart');
+                window.location.href = '/order-success/' + res.orderId;
+              } else {
+                throw new Error(res.error || 'Verification failed');
+              }
+            })
+            .catch(function(err) {
+              errDiv.textContent = err.message;
+              errDiv.classList.remove('hidden');
+              btn.disabled = false;
+              btn.textContent = 'Pay Now →';
+            });
+          },
+          modal: {
+            ondismiss: function() {
+              btn.disabled = false;
+              btn.textContent = 'Pay Now →';
+            }
+          }
+        };
+        var rzp = new Razorpay(options);
+        rzp.open();
+      })
+      .catch(function(err) {
+        errDiv.textContent = err.message || 'Payment gateway error. Please try again.';
+        errDiv.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Pay Now →';
+      });
+    });
+  </script>
+</body>
+</html>

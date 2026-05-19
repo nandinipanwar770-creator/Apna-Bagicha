@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Apna Bagicha</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { 'green-dark': '#2d5a27', 'green-main': '#3a7032' },
+          fontFamily: { 'sans': ['DM Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    @keyframes fadeIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes slideIn { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
+    .card { animation: fadeIn 0.35s ease both; }
+    .step-slide { animation: slideIn 0.3s ease both; }
+
+    .form-input {
+      width:100%; border:1.5px solid #e5e7eb; border-radius:12px;
+      padding:11px 14px; font-size:15px; outline:none; transition:border-color 0.2s, box-shadow 0.2s;
+      font-family:'DM Sans',sans-serif; color:#111827;
+    }
+    .form-input:focus { border-color:#3a7032; box-shadow:0 0 0 3px rgba(58,112,50,0.1); }
+    .form-input.error { border-color:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,0.1); }
+
+    .otp-input {
+      width:46px; height:52px; text-align:center; font-size:22px; font-weight:700;
+      border:1.5px solid #e5e7eb; border-radius:12px; outline:none;
+      transition:border-color 0.2s, box-shadow 0.2s; font-family:'DM Sans',sans-serif;
+      color:#111827;
+    }
+    .otp-input:focus { border-color:#3a7032; box-shadow:0 0 0 3px rgba(58,112,50,0.12); }
+    .otp-input.filled { border-color:#3a7032; background:#f0fdf4; }
+
+    .btn-primary {
+      width:100%; background:#3a7032; color:white; font-weight:700;
+      padding:12px; border-radius:12px; border:none; font-size:14px;
+      cursor:pointer; transition:background 0.2s, transform 0.1s;
+      font-family:'DM Sans',sans-serif; letter-spacing:0.01em;
+    }
+    .btn-primary:hover { background:#2d5a27; }
+    .btn-primary:active { transform:scale(0.98); }
+    .btn-primary:disabled { background:#9ca3af; cursor:not-allowed; transform:none; }
+
+    .phone-prefix {
+      position:absolute; left:14px; top:50%; transform:translateY(-50%);
+      font-size:15px; font-weight:600; color:#374151; pointer-events:none;
+    }
+
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .spinner { animation:spin 0.8s linear infinite; }
+
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-5px)} 40%,80%{transform:translateX(5px)} }
+    .shake { animation:shake 0.4s ease; }
+    .tab-active   { background:#3a7032; color:white; }
+    .tab-inactive { background:transparent; color:#6b7280; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-[#2d5a27] via-[#2e6029] to-[#4a8a3a] flex items-center justify-center px-4 py-10 font-sans">
+
+  <div class="card bg-white rounded-2xl shadow-2xl w-full max-w-[400px] overflow-hidden">
+
+    <!-- Logo -->
+    <div class="text-center px-8 pt-8 pb-5">
+      <a href="/" class="inline-flex items-center gap-2.5 no-underline">
+        <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Logo" class="w-12 h-12 object-contain">
+        <span class="font-bold text-[1.5rem] leading-none">
+          <span style="font-family:'Dancing Script',cursive;color:#2d5a27;">Apna</span>
+          <span style="font-family:'Dancing Script',cursive;color:#f97316;">Bagicha</span>
+        </span>
+      </a>
+      <p class="text-gray-400 text-[12.5px] mt-1.5">India's trusted plant & farming store</p>
+    </div>
+
+    <!-- Auth method tabs -->
+    <div class="mx-6 mb-4 flex bg-gray-100 rounded-xl p-1 gap-1">
+      <button id="tabOtp" onclick="switchAuthTab('otp')"
+        class="flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all tab-active">
+        📱 Mobile OTP
+      </button>
+      <button id="tabPass" onclick="switchAuthTab('pass')"
+        class="flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all tab-inactive">
+        🔑 Password
+      </button>
+    </div>
+
+    <!-- Error / info banner -->
+    <div id="msgBanner" class="hidden mx-6 mb-1"></div>
+
+    <!-- ── STEP 1: Mobile number ── -->
+    <div id="step1" class="px-6 pb-7">
+      <div class="mb-5">
+        <p class="text-[13px] font-semibold text-gray-500 mb-1 uppercase tracking-wider">Step 1 of 2</p>
+        <h2 class="text-xl font-bold text-gray-800">Enter your mobile number</h2>
+        <p class="text-sm text-gray-500 mt-1">We'll send a 6-digit OTP to verify</p>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Mobile Number</label>
+        <div class="relative">
+          <span class="phone-prefix">+91</span>
+          <input id="phoneInput" type="tel" inputmode="numeric" maxlength="10"
+            class="form-input pl-12" placeholder="98765 43210"
+            oninput="this.value=this.value.replace(/\D/g,'').slice(0,10); updateSendBtn()">
+        </div>
+      </div>
+
+      <button id="sendOtpBtn" class="btn-primary" disabled onclick="sendOtp()">
+        Send OTP →
+      </button>
+
+      <p class="text-center text-xs text-gray-400 mt-4">
+        By continuing you agree to our
+        <a href="/about" class="text-green-main hover:underline">Terms & Privacy Policy</a>
+      </p>
+    </div>
+
+    <!-- ── STEP 2: OTP verify ── -->
+    <div id="step2" class="px-6 pb-7 hidden">
+      <div class="mb-5">
+        <button onclick="goBack()" class="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-3 bg-transparent border-0 cursor-pointer font-sans p-0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Change number
+        </button>
+        <p class="text-[13px] font-semibold text-gray-500 mb-1 uppercase tracking-wider">Step 2 of 2</p>
+        <h2 class="text-xl font-bold text-gray-800">Enter OTP</h2>
+        <p class="text-sm text-gray-500 mt-1">Sent to <span id="phoneMask" class="font-semibold text-gray-700"></span></p>
+      </div>
+
+      <!-- OTP boxes -->
+      <div class="flex gap-2.5 justify-between mb-5" id="otpBoxes">
+        <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="0" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
+        <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="1" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)" oninput="otpInput(this)">
+        <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="2" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)" oninput="otpInput(this)">
+        <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="3" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)" oninput="otpInput(this)">
+        <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="4" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)" oninput="otpInput(this)">
+        <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="5" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)" oninput="otpInput(this)">
+      </div>
+
+      <!-- Name field (shown for new users) -->
+      <div id="nameField" class="hidden mb-4">
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Your Name <span class="text-red-400">*</span></label>
+        <input id="nameInput" type="text" class="form-input" placeholder="Ramesh Kumar"
+          oninput="updateVerifyBtn()">
+        <p class="text-xs text-gray-400 mt-1">Looks like you're new here! What should we call you?</p>
+      </div>
+
+      <button id="verifyBtn" class="btn-primary mb-3" disabled onclick="verifyOtp()">
+        Verify & Login →
+      </button>
+
+      <!-- Resend -->
+      <div class="text-center text-sm text-gray-500">
+        <span id="resendTimer">Resend OTP in <span id="timerCount" class="font-semibold text-green-main">30s</span></span>
+        <button id="resendBtn" class="hidden text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans" onclick="resendOtp()">
+          Resend OTP
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Password login panel ── -->
+    <div id="passPanel" class="px-6 pb-7 hidden">
+      <div class="mb-5">
+        <h2 class="text-xl font-bold text-gray-800">Sign in</h2>
+        <p class="text-sm text-gray-500 mt-1">Use your email or registered mobile number</p>
+      </div>
+      <form method="POST" action="/login" class="space-y-4" id="passForm">
+        <input type="hidden" name="next" value="{{ next }}">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email or Mobile Number</label>
+          <input type="text" name="email" class="form-input" placeholder="you@email.com or 98765 43210" required autofocus>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+          <div class="relative">
+            <input type="password" name="password" id="passInput" class="form-input pr-11" placeholder="Enter your password" required>
+            <button type="button" onclick="togglePass()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 bg-transparent border-0 cursor-pointer p-0">
+              <svg id="eyeIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary mt-2">Log In →</button>
+      </form>
+      <p class="text-center text-sm text-gray-500 mt-4">
+        New user?
+        <button onclick="switchAuthTab('otp')" class="text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans">Login with OTP instead</button>
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="border-t border-gray-100 py-3 text-center">
+      <a href="/" class="text-xs text-gray-400 hover:text-gray-600 transition-colors no-underline">← Back to Website</a>
+    </div>
+
+  </div>
+
+<script>
+var currentPhone = '';
+var isNewUser    = false;
+var resendTimer  = null;
+var nextUrl      = '{{ next }}' || '/';
+
+/* ── Tab switching ── */
+function switchAuthTab(tab) {
+  var isOtp = tab === 'otp';
+  document.getElementById('tabOtp').className   = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (isOtp  ? 'tab-active' : 'tab-inactive');
+  document.getElementById('tabPass').className  = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (!isOtp ? 'tab-active' : 'tab-inactive');
+  document.getElementById('step1').classList.toggle('hidden', !isOtp);
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('passPanel').classList.toggle('hidden', isOtp);
+  hideMsg();
+}
+
+function togglePass() {
+  var inp  = document.getElementById('passInput');
+  var show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  document.getElementById('eyeIcon').innerHTML = show
+    ? '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+}
+
+// Show error from server redirect (e.g. wrong password)
+var urlError = new URLSearchParams(window.location.search).get('error');
+if (urlError) { switchAuthTab('pass'); showMsg(urlError, 'error'); }
+
+/* ── Utility ── */
+function showMsg(text, type) {
+  var b = document.getElementById('msgBanner');
+  var isErr = type === 'error';
+  b.className = 'mx-6 mb-3 flex items-start gap-2 text-sm px-4 py-3 rounded-xl '
+    + (isErr ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700');
+  b.innerHTML = (isErr
+    ? '<svg class="flex-shrink-0 mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+    : '<svg class="flex-shrink-0 mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>'
+  ) + '<span>' + text + '</span>';
+  b.classList.remove('hidden');
+}
+function hideMsg() { document.getElementById('msgBanner').classList.add('hidden'); }
+
+function setLoading(btnId, loading, label) {
+  var btn = document.getElementById(btnId);
+  if (loading) {
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="spinner inline w-4 h-4 mr-2 -mt-0.5" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M12 2a10 10 0 0110 10" opacity=".75"/></svg>Please wait…';
+  } else {
+    btn.innerHTML = label;
+  }
+}
+
+/* ── Step 1 ── */
+function updateSendBtn() {
+  var v = document.getElementById('phoneInput').value.replace(/\D/g,'');
+  document.getElementById('sendOtpBtn').disabled = v.length !== 10;
+}
+
+function sendOtp() {
+  var phone = document.getElementById('phoneInput').value.replace(/\D/g,'');
+  if (phone.length !== 10) return;
+  hideMsg();
+  setLoading('sendOtpBtn', true, 'Send OTP →');
+
+  fetch('/api/otp/send', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ phone: phone })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if (!d.success) { showMsg(d.error || 'Failed to send OTP.', 'error'); setLoading('sendOtpBtn', false, 'Send OTP →'); document.getElementById('sendOtpBtn').disabled=false; return; }
+    currentPhone = phone;
+    isNewUser    = d.is_new;
+    document.getElementById('phoneMask').textContent = '+91 ' + phone.slice(0,5) + ' ' + phone.slice(5);
+    document.getElementById('nameField').classList.toggle('hidden', !isNewUser);
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+    document.getElementById('step2').classList.add('step-slide');
+    startResendTimer();
+    document.querySelector('.otp-input').focus();
+    if (d.otp) showMsg('Dev mode — OTP: ' + d.otp, 'success');
+  })
+  .catch(function(){ showMsg('Network error. Please try again.', 'error'); setLoading('sendOtpBtn', false, 'Send OTP →'); document.getElementById('sendOtpBtn').disabled=false; });
+}
+
+/* ── OTP boxes ── */
+function otpInput(el) {
+  el.value = el.value.replace(/\D/g,'');
+  el.classList.toggle('filled', el.value !== '');
+  var idx = parseInt(el.dataset.idx);
+  if (el.value && idx < 5) {
+    document.querySelectorAll('.otp-input')[idx + 1].focus();
+  }
+  updateVerifyBtn();
+}
+
+function otpKeydown(e, el) {
+  var idx = parseInt(el.dataset.idx);
+  if (e.key === 'Backspace' && !el.value && idx > 0) {
+    var prev = document.querySelectorAll('.otp-input')[idx - 1];
+    prev.value = '';
+    prev.classList.remove('filled');
+    prev.focus();
+    updateVerifyBtn();
+  }
+}
+
+function otpPaste(e) {
+  e.preventDefault();
+  var text = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+  var boxes = document.querySelectorAll('.otp-input');
+  text.split('').forEach(function(ch, i){ if(boxes[i]){ boxes[i].value=ch; boxes[i].classList.add('filled'); } });
+  if (boxes[Math.min(text.length, 5)]) boxes[Math.min(text.length, 5)].focus();
+  updateVerifyBtn();
+}
+
+function getOtp() {
+  return Array.from(document.querySelectorAll('.otp-input')).map(function(b){ return b.value; }).join('');
+}
+
+function updateVerifyBtn() {
+  var otp  = getOtp();
+  var name = document.getElementById('nameInput').value.trim();
+  var ok   = otp.length === 6 && (!isNewUser || name.length >= 2);
+  document.getElementById('verifyBtn').disabled = !ok;
+}
+
+/* ── Step 2: Verify ── */
+function verifyOtp() {
+  var otp  = getOtp();
+  var name = document.getElementById('nameInput').value.trim();
+  if (otp.length !== 6) return;
+  hideMsg();
+  setLoading('verifyBtn', true, 'Verify & Login →');
+
+  fetch('/api/otp/verify', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ phone: currentPhone, otp: otp, name: name })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if (!d.success) {
+      showMsg(d.error || 'Verification failed.', 'error');
+      setLoading('verifyBtn', false, 'Verify & Login →');
+      updateVerifyBtn();
+      document.getElementById('otpBoxes').classList.add('shake');
+      setTimeout(function(){ document.getElementById('otpBoxes').classList.remove('shake'); }, 500);
+      return;
+    }
+    try { localStorage.setItem('abUserCache', JSON.stringify({ user: d.user, ts: Date.now() })); } catch(e){}
+    window.location.href = nextUrl;
+  })
+  .catch(function(){ showMsg('Network error. Please try again.', 'error'); setLoading('verifyBtn', false, 'Verify & Login →'); updateVerifyBtn(); });
+}
+
+/* ── Resend timer ── */
+function startResendTimer() {
+  var secs = 30;
+  document.getElementById('resendTimer').classList.remove('hidden');
+  document.getElementById('resendBtn').classList.add('hidden');
+  clearInterval(resendTimer);
+  resendTimer = setInterval(function() {
+    secs--;
+    document.getElementById('timerCount').textContent = secs + 's';
+    if (secs <= 0) {
+      clearInterval(resendTimer);
+      document.getElementById('resendTimer').classList.add('hidden');
+      document.getElementById('resendBtn').classList.remove('hidden');
+    }
+  }, 1000);
+}
+
+function resendOtp() {
+  currentPhone = document.getElementById('phoneInput').value.replace(/\D/g,'');
+  document.querySelectorAll('.otp-input').forEach(function(b){ b.value=''; b.classList.remove('filled'); });
+  hideMsg();
+  sendOtpRequest();
+}
+
+function sendOtpRequest() {
+  fetch('/api/otp/send', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ phone: currentPhone })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if (d.success) {
+      showMsg('OTP resent successfully!', 'success');
+      startResendTimer();
+      if (d.otp) showMsg('Dev mode — OTP: ' + d.otp, 'success');
+    } else {
+      showMsg(d.error || 'Failed to resend OTP.', 'error');
+    }
+  })
+  .catch(function(){ showMsg('Network error. Try again.', 'error'); });
+}
+
+function goBack() {
+  clearInterval(resendTimer);
+  hideMsg();
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step1').classList.remove('hidden');
+  document.querySelectorAll('.otp-input').forEach(function(b){ b.value=''; b.classList.remove('filled'); });
+  document.getElementById('sendOtpBtn').disabled = false;
+  document.getElementById('sendOtpBtn').innerHTML = 'Send OTP →';
+}
+</script>
+</body>
+</html>

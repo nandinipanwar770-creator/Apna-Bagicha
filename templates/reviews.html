@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmer Reviews — Apna Bagicha</title>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'green-dark':  '#2d5a27',
+            'green-main':  '#3a7032',
+            'green-light': '#4a8a3a',
+            'gold':        '#d4a843',
+            'cream':       '#f5f0e8',
+            'cream-light': '#fdf8f0',
+          },
+          fontFamily: {
+            'sans':     ['DM Sans', 'sans-serif'],
+            'dancing':  ['Dancing Script', 'cursive'],
+            'playfair': ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="/css/common.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex; gap: 80px; white-space: nowrap;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      animation: marquee 28s linear infinite;
+    }
+    .review-card {
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .review-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.1);
+    }
+    .star-filled { color: #d4a843; }
+    .star-empty  { color: #e5e7eb; }
+    .rev-body    { word-break: break-all; overflow-wrap: anywhere; }
+    .review-card .author-name,
+    .review-card .author-loc { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  </style>
+</head>
+
+<body class="m-0 font-sans bg-cream-light overflow-x-hidden">
+
+  <!-- TOPBAR -->
+  <div class="fixed top-0 w-full z-[1001] bg-gradient-to-r from-green-dark to-green-main text-white overflow-hidden"
+       style="height:32px;display:flex;align-items:center;">
+    <div class="ticker-track">
+      <span>🌱 100% Certified Organic Inputs</span>
+      <span>🚚 Pan-India Delivery Available</span>
+      <span>🏅 PGS-India &amp; FSSAI Certified</span>
+      <span>📞 Free Agronomist Helpline: +91 9876543210</span>
+      <span>🌾 Trusted by 12,000+ Farmers Across India</span>
+      <span>🌱 100% Certified Organic Inputs</span>
+      <span>🚚 Pan-India Delivery Available</span>
+      <span>🏅 PGS-India &amp; FSSAI Certified</span>
+      <span>📞 Free Agronomist Helpline: +91 9876543210</span>
+      <span>🌾 Trusted by 12,000+ Farmers Across India</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <div id="navbar"
+       class="fixed top-[32px] w-full z-[1000] bg-white/96 flex justify-between items-center py-3 px-6 transition-all duration-300 navbar border-b border-gray-100">
+    <a href="/" class="flex items-center gap-2.5 no-underline">
+      <img src="/images/logo.svg" onerror="this.src='/images/logo.png'"
+           alt="Apna Bagicha Logo" class="w-[46px] h-[46px] object-contain hover:scale-105 transition-transform duration-300">
+      <span class="font-dancing text-[1.8rem] font-bold leading-none cursor-pointer">
+        <span class="text-green-800">Apna</span>
+        <span class="text-orange-500">Bagicha</span>
+      </span>
+    </a>
+
+    <div class="menu hidden md:flex items-center">
+      <a href="/"            class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium active">Home</a>
+      <a href="/products"    class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Products</a>
+      <a href="/about.html"  class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">About</a>
+      <a href="/blog.html"   class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Blog</a>
+      <a href="/contact.html" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Contact</a>
+      <div id="navAuthArea" class="inline-flex items-center"></div>
+      <a href="/contact.html"
+         class="nav-cta ml-3 bg-green-main text-white px-5 py-2 rounded-full text-[13px] font-semibold hover:bg-green-dark transition-all no-underline shadow-sm">
+        Get Quote
+      </a>
+    </div>
+
+    <button class="menu-toggle block md:hidden p-1.5 rounded-lg hover:bg-gray-100 transition-colors bg-transparent border-0 cursor-pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2.5" stroke-linecap="round">
+        <line x1="3" y1="7"  x2="21" y2="7" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="17" x2="21" y2="17" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="pt-[90px]"></div>
+
+  <!-- HERO -->
+  <section class="bg-gradient-to-br from-green-dark to-green-main py-14 px-[6vw] text-white text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5 pointer-events-none"
+         style="background-image:radial-gradient(circle at 20% 50%,white 1px,transparent 1px),radial-gradient(circle at 80% 20%,white 1px,transparent 1px);background-size:40px 40px;"></div>
+    <div class="relative z-10 max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-2 border border-white/30 text-white/80 bg-white/10 px-4 py-1.5 rounded-full text-[12px] font-semibold tracking-wider uppercase mb-5">
+        <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+        Farmer Reviews
+      </div>
+      <h1 class="font-playfair text-[clamp(2rem,4vw,3rem)] font-bold mb-4 leading-tight">
+        What Our Farmers Say
+      </h1>
+      <p class="text-white/75 text-[15px] mb-8">
+        Honest reviews from the farming community that trusts Apna Bagicha
+      </p>
+
+      <!-- Stats row -->
+      <div class="flex flex-wrap justify-center gap-8">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-gold">{{ total }}</div>
+          <div class="text-white/60 text-xs mt-0.5">Total Reviews</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-gold">{{ avgRating }}</div>
+          <div class="text-white/60 text-xs mt-0.5">Average Rating</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-gold">{{ fiveStarPct }}%</div>
+          <div class="text-white/60 text-xs mt-0.5">5-Star Reviews</div>
+        </div>
+      </div>
+
+      <div class="mt-8">
+        <button onclick="openRevWriteModal()" style="display:inline-flex;align-items:center;gap:8px;background:white;color:#3a7032;border:none;border-radius:99px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.15);transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.15)'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Write a Review
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS GRID -->
+  <section class="py-12 px-[6vw]">
+    <div class="max-w-[1200px] mx-auto">
+
+      {% if reviews | length == 0 %}
+      <div class="text-center py-24">
+        <div class="text-6xl mb-4">🌱</div>
+        <p class="text-gray-500 font-semibold text-lg">No reviews yet</p>
+        <p class="text-gray-400 text-sm mt-1">Be the first to share your experience!</p>
+      </div>
+
+      {% else %}
+      <div id="reviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for r in reviews %}
+        <div class="review-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100" data-name="{{ r.name }}" data-location="{{ r.location }}" data-rating="{{ r.rating }}" data-review="{{ r.review }}">
+          <!-- Quote mark -->
+          <div class="text-gold text-4xl leading-none mb-3 font-playfair">&ldquo;</div>
+
+          <!-- Stars -->
+          <div class="flex gap-0.5 mb-3">
+            {% for i in range(1, 6) %}
+              {% if i <= r.rating %}
+              <span class="text-gold text-base">★</span>
+              {% else %}
+              <span class="text-gray-200 text-base">★</span>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- Review text -->
+          <p class="text-sm text-gray-600 leading-relaxed mb-5 rev-body">{{ r.review }}</p>
+
+          <!-- Author -->
+          <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
+            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-main font-bold text-sm shrink-0">
+              {{ r.name[0] | upper }}
+            </div>
+            <div class="min-w-0">
+              <div class="author-name text-sm font-bold text-gray-800 truncate">{{ r.name }}</div>
+              {% if r.location %}
+              <div class="author-loc text-xs text-gray-400 truncate">{{ r.location }}</div>
+              {% endif %}
+            </div>
+            <div class="ml-auto text-xs text-gray-300 shrink-0 whitespace-nowrap">
+              {{ r.created_at | truncdate | replace("T", " ") }}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="flex justify-center items-center gap-3 mt-10 mb-2 flex-wrap">
+        {% if page > 1 %}
+        <a href="/reviews?page={{ page - 1 }}" class="px-5 py-2 rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 no-underline transition-colors">&#8592; Prev</a>
+        {% else %}
+        <span class="px-5 py-2 rounded-full border border-gray-100 text-sm font-semibold text-gray-300 cursor-not-allowed select-none">&#8592; Prev</span>
+        {% endif %}
+
+        {% for p in range(1, totalPages + 1) %}
+          {% if p == page %}
+          <span class="w-9 h-9 flex items-center justify-center rounded-full bg-green-main text-white text-sm font-bold">{{ p }}</span>
+          {% else %}
+          <a href="/reviews?page={{ p }}" class="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 no-underline transition-colors">{{ p }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page < totalPages %}
+        <a href="/reviews?page={{ page + 1 }}" class="px-5 py-2 rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 no-underline transition-colors">Next &#8594;</a>
+        {% else %}
+        <span class="px-5 py-2 rounded-full border border-gray-100 text-sm font-semibold text-gray-300 cursor-not-allowed select-none">Next &#8594;</span>
+        {% endif %}
+      </div>
+
+      {% endif %}
+
+    </div>
+  </section>
+
+  <!-- BACK TO HOME -->
+  <div class="pb-16 text-center">
+    <a href="/"
+      class="inline-flex items-center gap-2 text-green-main hover:text-green-dark font-semibold text-sm transition-colors no-underline">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </a>
+  </div>
+
+
+  <!-- REVIEW POPUP MODAL -->
+  <div id="revPopupModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeRevPopup()">
+    <div style="background:white;border-radius:20px;max-width:520px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.2);">
+      <div style="padding:20px 24px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div id="revPopupTitle" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#1f2937;"></div>
+        <button onclick="closeRevPopup()" style="background:none;border:none;cursor:pointer;font-size:26px;line-height:1;color:#9ca3af;padding:0;" onmouseover="this.style.color='#374151'" onmouseout="this.style.color='#9ca3af'">&times;</button>
+      </div>
+      <div style="padding:14px 24px 12px;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+        <div id="revPopupStars" style="display:flex;gap:4px;"></div>
+      </div>
+      <div style="padding:16px 24px 22px;overflow-y:auto;flex:1;">
+        <p id="revPopupText" style="font-size:15px;color:#374151;line-height:1.8;margin:0 0 20px;"></p>
+        <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #f3f4f6;">
+          <div id="revPopupInitial" style="width:44px;height:44px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;color:#3a7032;font-weight:700;font-size:16px;flex-shrink:0;"></div>
+          <div>
+            <div id="revPopupName" style="font-size:14px;font-weight:700;color:#1f2937;"></div>
+            <div id="revPopupLocation" style="font-size:12px;color:#9ca3af;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function closeRevPopup() {
+      document.getElementById('revPopupModal').style.display = 'none';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeRevPopup();
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.review-card').forEach(function(card) {
+        var fullText = card.dataset.review || '';
+        var p = card.querySelector('.rev-body');
+        if (!p) return;
+        var words = fullText.trim().split(/\s+/).filter(Boolean);
+        if (words.length <= 30) return;
+        p.textContent = words.slice(0, 30).join(' ') + '...';
+        var btn = document.createElement('button');
+        btn.textContent = 'View full review →';
+        btn.style.cssText = 'background:none;border:none;cursor:pointer;color:#3a7032;font-size:13px;font-weight:600;padding:4px 0 0;display:block;text-decoration:underline;font-family:inherit;';
+        btn.addEventListener('click', function() {
+          var name = card.dataset.name || '';
+          var loc = card.dataset.location || '';
+          var rating = parseInt(card.dataset.rating) || 5;
+          var starsHtml = '';
+          for (var i = 1; i <= 5; i++) {
+            starsHtml += '<span style=\'font-size:22px;color:' + (i <= rating ? '#d4a843' : '#e5e7eb') + ';\'>★</span>';
+          }
+          document.getElementById('revPopupTitle').textContent = name;
+          document.getElementById('revPopupStars').innerHTML = starsHtml;
+          document.getElementById('revPopupText').textContent = fullText;
+          document.getElementById('revPopupInitial').textContent = (name || '?')[0].toUpperCase();
+          document.getElementById('revPopupName').textContent = name;
+          var locEl = document.getElementById('revPopupLocation');
+          locEl.textContent = loc;
+          locEl.style.display = loc ? '' : 'none';
+          document.getElementById('revPopupModal').style.display = 'flex';
+        });
+        p.parentNode.insertBefore(btn, p.nextSibling);
+      });
+    });
+  </script>
+
+  <!-- WRITE A REVIEW MODAL -->
+  <div id="revWriteModal" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeRevWriteModal()">
+    <div style="background:white;border-radius:20px;max-width:500px;width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.22);">
+      <!-- Header -->
+      <div style="padding:20px 24px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#1f2937;">Share Your Experience</div>
+        <button onclick="closeRevWriteModal()" style="background:none;border:none;cursor:pointer;font-size:26px;line-height:1;color:#9ca3af;padding:0;" onmouseover="this.style.color='#374151'" onmouseout="this.style.color='#9ca3af'">&times;</button>
+      </div>
+      <!-- Form -->
+      <div id="revWriteForm" style="padding:20px 24px 24px;overflow-y:auto;flex:1;">
+        <div style="margin-bottom:14px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">Your Name <span style="color:#dc2626;">*</span></label>
+          <input id="rwName" type="text" placeholder="e.g. Ramesh Kumar" style="width:100%;border:1.5px solid #e5e7eb;border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;transition:border-color 0.2s;" onfocus="this.style.borderColor='#3a7032'" onblur="this.style.borderColor='#e5e7eb'">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">Location <span style="color:#9ca3af;font-weight:400;">(optional)</span></label>
+          <input id="rwLocation" type="text" placeholder="e.g. Punjab, India" style="width:100%;border:1.5px solid #e5e7eb;border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;transition:border-color 0.2s;" onfocus="this.style.borderColor='#3a7032'" onblur="this.style.borderColor='#e5e7eb'">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">Your Rating <span style="color:#dc2626;">*</span></label>
+          <div id="rwStars" style="display:flex;gap:6px;">
+            <span class="rw-star" data-val="1" style="font-size:30px;cursor:pointer;color:#e5e7eb;transition:color 0.15s;">&#9733;</span>
+            <span class="rw-star" data-val="2" style="font-size:30px;cursor:pointer;color:#e5e7eb;transition:color 0.15s;">&#9733;</span>
+            <span class="rw-star" data-val="3" style="font-size:30px;cursor:pointer;color:#e5e7eb;transition:color 0.15s;">&#9733;</span>
+            <span class="rw-star" data-val="4" style="font-size:30px;cursor:pointer;color:#e5e7eb;transition:color 0.15s;">&#9733;</span>
+            <span class="rw-star" data-val="5" style="font-size:30px;cursor:pointer;color:#e5e7eb;transition:color 0.15s;">&#9733;</span>
+          </div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">Your Review <span style="color:#dc2626;">*</span></label>
+          <textarea id="rwReview" rows="5" placeholder="Tell us about your experience with Apna Bagicha..." style="width:100%;border:1.5px solid #e5e7eb;border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;resize:vertical;outline:none;box-sizing:border-box;transition:border-color 0.2s;" onfocus="this.style.borderColor='#3a7032'" onblur="this.style.borderColor='#e5e7eb'"></textarea>
+        </div>
+        <div id="rwError" style="color:#dc2626;font-size:13px;margin-bottom:10px;display:none;"></div>
+        <button id="rwSubmit" onclick="submitRevWrite()" style="width:100%;background:#3a7032;color:white;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;" onmouseover="this.style.background='#2d5a27'" onmouseout="this.style.background='#3a7032'">
+          Submit Review
+        </button>
+      </div>
+      <!-- Thank-you overlay (same ty animation) -->
+      <div id="revWriteThanks" style="display:none;position:absolute;inset:0;border-radius:20px;background:white;z-index:10;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 32px;overflow:hidden;">
+        <div class="ty-spark" style="width:10px;height:10px;background:#4a8a3a;--x:60px;--y:-80px;--dur:2.1s;--del:0.0s;top:50%;left:50%;margin:-5px;"></div>
+        <div class="ty-spark" style="width:7px;height:7px;background:#d4a843;--x:-70px;--y:-60px;--dur:1.9s;--del:0.2s;top:50%;left:50%;margin:-4px;"></div>
+        <div class="ty-spark" style="width:9px;height:9px;background:#3a7032;--x:80px;--y:50px;--dur:2.3s;--del:0.1s;top:50%;left:50%;margin:-5px;"></div>
+        <div class="ty-spark" style="width:6px;height:6px;background:#d4a843;--x:-50px;--y:70px;--dur:1.8s;--del:0.3s;top:50%;left:50%;margin:-3px;"></div>
+        <div class="ty-spark" style="width:8px;height:8px;background:#4a8a3a;--x:-90px;--y:-30px;--dur:2.0s;--del:0.15s;top:50%;left:50%;margin:-4px;"></div>
+        <div class="ty-spark" style="width:7px;height:7px;background:#3a7032;--x:40px;--y:90px;--dur:2.4s;--del:0.25s;top:50%;left:50%;margin:-4px;"></div>
+        <div class="ty-circle" style="width:72px;height:72px;border-radius:50%;background:#dcfce7;border:3px solid #4a8a3a;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;opacity:0;flex-shrink:0;">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h4 class="ty-heading" style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#1f2937;margin:0 0 8px;opacity:0;">Thank You! &#127807;</h4>
+        <p class="ty-subtext" style="font-size:14px;color:#6b7280;margin:0 0 10px;opacity:0;">Your review has been submitted and is<br>awaiting approval. We appreciate your feedback!</p>
+        <div class="ty-emoji" style="font-size:22px;letter-spacing:6px;opacity:0;">&#127807; &#128154; &#127806;</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function isGibberish(text) {
+      var t = (text || '').trim();
+      if (!t) return false;
+      if (t.split(/\s+/).some(function(w){ return w.length > 30; })) return true;
+      var clean = t.toLowerCase().replace(/\s/g, '');
+      var unique = clean.split('').filter(function(c,i,a){ return a.indexOf(c)===i; }).length;
+      if (clean.length > 20 && unique / clean.length < 0.10) return true;
+      return false;
+    }
+
+    var _rwRating = 0;
+
+    function openRevWriteModal() {
+      _rwRating = 0;
+      document.getElementById('rwName').value = '';
+      document.getElementById('rwLocation').value = '';
+      document.getElementById('rwReview').value = '';
+      document.getElementById('rwError').style.display = 'none';
+      document.getElementById('rwError').textContent = '';
+      document.querySelectorAll('.rw-star').forEach(function(s){ s.style.color = '#e5e7eb'; });
+      var thanks = document.getElementById('revWriteThanks');
+      thanks.style.display = 'none';
+      thanks.querySelectorAll('.ty-spark,.ty-circle,.ty-heading,.ty-subtext,.ty-emoji').forEach(function(el){ el.classList.remove('go'); });
+      document.getElementById('revWriteForm').style.opacity = '1';
+      document.getElementById('rwSubmit').disabled = false;
+      document.getElementById('rwSubmit').style.opacity = '1';
+      var modal = document.getElementById('revWriteModal');
+      modal.style.display = 'flex';
+      var card = modal.querySelector('div');
+      card.style.position = 'relative';
+    }
+
+    function closeRevWriteModal() {
+      document.getElementById('revWriteModal').style.display = 'none';
+    }
+
+    document.querySelectorAll('.rw-star').forEach(function(star) {
+      star.addEventListener('mouseenter', function() {
+        var v = parseInt(this.dataset.val);
+        document.querySelectorAll('.rw-star').forEach(function(s){ s.style.color = parseInt(s.dataset.val) <= v ? '#d4a843' : '#e5e7eb'; });
+      });
+      star.addEventListener('mouseleave', function() {
+        document.querySelectorAll('.rw-star').forEach(function(s){ s.style.color = parseInt(s.dataset.val) <= _rwRating ? '#d4a843' : '#e5e7eb'; });
+      });
+      star.addEventListener('click', function() {
+        _rwRating = parseInt(this.dataset.val);
+        document.querySelectorAll('.rw-star').forEach(function(s){ s.style.color = parseInt(s.dataset.val) <= _rwRating ? '#d4a843' : '#e5e7eb'; });
+      });
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { closeRevWriteModal(); closeRevPopup(); }
+    });
+
+    function submitRevWrite() {
+      var name   = document.getElementById('rwName').value.trim();
+      var loc    = document.getElementById('rwLocation').value.trim();
+      var review = document.getElementById('rwReview').value.trim();
+      var errEl  = document.getElementById('rwError');
+      if (!name) { errEl.textContent = 'Please enter your name.'; errEl.style.display = 'block'; return; }
+      if (isGibberish(name)) { errEl.textContent = 'Please enter a valid name.'; errEl.style.display = 'block'; return; }
+      if (!_rwRating) { errEl.textContent = 'Please select a rating.'; errEl.style.display = 'block'; return; }
+      if (!review) { errEl.textContent = 'Please write your review.'; errEl.style.display = 'block'; return; }
+      if (isGibberish(review)) { errEl.textContent = 'Please write a meaningful review.'; errEl.style.display = 'block'; return; }
+      errEl.style.display = 'none';
+      var btn = document.getElementById('rwSubmit');
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+      btn.textContent = 'Submitting...';
+      fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, location: loc, rating: _rwRating, review: review })
+      }).then(function(r){ return r.json(); }).then(function(res) {
+        if (res.success) {
+          document.getElementById('revWriteForm').style.opacity = '0';
+          var thanks = document.getElementById('revWriteThanks');
+          thanks.style.display = 'flex';
+          thanks.querySelectorAll('.ty-spark,.ty-circle,.ty-heading,.ty-subtext,.ty-emoji').forEach(function(el){ el.classList.add('go'); });
+          setTimeout(function() { closeRevWriteModal(); }, 5000);
+        } else {
+          errEl.textContent = res.error || 'Failed to submit. Please try again.';
+          errEl.style.display = 'block';
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          btn.textContent = 'Submit Review';
+        }
+      }).catch(function() {
+        errEl.textContent = 'Network error. Please try again.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.textContent = 'Submit Review';
+      });
+    }
+  </script>
+
+</body>
+</html>

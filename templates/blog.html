@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gardening Blog — Apna Bagicha | Tips, Guides &amp; Growing Advice</title>
+  <meta name="description" content="Expert gardening guides, beginner how-tos, organic fertilizer tips, grow bag setup, pest control, and seasonal planting calendars for Indian home gardeners.">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'green-dark':  '#2d5a27',
+            'green-main':  '#3a7032',
+            'green-light': '#4a8a3a',
+            'gold':        '#d4a843',
+            'cream':       '#f5f0e8',
+            'cream-light': '#fdf8f0',
+          },
+          fontFamily: {
+            'sans':     ['DM Sans', 'sans-serif'],
+            'dancing':  ['Dancing Script', 'cursive'],
+            'playfair': ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/common.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex; gap: 80px; white-space: nowrap;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      animation: marquee 28s linear infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-12px); }
+    }
+    .blog-tab {
+      padding: 7px 18px; border-radius: 999px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: 1.5px solid #e0e7e0; background: white; color: #6b7280;
+      transition: all 0.2s ease; white-space: nowrap;
+    }
+    .blog-tab:hover  { border-color: #3a7032; color: #3a7032; }
+    .blog-tab.active { background: #3a7032; color: white; border-color: #3a7032; }
+    .blog-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .blog-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(0,0,0,0.12); }
+    .blog-card.hidden-card { display: none; }
+    .cat-pill {
+      display: inline-block; padding: 3px 11px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .cat-guide      { background:#e8f5e2; color:#2d5a27; }
+    .cat-howto      { background:#fce7f3; color:#be185d; }
+    .cat-beginners  { background:#fef9c3; color:#854d0e; }
+    .cat-seasonal   { background:#e0f2fe; color:#0369a1; }
+    .cat-expert     { background:#f3e8ff; color:#6b21a8; }
+    .featured-glow {
+      background: linear-gradient(135deg, #2d5a27 0%, #3a7032 50%, #4a8a3a 100%);
+      position: relative; overflow: hidden;
+    }
+    .featured-glow::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(212,168,67,0.18) 0%, transparent 60%);
+    }
+    .read-time {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11.5px; color: #9ca3af; font-weight: 500;
+    }
+    .key-topics {
+      list-style: none; padding: 0; margin: 0 0 14px;
+      display: flex; flex-wrap: wrap; gap: 5px;
+    }
+    .key-topics li {
+      background: #f0fdf4; color: #166534; font-size: 11px; font-weight: 600;
+      padding: 2px 9px; border-radius: 999px; border: 1px solid #bbf7d0;
+    }
+    .commerce-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #fffbeb; color: #92400e; font-size: 10.5px; font-weight: 700;
+      padding: 2px 9px; border-radius: 999px; border: 1px solid #fde68a;
+      letter-spacing: 0.03em;
+    }
+  </style>
+</head>
+<body class="m-0 font-sans bg-cream-light overflow-x-hidden">
+
+  <!-- TOPBAR -->
+  <div class="fixed top-0 w-full z-[1001] bg-gradient-to-r from-green-dark to-green-main text-white overflow-hidden"
+       style="height:32px;display:flex;align-items:center;">
+    <div class="ticker-track">
+      <span>🌱 100% Certified Organic Inputs</span>
+      <span>🚚 Pan-India Delivery Available</span>
+      <span>🏅 PGS-India &amp; FSSAI Certified</span>
+      <span>📞 Free Agronomist Helpline: +91 9876543210</span>
+      <span>🌾 Trusted by 500+ Happy Customers</span>
+      <span>🌱 100% Certified Organic Inputs</span>
+      <span>🚚 Pan-India Delivery Available</span>
+      <span>🏅 PGS-India &amp; FSSAI Certified</span>
+      <span>📞 Free Agronomist Helpline: +91 9876543210</span>
+      <span>🌾 Trusted by 500+ Happy Customers</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <div class="fixed top-[32px] w-full z-[1000] bg-white/96 flex justify-between items-center py-3 px-6 transition-all duration-300 navbar border-b border-gray-100">
+    <a href="/" class="flex items-center gap-2.5 no-underline">
+      <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Apna Bagicha Logo"
+           class="w-[46px] h-[46px] object-contain hover:scale-105 transition-transform duration-300">
+      <span class="font-dancing text-[1.8rem] font-bold leading-none cursor-pointer">
+        <span class="text-green-800">Apna</span> <span class="text-orange-500">Bagicha</span>
+      </span>
+    </a>
+    <div class="menu hidden md:flex items-center">
+      <a href="/"             class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Home</a>
+      <a href="/products"     class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Products</a>
+      <a href="/about.html"   class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">About</a>
+      <a href="/blog.html"    class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium active">Blog</a>
+      <a href="/contact.html" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Contact</a>
+      <div id="navAuthArea" class="inline-flex items-center ml-3"></div>
+      <a href="/contact.html" class="nav-cta ml-3 bg-green-main text-white px-5 py-2 rounded-full text-[13px] font-semibold hover:bg-green-dark transition-all no-underline shadow-sm">Get Quote</a>
+    </div>
+    <button class="menu-toggle block md:hidden p-1.5 rounded-lg hover:bg-gray-100 transition-colors bg-transparent border-0 cursor-pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2.5" stroke-linecap="round">
+        <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="pt-[90px]"></div>
+
+  <!-- HERO -->
+  <section class="bg-gradient-to-br from-green-dark via-[#2d5a27] to-green-light py-16 px-[6vw] text-white text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5 pointer-events-none"
+         style="background-image:radial-gradient(circle at 20% 50%,white 1px,transparent 1px),radial-gradient(circle at 80% 20%,white 1px,transparent 1px);background-size:40px 40px;"></div>
+    <div class="absolute top-[10%] left-[4%] text-[55px] opacity-[0.07] pointer-events-none select-none" style="animation:float 8s ease-in-out infinite;">🌿</div>
+    <div class="absolute bottom-[12%] right-[5%] text-[45px] opacity-[0.07] pointer-events-none select-none" style="animation:float 6s ease-in-out 2s infinite;">🌾</div>
+    <div class="relative z-10 max-w-[680px] mx-auto">
+      <div class="inline-flex items-center gap-2 border border-white/30 text-white/80 bg-white/10 px-4 py-1.5 rounded-full text-[12px] font-semibold tracking-wider uppercase mb-5">
+        <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+        Gardening Knowledge Hub
+      </div>
+      <h1 class="font-playfair text-[clamp(2rem,4vw,2.9rem)] font-bold mb-4 leading-tight">
+        Learn, Grow, Harvest —<br><em class="text-gold italic">Expert Guides for Indian Gardeners</em>
+      </h1>
+      <p class="text-white/75 text-[15px] leading-relaxed max-w-[520px] mx-auto">
+        Step-by-step tutorials, organic farming techniques, product comparisons, and seasonal planting calendars — everything you need to grow smarter, from balcony to terrace.
+      </p>
+    </div>
+  </section>
+
+  <!-- FEATURED GUIDE -->
+  <section class="py-[48px] px-[6vw] bg-cream-light">
+    <div class="max-w-[1200px] mx-auto">
+
+      <div class="section-badge mb-7">
+        <span class="w-2 h-2 rounded-full bg-gold inline-block"></span>Featured Guide
+      </div>
+
+      <div class="featured-glow rounded-[28px] p-8 md:p-12 flex flex-col md:flex-row gap-8 md:gap-12 items-center">
+        <div class="flex-none w-full md:w-[220px] h-[180px] md:h-[220px] rounded-[20px] bg-white/10 flex items-center justify-center relative overflow-hidden shrink-0">
+          <div class="text-[80px]" style="animation:float 5s ease-in-out infinite;">🌱</div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-[20px]"></div>
+        </div>
+        <div class="flex-1 relative z-10">
+          <div class="flex items-center gap-3 mb-4 flex-wrap">
+            <span class="cat-pill" style="background:rgba(212,168,67,0.25);color:#f0c040;font-size:10.5px;">📚 In-Depth Guide</span>
+            <span class="text-white/45 text-[12px]">May 2026</span>
+            <span class="text-white/45 text-[12px]">·</span>
+            <span class="text-white/45 text-[12px]">15 min read</span>
+          </div>
+          <h2 class="font-playfair text-[clamp(1.4rem,2.8vw,2rem)] text-white font-bold mb-3 leading-snug">
+            The Complete Grow Bag Guide<br class="hidden md:block"> for Indian Home Gardeners
+          </h2>
+          <p class="text-white/65 text-[14px] leading-relaxed mb-4 max-w-[560px]">
+            From 5-litre herb pots to 100-litre terrace setups — understand grow bag types, materials (HDPE vs. geo-fabric), soil mix ratios, drainage basics, and a crop-to-size matching chart. Whether you have a Mumbai balcony or a Delhi terrace, this is the only grow bag guide you need.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.75);font-size:11px;font-weight:600;padding:2px 10px;border-radius:999px;">Bag Sizes &amp; Types</span>
+            <span style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.75);font-size:11px;font-weight:600;padding:2px 10px;border-radius:999px;">Soil Mix Ratios</span>
+            <span style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.75);font-size:11px;font-weight:600;padding:2px 10px;border-radius:999px;">Crop-to-Bag Chart</span>
+            <span style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.75);font-size:11px;font-weight:600;padding:2px 10px;border-radius:999px;">Bulk Buying Tips</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-white text-[13px]">A</div>
+            <div>
+              <div class="text-white text-[13px] font-semibold">Apna Bagicha Editorial Team</div>
+              <div class="text-white/40 text-[11px]">Muzaffarnagar, UP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG GRID -->
+  <section class="pb-[80px] px-[6vw] bg-cream-light">
+    <div class="max-w-[1200px] mx-auto">
+
+      <div class="flex items-center justify-between mb-8 flex-wrap gap-4">
+        <h2 class="font-playfair text-[1.5rem] text-green-dark font-bold">Expert Guides &amp; Resources</h2>
+        <div class="flex flex-wrap gap-2" id="blogTabs">
+          <button class="blog-tab active" data-filter="all">All</button>
+          <button class="blog-tab" data-filter="story">Guides</button>
+          <button class="blog-tab" data-filter="inspiration">How-To</button>
+          <button class="blog-tab" data-filter="beginners">Beginners</button>
+          <button class="blog-tab" data-filter="seasonal">Seasonal</button>
+          <button class="blog-tab" data-filter="tips">Expert Tips</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="blogGrid">
+
+        <!-- Card 1 — Home Gardening for Beginners -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="beginners">
+          <div class="h-[150px] bg-gradient-to-br from-[#1b5e20] to-[#43a047] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 7s ease-in-out 0.4s infinite;">🏡</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-beginners">🌱 Beginner</span>
+              <span class="text-gray-400 text-[11.5px]">May 2026</span>
+              <span class="read-time ml-auto">⏱ 7 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              Home Gardening for Beginners: A Practical Starter Guide for Indian Homes
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Understand soil selection, container sizing, watering frequency, and which plants thrive in India's climate. Includes a beginner plant list and the most common first-timer mistakes.</p>
+            <ul class="key-topics">
+              <li>Soil &amp; Containers</li><li>Watering Schedule</li><li>Best Starter Plants</li><li>Common Mistakes</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="commerce-tag">🛒 Products Available</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 — Balcony Garden Setup -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="story">
+          <div class="h-[150px] bg-gradient-to-br from-[#4a148c] to-[#7b1fa2] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 8s ease-in-out 1.1s infinite;">🌺</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-guide">📘 Guide</span>
+              <span class="text-gray-400 text-[11.5px]">May 2026</span>
+              <span class="read-time ml-auto">⏱ 8 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              Balcony Garden Setup in India: Space, Sunlight &amp; Smart Layout Ideas
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Make the most of 50–200 sq ft. Covers vertical gardening, grow bag placement, sunlight mapping, and the best crops for east, west, and north-facing Indian balconies.</p>
+            <ul class="key-topics">
+              <li>Layout Planning</li><li>Vertical Gardening</li><li>Sunlight Mapping</li><li>Crop Selection</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="commerce-tag">🛒 Grow Bags Available</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 — Indoor Plant Care Guide -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="tips">
+          <div class="h-[150px] bg-gradient-to-br from-[#01579b] to-[#039be5] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 6s ease-in-out 0.9s infinite;">🪴</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-expert">💡 Expert</span>
+              <span class="text-gray-400 text-[11.5px]">May 2026</span>
+              <span class="read-time ml-auto">⏱ 6 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              Indoor Plant Care Guide: Light, Water &amp; Soil for Healthy Houseplants
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Covers pothos, snake plant, peace lily, and ZZ plant care routines. Explains indirect light zones, soil drainage fixes, and a watering schedule by plant type.</p>
+            <ul class="key-topics">
+              <li>Light Requirements</li><li>Watering Chart</li><li>Soil Drainage</li><li>Plant-by-Plant Guide</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="read-time">Coming soon</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4 — Pest Control -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="tips">
+          <div class="h-[150px] bg-gradient-to-br from-[#558b2f] to-[#8bc34a] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 7s ease-in-out 1.6s infinite;">🐛</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-expert">💡 Expert</span>
+              <span class="text-gray-400 text-[11.5px]">Apr 2026</span>
+              <span class="read-time ml-auto">⏱ 9 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              How to Protect Plants from Insects: Organic Pest Control Methods
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Identify aphids, whiteflies, mealybugs, and fungus gnats. Includes neem oil spray recipes, soap solution ratios, and companion planting combos that repel pests naturally.</p>
+            <ul class="key-topics">
+              <li>Neem Oil Spray</li><li>Pest Identification</li><li>Companion Planting</li><li>Soap Solution</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="commerce-tag">🛒 Neem Products Available</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5 — Grow Bags Guide -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="story">
+          <div class="h-[150px] bg-gradient-to-br from-[#2d5a27] to-[#4a8a3a] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 9s ease-in-out 0.5s infinite;">🌱</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-guide">📘 Guide</span>
+              <span class="text-gray-400 text-[11.5px]">Apr 2026</span>
+              <span class="read-time ml-auto">⏱ 10 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              Grow Bags in India: Which Size, Material &amp; Type to Choose
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">HDPE vs. geo-fabric bags, 5L to 100L — a full comparison with a crop-to-bag size matching chart, lifespan data (3–8 seasons), and bulk buying tips for terrace and balcony gardens.</p>
+            <ul class="key-topics">
+              <li>HDPE vs Geo-Fabric</li><li>Size Chart</li><li>Lifespan Data</li><li>Bulk Buying Tips</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="commerce-tag">🛒 Grow Bags Available</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 6 — Organic Fertilizers -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="tips">
+          <div class="h-[150px] bg-gradient-to-br from-[#5d4037] to-[#795548] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 6s ease-in-out 2s infinite;">🌾</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-expert">💡 Expert</span>
+              <span class="text-gray-400 text-[11.5px]">Apr 2026</span>
+              <span class="read-time ml-auto">⏱ 8 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              Best Organic Fertilizers for Home Gardens in India
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Vermicompost, neem cake, seaweed extract, and bone meal — application rates, timing, and which works best for vegetables, herbs, and flowering plants. With a monthly fertilizer calendar.</p>
+            <ul class="key-topics">
+              <li>Vermicompost</li><li>Neem Cake</li><li>Seaweed Extract</li><li>Fertilizer Calendar</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="commerce-tag">🛒 Fertilizers Available</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 7 — Kitchen Garden -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="beginners">
+          <div class="h-[150px] bg-gradient-to-br from-[#e65100] to-[#f57c00] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 7s ease-in-out 0.7s infinite;">🫙</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-beginners">🌱 Beginner</span>
+              <span class="text-gray-400 text-[11.5px]">Mar 2026</span>
+              <span class="read-time ml-auto">⏱ 6 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              How to Start a Kitchen Garden: Herbs &amp; Vegetables in Pots
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Grow coriander, methi, mint, tomatoes, and chilli from your kitchen window. A no-fuss guide covering pot selection, soil mix, sowing depth, and how to harvest repeatedly.</p>
+            <ul class="key-topics">
+              <li>Herb Starter List</li><li>Pot &amp; Soil Mix</li><li>Sowing Depth</li><li>Repeat Harvest Tips</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="commerce-tag">🛒 Seed Kits Available</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 8 — Terrace Garden Planning -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="story">
+          <div class="h-[150px] bg-gradient-to-br from-[#1a237e] to-[#3949ab] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 8s ease-in-out 1.4s infinite;">🏗️</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-guide">📘 Guide</span>
+              <span class="text-gray-400 text-[11.5px]">Mar 2026</span>
+              <span class="read-time ml-auto">⏱ 11 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              Terrace Garden Planning: A Step-by-Step Setup Guide
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Calculate usable area, manage rooftop weight limits, plan drip irrigation, and lay out grow bags efficiently. Includes a sample layout plan for 200–500 sq ft terraces with crop zoning.</p>
+            <ul class="key-topics">
+              <li>Area Calculation</li><li>Weight Load Guide</li><li>Drip Irrigation</li><li>Sample Layout</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="read-time">Coming soon</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 9 — Composting -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="inspiration">
+          <div class="h-[150px] bg-gradient-to-br from-[#33691e] to-[#689f38] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 6s ease-in-out 0.3s infinite;">♻️</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-howto">🔧 How-To</span>
+              <span class="text-gray-400 text-[11.5px]">Mar 2026</span>
+              <span class="read-time ml-auto">⏱ 7 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              Composting at Home: Convert Kitchen Waste into Garden Fertilizer
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Step-by-step guide to pit composting and compact bin methods. Covers carbon-to-nitrogen ratios, what to add (and avoid), and how to speed up decomposition in Indian climates.</p>
+            <ul class="key-topics">
+              <li>Pit vs. Bin Method</li><li>C:N Ratio Basics</li><li>What to Add</li><li>Faster Composting Tips</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="read-time">Coming soon</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 10 — Planting Calendar -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="seasonal">
+          <div class="h-[150px] bg-gradient-to-br from-[#00695c] to-[#00897b] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 9s ease-in-out 1.9s infinite;">📅</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-seasonal">🌦️ Seasonal</span>
+              <span class="text-gray-400 text-[11.5px]">Feb 2026</span>
+              <span class="read-time ml-auto">⏱ 5 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              Indian Seasonal Planting Calendar: What to Grow Month by Month
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">A complete Kharif, Rabi, and Zaid planting chart for vegetables, herbs, and flowers. Know exactly when to sow, transplant, and harvest — with region-wise notes for North and South India.</p>
+            <ul class="key-topics">
+              <li>Kharif &amp; Rabi Chart</li><li>Herb Calendar</li><li>North vs. South India</li><li>Harvest Timelines</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="read-time">Coming soon</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 11 — Watering Guide -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="inspiration">
+          <div class="h-[150px] bg-gradient-to-br from-[#0277bd] to-[#0288d1] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 7s ease-in-out 1.2s infinite;">💧</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-howto">🔧 How-To</span>
+              <span class="text-gray-400 text-[11.5px]">Feb 2026</span>
+              <span class="read-time ml-auto">⏱ 6 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              How to Water Plants the Right Way: Timing, Amount &amp; Technique
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Overwatering kills more plants than underwatering. Learn the finger test, the saucer method, and drip irrigation basics. Includes a frequency chart for 15+ vegetables and houseplants.</p>
+            <ul class="key-topics">
+              <li>Finger Test Method</li><li>Morning vs. Evening</li><li>Drip Basics</li><li>Frequency Chart</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="read-time">Coming soon</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 12 — Grow Bags vs Pots -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="story">
+          <div class="h-[150px] bg-gradient-to-br from-[#37474f] to-[#546e7a] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 8s ease-in-out 0.6s infinite;">⚖️</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-guide">📘 Guide</span>
+              <span class="text-gray-400 text-[11.5px]">Jan 2026</span>
+              <span class="read-time ml-auto">⏱ 7 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              Grow Bags vs. Pots vs. Ground: Which is Best for Your Garden?
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">A detailed comparison covering drainage, root health, cost, reusability, and crop performance. Includes a decision chart — which container wins for tomatoes, greens, and root vegetables.</p>
+            <ul class="key-topics">
+              <li>Drainage Comparison</li><li>Root Health</li><li>Cost Analysis</li><li>Decision Chart</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="commerce-tag">🛒 Grow Bags Available</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 13 — Fast-Growing Vegetables -->
+        <article class="blog-card bg-white rounded-[20px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]" data-cat="beginners">
+          <div class="h-[150px] bg-gradient-to-br from-[#2e7d32] to-[#66bb6a] flex items-center justify-center relative overflow-hidden">
+            <span class="text-[60px]" style="animation:float 6s ease-in-out 1.8s infinite;">🥗</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+              <span class="cat-pill cat-beginners">🌱 Beginner</span>
+              <span class="text-gray-400 text-[11.5px]">Jan 2026</span>
+              <span class="read-time ml-auto">⏱ 5 min read</span>
+            </div>
+            <h3 class="font-playfair text-[1.05rem] font-bold text-gray-800 mb-2 leading-snug">
+              5 Fast-Growing Vegetables You Can Harvest in Under 45 Days
+            </h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-3">Radish, spinach, fenugreek, coriander, and lettuce — the fastest crops for first-time gardeners. Full sowing-to-harvest timelines, grow bag sizes, and soil mix recommendations included.</p>
+            <ul class="key-topics">
+              <li>Harvest Timeline</li><li>Grow Bag Sizes</li><li>Soil Mix</li><li>Sowing Depth</li>
+            </ul>
+            <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+              <span class="text-[12px] text-gray-400 font-medium">Apna Bagicha Team</span>
+              <span class="commerce-tag">🛒 Seed Kits Available</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- No results -->
+      <div id="noBlogResults" class="hidden text-center py-16 text-gray-400">
+        <div class="text-[48px] mb-4">🌱</div>
+        <p class="text-[15px]">No guides in this category yet. <a href="/contact.html" class="text-green-main no-underline font-semibold hover:underline">Have a gardening question?</a></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="py-[64px] px-[6vw] bg-cream relative overflow-hidden">
+    <div class="max-w-[700px] mx-auto text-center">
+      <div class="text-[44px] mb-4">🌿</div>
+      <h2 class="font-playfair text-[clamp(1.5rem,3vw,2.1rem)] text-green-dark font-bold mb-4">
+        Have a Gardening Question?
+      </h2>
+      <p class="text-[15px] text-gray-500 leading-relaxed mb-6 max-w-[500px] mx-auto">
+        Whether you are just starting out or looking to scale your terrace farm — our team is here to help. Ask us about soil, seeds, grow bags, or anything in between.
+      </p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="/contact.html" class="inline-flex items-center gap-2 bg-green-main hover:bg-green-dark text-white font-bold px-7 py-3 rounded-full text-[14px] no-underline transition-all shadow-md">
+          Ask Our Experts
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="/products" class="inline-flex items-center gap-2 border-2 border-green-main text-green-main font-semibold px-7 py-3 rounded-full text-[14px] no-underline hover:bg-green-main hover:text-white transition-all">
+          Shop Garden Products
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#1a2f17] text-white pt-[60px] pb-[24px] px-[6vw]">
+    <div class="max-w-[1200px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-[48px]">
+        <div>
+          <div class="flex items-center gap-2.5 mb-4">
+            <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Apna Bagicha" class="w-[42px] h-[42px]">
+            <span class="font-dancing text-[1.65rem] font-bold">
+              <span class="text-green-400">Apna</span> <span class="text-orange-400">Bagicha</span>
+            </span>
+          </div>
+          <p class="text-white/50 text-[13px] leading-relaxed mb-5 max-w-[260px]">Quality organic garden products for every home gardener and farmer across India.</p>
+          <div class="flex gap-2.5">
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">WA</a>
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">FB</a>
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">IG</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-[13px] uppercase tracking-wider mb-5">Quick Links</h4>
+          <a href="/"             class="footer-link">Home</a>
+          <a href="/products"     class="footer-link">Our Products</a>
+          <a href="/about.html"   class="footer-link">About Us</a>
+          <a href="/reviews"      class="footer-link">Farmer Reviews</a>
+          <a href="/blog.html"    class="footer-link">Blog</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-[13px] uppercase tracking-wider mb-5">Contact Us</h4>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2.5 text-[13px] text-white/55">
+              <span class="shrink-0 mt-0.5">📍</span>
+              <span>Muzaffarnagar, Uttar Pradesh, India</span>
+            </div>
+            <div class="flex items-center gap-2.5 text-[13px] text-white/55">
+              <span>📞</span>
+              <a href="tel:+919876543210" class="text-white/55 hover:text-gold no-underline transition-colors">+91 9876543210</a>
+            </div>
+            <div class="flex items-center gap-2.5 text-[13px] text-white/55">
+              <span>✉️</span>
+              <a href="mailto:support@apnabagicha.com" class="text-white/55 hover:text-gold no-underline transition-colors">support@apnabagicha.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-5 flex flex-col md:flex-row items-center justify-between gap-3">
+        <p class="text-white/35 text-[12px]">© 2026 <span class="text-gold font-semibold">Apna Bagicha</span>. All Rights Reserved.</p>
+        <div class="flex gap-5">
+          <a href="#" class="text-white/30 text-[12px] hover:text-white/55 no-underline transition-colors">Privacy Policy</a>
+          <a href="#" class="text-white/30 text-[12px] hover:text-white/55 no-underline transition-colors">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/7417002360" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script>
+    document.querySelectorAll('#blogTabs .blog-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('#blogTabs .blog-tab').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var filter = btn.dataset.filter;
+        var cards = document.querySelectorAll('#blogGrid .blog-card');
+        var visible = 0;
+        cards.forEach(function(card) {
+          if (filter === 'all' || card.dataset.cat === filter) {
+            card.classList.remove('hidden-card'); visible++;
+          } else {
+            card.classList.add('hidden-card');
+          }
+        });
+        document.getElementById('noBlogResults').classList.toggle('hidden', visible > 0);
+      });
+    });
+  </script>
+
+</body>
+</html>

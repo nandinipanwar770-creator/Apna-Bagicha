@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2d5a27"/>
+      <stop offset="1" stop-color="#3a8040"/>
+    </linearGradient>
+    <linearGradient id="lf" x1="35" y1="45" x2="55" y2="65" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#c8f0c0"/>
+    </linearGradient>
+  </defs>
+  <!-- Hexagonal background -->
+  <path d="M50 2 L95 26.5 L95 73.5 L50 98 L5 73.5 L5 26.5 Z" fill="url(#bg)"/>
+  <!-- Gold inner ring -->
+  <path d="M50 9 L89 31 L89 69 L50 91 L11 69 L11 31 Z" stroke="#d4a843" stroke-width="1.5" opacity="0.65"/>
+  <!-- Stem -->
+  <line x1="50" y1="82" x2="50" y2="44" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Left white leaf -->
+  <path d="M50 66 Q37 58 34 46 Q44 42 50 57 Z" fill="url(#lf)"/>
+  <!-- Right gold leaf -->
+  <path d="M50 59 Q63 51 66 39 Q56 35 50 50 Z" fill="#d4a843" opacity="0.92"/>
+  <!-- Sprout tip -->
+  <path d="M50 44 Q52 36 57 31" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="58" cy="30" r="3.5" fill="#d4a843"/>
+  <!-- Ground ellipse -->
+  <ellipse cx="50" cy="82" rx="11" ry="3" fill="#d4a843" opacity="0.4"/>
+  <!-- Accent dots -->
+  <circle cx="28" cy="46" r="1.5" fill="white" opacity="0.35"/>
+  <circle cx="72" cy="38" r="1.5" fill="white" opacity="0.35"/>
+  <circle cx="25" cy="63" r="1" fill="#d4a843" opacity="0.5"/>
+  <circle cx="75" cy="57" r="1" fill="white" opacity="0.3"/>
+</svg>

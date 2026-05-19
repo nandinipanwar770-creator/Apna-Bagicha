@@ -1,0 +1,632 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ — Apna Bagicha</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'green-dark': '#2d5a27',
+            'green-main': '#3a7032',
+            'green-light': '#4a8a3a',
+            'gold': '#d4a843',
+            'cream': '#f5f0e8',
+            'cream-light': '#fdf8f0',
+          },
+          fontFamily: {
+            'sans': ['DM Sans', 'sans-serif'],
+            'dancing': ['Dancing Script', 'cursive'],
+            'playfair': ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/common.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    .faq-cat-btn {
+      padding: 7px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid #e0e7e0;
+      background: white;
+      color: #6b7280;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .faq-cat-btn:hover { border-color: #3a7032; color: #3a7032; }
+    .faq-cat-btn.active { background: #3a7032; color: white; border-color: #3a7032; }
+
+    /* Accordion */
+    .faq-item { border-radius: 14px; overflow: hidden; }
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      padding: 18px 22px;
+      background: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1f2937;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s ease;
+    }
+    .faq-question:hover { background: #f9fafb; }
+    .faq-question.open { background: #f0faf0; color: #2d5a27; }
+    .faq-icon {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: #e8f5e2;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.3s ease, background 0.2s ease;
+    }
+    .faq-question.open .faq-icon { transform: rotate(45deg); background: #3a7032; }
+    .faq-question.open .faq-icon svg { stroke: white; }
+    .faq-answer {
+      display: none;
+      padding: 0 22px 18px;
+      background: #f0faf0;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.75;
+    }
+    .faq-answer.open { display: block; }
+    .faq-group.hidden-group { display: none; }
+
+    .search-input {
+      width: 100%;
+      padding: 13px 20px 13px 48px;
+      border: 1.5px solid #e0e7e0;
+      border-radius: 999px;
+      font-size: 14.5px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      background: white;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .search-input:focus { border-color: #3a7032; box-shadow: 0 0 0 3px rgba(58,112,50,0.1); }
+    .search-wrap { position: relative; max-width: 560px; margin: 0 auto; }
+    .search-icon { position: absolute; left: 17px; top: 50%; transform: translateY(-50%); }
+  </style>
+</head>
+<body class="m-0 font-sans bg-cream-light overflow-x-hidden">
+
+  <!-- TOPBAR -->
+  <div class="fixed top-0 w-full z-[1001] bg-gradient-to-r from-green-dark to-green-main text-white overflow-hidden" style="height:32px;display:flex;align-items:center;">
+    <div style="display:flex;gap:80px;animation:marquee 28s linear infinite;white-space:nowrap;font-size:11px;font-weight:600;letter-spacing:0.06em;">
+      <span>❓ FAQ — Apna Bagicha ke saare Sawalon ke Jawab</span>
+      <span>📞 Helpline: +91 9876543210</span>
+      <span>🚚 Pan-India Delivery in 2–5 Days</span>
+      <span>🌱 500+ Certified Agri Products</span>
+      <span>❓ FAQ — Apna Bagicha ke saare Sawalon ke Jawab</span>
+      <span>📞 Helpline: +91 9876543210</span>
+      <span>🚚 Pan-India Delivery in 2–5 Days</span>
+      <span>🌱 500+ Certified Agri Products</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <div class="fixed top-[32px] w-full z-[1000] bg-white/96 flex justify-between items-center py-3 px-6 transition-all duration-300 navbar border-b border-gray-100">
+    <a href="index.html" class="flex items-center gap-2.5 no-underline">
+      <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Apna Bagicha Logo" class="w-[46px] h-[46px] object-contain hover:scale-105 transition-transform duration-300">
+      <span class="font-dancing text-[1.8rem] font-bold leading-none cursor-pointer">
+        <span class="text-green-800">Apna</span> <span class="text-orange-500">Bagicha</span>
+      </span>
+    </a>
+    <div class="menu hidden md:flex items-center">
+      <a href="index.html" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Home</a>
+      <a href="products.html" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Products</a>
+      <a href="about.html" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">About</a>
+      <a href="blog.html" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Blog</a>
+      <a href="contact.html" class="mx-1.5 text-gray-600 py-1.5 px-3 text-[14px] font-medium">Contact</a>
+      <div id="navAuthArea" class="inline-flex items-center"></div>
+      <a href="contact.html" class="nav-cta ml-3 bg-green-main text-white px-5 py-2 rounded-full text-[13px] font-semibold hover:bg-green-dark transition-all no-underline shadow-sm">Get Quote</a>
+    </div>
+    <button class="menu-toggle block md:hidden p-1.5 rounded-lg hover:bg-gray-100 transition-colors bg-transparent border-0 cursor-pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2.5" stroke-linecap="round">
+        <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="pt-[90px]"></div>
+
+  <!-- ========== HERO BANNER ========== -->
+  <div class="relative bg-gradient-to-br from-[#1b5e20] via-green-dark to-[#2d6b28] text-white text-center py-[88px] px-6 overflow-hidden">
+    <svg class="absolute right-0 top-0 opacity-[0.06] pointer-events-none" width="400" height="400" viewBox="0 0 400 400" fill="none">
+      <circle cx="350" cy="50" r="270" stroke="white" stroke-width="66"/>
+      <circle cx="350" cy="50" r="140" stroke="white" stroke-width="33"/>
+    </svg>
+    <svg class="absolute left-[-55px] bottom-[-40px] opacity-[0.05] pointer-events-none" width="250" height="250" viewBox="0 0 250 250" fill="none">
+      <circle cx="0" cy="250" r="180" stroke="white" stroke-width="50"/>
+    </svg>
+
+    <div class="relative z-10 max-w-[700px] mx-auto">
+      <div class="inline-flex items-center gap-2 border border-white/30 rounded-full px-4 py-1.5 text-[11px] font-semibold tracking-widest uppercase mb-6 text-white/80">
+        <span class="w-[6px] h-[6px] rounded-full bg-gold inline-block"></span>
+        Frequently Asked Questions
+      </div>
+      <h1 class="font-playfair text-[clamp(2rem,5vw,3.1rem)] mb-4 leading-[1.13] opacity-0" style="animation:fadeUp .6s .15s forwards;">
+        Aapke <em class="text-gold italic">Sawalon</em> Ka Jawab<br>Yahan Hai
+      </h1>
+      <p class="text-[15px] text-white/65 leading-relaxed opacity-0 max-w-[500px] mx-auto mb-8" style="animation:fadeUp .6s .3s forwards;">
+        Products, delivery, organic certification, technical advice — sab kuch ek jagah. Jawab nahi mila? Hamse directly baat karein.
+      </p>
+
+      <!-- Search bar -->
+      <div class="search-wrap opacity-0 w-full" style="animation:fadeUp .6s .45s forwards;">
+        <span class="search-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <input type="text" id="faqSearch" placeholder="Apna sawaal search karein..." class="search-input" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 w-full leading-[0]">
+      <svg viewBox="0 0 1440 55" preserveAspectRatio="none" class="block w-full">
+        <path d="M0,0 C480,55 960,55 1440,0 L1440,55 L0,55 Z" fill="#fdf8f0"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ========== FAQ SECTION ========== -->
+  <section class="py-[72px] px-[6vw] bg-cream-light">
+    <div class="max-w-[860px] mx-auto">
+
+      <!-- Category filter -->
+      <div class="flex flex-wrap gap-2.5 justify-center mb-10" id="faqCatTabs">
+        <button class="faq-cat-btn active" data-cat="all">All Questions</button>
+        <button class="faq-cat-btn" data-cat="products">🌱 Products</button>
+        <button class="faq-cat-btn" data-cat="delivery">🚚 Delivery</button>
+        <button class="faq-cat-btn" data-cat="organic">🍃 Organic</button>
+        <button class="faq-cat-btn" data-cat="technical">🔬 Technical</button>
+        <button class="faq-cat-btn" data-cat="dealer">🤝 Dealers</button>
+      </div>
+
+      <!-- ======= PRODUCTS ======= -->
+      <div class="faq-group mb-8" data-group="products">
+        <h3 class="font-bold text-[13px] uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+          <span class="w-5 h-[2px] bg-green-main inline-block rounded"></span>Products
+        </h3>
+        <div class="space-y-3">
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Apna Bagicha ke products FSSAI certified hain?">
+              <span>Kya Apna Bagicha ke sare products FSSAI certified hain?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Haan, hamare saare fertilizer aur food-grade products FSSAI licensed hain. Hamare seeds PGS-India Organic Certified hain aur bio-pesticides Central Insecticide Board (CIB) registered hain. Har product ke saath quality certificate bhi milta hai.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Minimum order quantity kya hai?">
+              <span>Minimum order quantity (MOQ) kya hai?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Retail orders ke liye koi minimum nahi hai — aap ek packet bhi order kar sakte hain. Bulk orders (500 kg+) ke liye special pricing milti hai. Dealer orders ke liye alag MOQ structure hai jo aap hamare sales team se jaanch sakte hain.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Product expiry date kab tak hoti hai?">
+              <span>Seeds aur fertilizers ki expiry date kitni hoti hai?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Hybrid seeds generally 1–2 saal tak valid rehte hain airtight packaging mein. Granular fertilizers 2–3 saal. Liquid bio-pesticides 1–1.5 saal. Har packet par manufacturing date aur best-before date clearly printed hoti hai. Cool, dry storage mein rakhne se shelf life extend hoti hai.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Kya product samples milte hain?">
+              <span>Kya trial sample ya demo pack milta hai?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Registered dealers aur bulk buyers ke liye limited trial samples available hain. Individual farmers ke liye hamare agronomist helpline se baat karein — woh aapki crop aur area ke hisaab se recommended quantity suggest karenge aur nearest dealer ka pata bhi batayenge.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ======= DELIVERY ======= -->
+      <div class="faq-group mb-8" data-group="delivery">
+        <h3 class="font-bold text-[13px] uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+          <span class="w-5 h-[2px] bg-green-main inline-block rounded"></span>Ordering &amp; Delivery
+        </h3>
+        <div class="space-y-3">
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Delivery kitne din mein milti hai?">
+              <span>Order karne ke baad delivery kitne din mein milti hai?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Standard delivery: 3–5 business days pan-India. North India (UP, Punjab, Haryana, Rajasthan) mein 2–3 days. Remote areas ya hilly regions mein 5–7 days lag sakte hain. Express delivery option bhi available hai — contact us for details.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Order kaise karte hain?">
+              <span>Order karne ka process kya hai? Online order ho sakta hai?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Abhi aap 3 tarike se order kar sakte hain: (1) Contact form bharo hamare website par, (2) WhatsApp karo +91 9876543210 par, (3) Direct call karo. Online payment portal jald hi launch ho raha hai. Nearest dealer ke through bhi order de sakte hain.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Delivery charges kitne hain?">
+              <span>Delivery charges kitne hain? Free delivery milti hai?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              ₹2,000 se upar ke orders par FREE delivery milti hai. Chhote orders ke liye courier charges apply hote hain jo weight aur distance ke hisaab se calculate hote hain. Bulk orders (50 kg+) par delivery charges maafi ya special rate diya jaata hai.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Payment methods kya hain?">
+              <span>Kaunse payment methods accept kiye jaate hain?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Hum UPI, bank transfer (NEFT/RTGS), aur cheque accept karte hain. Registered dealers ke liye credit terms bhi available hain. Cash on delivery bhi kuch areas mein available hai — please confirm karo order ke time.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Wrong ya damaged product mila to kya karein?">
+              <span>Agar damaged ya galat product deliver ho jaye to kya karein?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Delivery ke 48 ghante ke andar WhatsApp ya call karein. Photo send karein product aur package ki. Hum free replacement ya full refund provide karte hain — no questions asked. Customer satisfaction hamari pehli priority hai.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ======= ORGANIC ======= -->
+      <div class="faq-group mb-8" data-group="organic">
+        <h3 class="font-bold text-[13px] uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+          <span class="w-5 h-[2px] bg-green-main inline-block rounded"></span>Organic Certification
+        </h3>
+        <div class="space-y-3">
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="PGS-India certification kya hoti hai?">
+              <span>PGS-India Organic Certification kya hoti hai aur ye kyon zaroori hai?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              PGS (Participatory Guarantee System) India Government ki organic certification hai jisme farmers ek dusre ke practices verify karte hain. Ye NPOP certification se chhote farmers ke liye accessible alternative hai. PGS certified products par premium price milti hai aur export ke liye bhi valid hai.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Organic products chemical free hain?">
+              <span>Kya hamare organic products 100% chemical-free hain?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Haan, hamare PGS-India certified organic products mein koi synthetic chemical, pesticide residue, ya GMO material nahi hota. Vermicompost, neem cake, karanja cake, aur bio-pesticides sab natural sources se banaye jaate hain aur third-party lab testing se confirm hote hain.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Organic kheti mein transition time kitna hota hai?">
+              <span>Chemical farming se organic farming mein convert hone mein kitna time lagta hai?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              PGS-India ke according minimum 2 saal ka conversion period hota hai. Pehle saal mein normally yield thodi kam hoti hai, lekin soil health improve hone par 2-3 saal mein yield aur quality dono badhti hain. Hamare agronomist aapko step-by-step conversion plan banane mein free help karenge.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ======= TECHNICAL ======= -->
+      <div class="faq-group mb-8" data-group="technical">
+        <h3 class="font-bold text-[13px] uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+          <span class="w-5 h-[2px] bg-green-main inline-block rounded"></span>Technical Support
+        </h3>
+        <div class="space-y-3">
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Agronomist helpline kya hai?">
+              <span>Free Agronomist Helpline kya hai aur kaise use karein?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              +91 9876543210 par Monday to Saturday, 9 AM – 6 PM call karein. Hamare senior agronomists crop disease identification, fertilizer scheduling, pest control aur soil problems ke baare mein free advice denge. WhatsApp par bhi photo bhej kar query kar sakte hain.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Kaunsa fertilizer meri crop ke liye sahi hai?">
+              <span>Apni crop ke liye sahi fertilizer kaise choose karein?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Pehle soil test karwaiye pH aur NPK level ke liye. Soil test report ke basis par hamare agronomist aapko exact fertilizer recommendation denge. Generally: vegetative stage mein high-N, flowering mein high-P, fruiting mein high-K formula use karein. Hamare blog mein crop-wise detailed guides bhi available hain.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Seeds germinate nahi ho rahe, kya karein?">
+              <span>Mera seed germinate nahi ho raha — kya karun?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Poor germination ke common reasons: soil temperature too low/high, overwatering, seed depth incorrect, poor soil aeration. Check karein: seed ko warm water mein 6–8 ghante soak karein pehle; seedbed mein 20–30°C temperature honi chahiye; light moisture, waterlogging nahi. Problem persist ho toh photo bhejkar helpline par contact karein.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="NPK water soluble fertilizer kaise use karein?">
+              <span>Water soluble NPK fertilizer drip system mein kaise use karein?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Stock solution 200–500x dilution par banayein. EC meter se 1.5–2.5 mS/cm maintain karein crop type ke hisaab se. Filter se pehle solution pass karein. Fertigation 30–40 min pehle plain water se start aur baad mein flush karein. Hamare blog mein fertigation schedule guide available hai.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ======= DEALERS ======= -->
+      <div class="faq-group mb-8" data-group="dealer">
+        <h3 class="font-bold text-[13px] uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+          <span class="w-5 h-[2px] bg-green-main inline-block rounded"></span>Dealers &amp; Bulk Buyers
+        </h3>
+        <div class="space-y-3">
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Dealer kaise banein?">
+              <span>Apna Bagicha ka authorized dealer kaise ban sakte hain?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Contact form bharo ya directly call karo. Requirements: valid agri-shop license, 500 sq ft storage space, minimum initial order ₹50,000. Dealer ko 15–25% margin milti hai MRP par, plus seasonal incentives. Training aur marketing material free milta hai.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="Bulk order discount kitna milta hai?">
+              <span>Bulk orders par kitna discount milta hai?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              100 kg+ par 5%, 500 kg+ par 10%, 1 MT+ par 15% discount milti hai. Annual contract par additional 3–5% rebate milta hai. FPOs (Farmer Producer Organizations) ke liye special pricing available hai. Exact quote ke liye hamare sales team se baat karein.
+            </div>
+          </div>
+
+          <div class="faq-item shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <button class="faq-question" data-q="FPO ke liye koi special scheme hai?">
+              <span>Kya Farmer Producer Organizations (FPOs) ke liye special schemes hain?</span>
+              <span class="faq-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </button>
+            <div class="faq-answer">
+              Haan! Registered FPOs ke liye: special pricing, extended credit terms (30–45 days), free agronomist visits, aur co-branded product packaging bhi available hai. FPO partnerships ke liye directly MD ko mail karein: partnerships@apnabagicha.com
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- No results -->
+      <div id="noFaqResults" class="hidden text-center py-16 text-gray-400">
+        <div class="text-[48px] mb-4">🔍</div>
+        <p class="text-[15px]">Koi matching sawaal nahi mila.<br><a href="contact.html" class="text-green-main no-underline font-semibold hover:underline">Humse directly puchein →</a></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== STILL HAVE QUESTIONS CTA ========== -->
+  <section class="py-[64px] px-[6vw] bg-gradient-to-r from-[#1a3d16] via-green-dark to-[#2d6b28] relative overflow-hidden">
+    <svg class="absolute right-0 bottom-0 opacity-[0.07] pointer-events-none" width="340" height="220" viewBox="0 0 340 220" fill="none">
+      <circle cx="300" cy="180" r="220" stroke="white" stroke-width="56"/>
+    </svg>
+    <div class="max-w-[700px] mx-auto text-center relative z-10">
+      <div class="text-[40px] mb-4">🤔</div>
+      <h2 class="font-playfair text-[clamp(1.5rem,3vw,2.1rem)] text-white font-bold mb-4">Aur Koi Sawaal Hai?</h2>
+      <p class="text-white/60 text-[14.5px] mb-8 leading-relaxed max-w-[500px] mx-auto">
+        Humara agronomist team Monday–Saturday 9 AM se 6 PM available hai. Call karein, WhatsApp karein, ya contact form bhejein.
+      </p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a href="contact.html" class="bg-gold text-green-dark px-7 py-3.5 rounded-full text-[14px] font-bold hover:brightness-110 hover:-translate-y-0.5 transition-all shadow-lg no-underline inline-flex items-center gap-2">
+          📩 Send a Message
+        </a>
+        <a href="https://wa.me/7417002360" target="_blank" rel="noopener" class="border-2 border-white/45 text-white px-7 py-3.5 rounded-full text-[14px] font-semibold hover:border-white hover:bg-white/10 hover:-translate-y-0.5 transition-all no-underline inline-flex items-center gap-2">
+          💬 WhatsApp Now
+        </a>
+        <a href="tel:+7417002360" class="border-2 border-white/45 text-white px-7 py-3.5 rounded-full text-[14px] font-semibold hover:border-white hover:bg-white/10 hover:-translate-y-0.5 transition-all no-underline inline-flex items-center gap-2">
+          📞 Call Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-[#1a2f17] text-white pt-[60px] pb-[24px] px-[6vw]">
+    <div class="max-w-[1200px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-[48px]">
+        <div>
+          <div class="flex items-center gap-2.5 mb-4">
+            <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Apna Bagicha" class="w-[42px] h-[42px]">
+            <span class="font-dancing text-[1.65rem] font-bold"><span class="text-green-400">Apna</span> <span class="text-orange-400">Bagicha</span></span>
+          </div>
+          <p class="text-white/50 text-[13px] leading-relaxed mb-5 max-w-[260px]">Trusted partner for 12,000+ farmers. Delivering quality agricultural inputs since 2006.</p>
+          <div class="flex gap-2.5">
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">WA</a>
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">FB</a>
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-main transition-colors text-[11px] no-underline text-white/70 font-bold">IG</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-[13px] uppercase tracking-wider mb-5">Quick Links</h4>
+         <a href="index.html" class="footer-link" style="display:flex; align-items:center; gap:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 3L2.5 10.5C2.2 10.7 2 11.1 2 11.5C2 12.3 2.7 13 3.5 13H5V19C5 20.1 5.9 21 7 21H17C18.1 21 19 20.1 19 19V13H20.5C21.3 13 22 12.3 22 11.5C22 11.1 21.8 10.7 21.5 10.5L12 3Z"
+                fill="#4CAF50" />
+              <rect x="6" y="11" width="12" height="9" rx="2" fill="#81C784" />
+              <rect x="10" y="14" width="4" height="6" rx="1" fill="#2E7D32" />
+            </svg>
+            Home
+          </a>
+         <a href="products.html" class="footer-link" style="display:flex; align-items:center; gap:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <!-- Stem -->
+              <rect x="11" y="10" width="2" height="10" rx="1" fill="#2E7D32" />
+
+              <!-- Left leaf -->
+              <path d="M12 10C8 10 6 7 6 5C9 5 12 6.5 12 10Z" fill="#66BB6A" />
+
+              <!-- Right leaf -->
+              <path d="M12 10C16 10 18 7 18 5C15 5 12 6.5 12 10Z" fill="#4CAF50" />
+            </svg>
+            Our Products
+          </a>
+          <a href="about.html" class="footer-link" style="display:flex; align-items:center; gap:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <!-- Back person -->
+              <circle cx="9" cy="8" r="3" fill="#CE93D8" />
+              <path d="M4 18C4 15.5 6.5 14 9 14C11.5 14 14 15.5 14 18V19H4V18Z" fill="#CE93D8" />
+
+              <!-- Front person -->
+              <circle cx="15" cy="9" r="3" fill="#9C27B0" />
+              <path d="M10 19C10 16.5 12.5 15 15 15C17.5 15 20 16.5 20 19V20H10V19Z" fill="#9C27B0" />
+            </svg>
+            About Us
+          </a>
+          <a href="blog.html" class="footer-link">📰 Kisan Blog</a>
+          <a href="faq.html" class="footer-link">❓ FAQ</a>
+          <a href="contact.html" class="footer-link" style="display:flex; align-items:center; gap:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M6.6 10.8C8.2 13.9 10.1 15.8 13.2 17.4L15.2 15.4C15.5 15.1 16 15 16.4 15.1C17.6 15.5 18.8 15.7 20 15.7C20.6 15.7 21 16.1 21 16.7V20C21 20.6 20.6 21 20 21C10.6 21 3 13.4 3 4C3 3.4 3.4 3 4 3H7.3C7.9 3 8.3 3.4 8.3 4C8.3 5.2 8.5 6.4 8.9 7.6C9 8 8.9 8.5 8.6 8.8L6.6 10.8Z"
+                fill="#F44336" />
+            </svg>
+            Contact
+          </a>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-[13px] uppercase tracking-wider mb-5">Contact Us</h4>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2.5 text-[13px] text-white/55"><span class="shrink-0 mt-0.5">📍</span><span>Muzaffarnagar, Uttar Pradesh, India</span></div>
+            <div class="flex items-center gap-2.5 text-[13px] text-white/55"><span> <svg width="18" height="18"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M6.6 10.8C8.2 13.9 10.1 15.8 13.2 17.4L15.2 15.4C15.5 15.1 16 15 16.4 15.1C17.6 15.5 18.8 15.7 20 15.7C20.6 15.7 21 16.1 21 16.7V20C21 20.6 20.6 21 20 21C10.6 21 3 13.4 3 4C3 3.4 3.4 3 4 3H7.3C7.9 3 8.3 3.4 8.3 4C8.3 5.2 8.5 6.4 8.9 7.6C9 8 8.9 8.5 8.6 8.8L6.6 10.8Z"
+                    fill="#F44336" />
+                </svg></span><a href="tel:+7417002360" class="text-white/55 hover:text-gold no-underline transition-colors">+91 9876543210</a></div>
+            <div class="flex items-center gap-2.5 text-[13px] text-white/55"><span><svg width="16" height="16"
+                  viewBox="0 0 24 24">
+                  <rect x="3" y="5" width="18" height="14" rx="2" fill="#FF9800" />
+                  <path d="M3 7L12 13L21 7" fill="none" stroke="#E65100" stroke-width="2" />
+                </svg></span><a href="mailto:support@apnabagicha.com" class="text-white/55 hover:text-gold no-underline transition-colors">support@apnabagicha.com</a></div>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-5 flex flex-col md:flex-row items-center justify-between gap-3">
+        <p class="text-white/35 text-[12px]">© 2026 <span class="text-gold font-semibold">Apna Bagicha</span>. All Rights Reserved.</p>
+        <div class="flex gap-5">
+          <a href="#" class="text-white/30 text-[12px] hover:text-white/55 no-underline transition-colors">Privacy Policy</a>
+          <a href="#" class="text-white/30 text-[12px] hover:text-white/55 no-underline transition-colors">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/7417002360" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script>
+    /* ---- Accordion ---- */
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const answer = btn.nextElementSibling;
+        const isOpen = btn.classList.contains('open');
+        // close all
+        document.querySelectorAll('.faq-question.open').forEach(b => {
+          b.classList.remove('open');
+          b.nextElementSibling.classList.remove('open');
+        });
+        if (!isOpen) {
+          btn.classList.add('open');
+          answer.classList.add('open');
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    });
+
+    /* ---- Category filter ---- */
+    document.querySelectorAll('#faqCatTabs .faq-cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#faqCatTabs .faq-cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.cat;
+        document.querySelectorAll('.faq-group').forEach(group => {
+          group.classList.toggle('hidden-group', cat !== 'all' && group.dataset.group !== cat);
+        });
+        document.getElementById('noFaqResults').classList.add('hidden');
+      });
+    });
+
+    /* ---- Search ---- */
+    document.getElementById('faqSearch').addEventListener('input', function() {
+      const query = this.value.trim().toLowerCase();
+      if (!query) {
+        document.querySelectorAll('.faq-item').forEach(item => item.style.display = '');
+        document.querySelectorAll('.faq-group').forEach(g => g.classList.remove('hidden-group'));
+        document.getElementById('noFaqResults').classList.add('hidden');
+        document.querySelectorAll('#faqCatTabs .faq-cat-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('#faqCatTabs .faq-cat-btn[data-cat="all"]').classList.add('active');
+        return;
+      }
+      // show all groups
+      document.querySelectorAll('.faq-group').forEach(g => g.classList.remove('hidden-group'));
+      document.querySelectorAll('#faqCatTabs .faq-cat-btn').forEach(b => b.classList.remove('active'));
+
+      let total = 0;
+      document.querySelectorAll('.faq-item').forEach(item => {
+        const q = item.querySelector('.faq-question');
+        const a = item.querySelector('.faq-answer');
+        const text = (q.dataset.q || q.textContent + a.textContent).toLowerCase();
+        const match = text.includes(query);
+        item.style.display = match ? '' : 'none';
+        if (match) total++;
+      });
+      document.getElementById('noFaqResults').classList.toggle('hidden', total > 0);
+    });
+  </script>
+
+</body>
+</html>
