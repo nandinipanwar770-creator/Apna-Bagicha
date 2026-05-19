@@ -891,7 +891,11 @@ app.post('/account/update-order-address', async (req, res) => {
 });
 
 // ── Reviews ───────────────────────────────────────────────────────────────────
-app.get('/reviews', async (req, res) => {
+app.get('/reviews', (req, res) => {
+  res.render('reviews.html', {});
+});
+
+app.get('/api/reviews', async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT id, name, location, rating, review, created_at FROM reviews WHERE approved=TRUE ORDER BY created_at DESC'
@@ -912,18 +916,7 @@ app.get('/reviews', async (req, res) => {
       star,
       count: allReviews.filter(r => r.rating === star).length
     }));
-    res.render('reviews.html', { reviews, total, avgRating, fiveStarPct, ratingCounts, page, totalPages });
-  } catch (e) {
-    res.status(500).send('Error loading reviews');
-  }
-});
-
-app.get('/api/reviews', async (req, res) => {
-  try {
-    const result = await pool.query(
-      'SELECT id, name, location, rating, review, created_at FROM reviews WHERE approved=TRUE ORDER BY created_at DESC'
-    );
-    res.json({ success: true, reviews: result.rows });
+    res.json({ success: true, reviews, total, avgRating, fiveStarPct, ratingCounts, page, totalPages });
   } catch (e) {
     res.json({ success: false, error: e.message });
   }

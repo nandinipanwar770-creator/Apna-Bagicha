@@ -134,15 +134,15 @@
       <!-- Stats row -->
       <div class="flex flex-wrap justify-center gap-8">
         <div class="text-center">
-          <div class="text-3xl font-bold text-gold">{{ total }}</div>
+          <div id="statTotal" class="text-3xl font-bold text-gold">—</div>
           <div class="text-white/60 text-xs mt-0.5">Total Reviews</div>
         </div>
         <div class="text-center">
-          <div class="text-3xl font-bold text-gold">{{ avgRating }}</div>
+          <div id="statAvg" class="text-3xl font-bold text-gold">—</div>
           <div class="text-white/60 text-xs mt-0.5">Average Rating</div>
         </div>
         <div class="text-center">
-          <div class="text-3xl font-bold text-gold">{{ fiveStarPct }}%</div>
+          <div id="statFiveStar" class="text-3xl font-bold text-gold">—</div>
           <div class="text-white/60 text-xs mt-0.5">5-Star Reviews</div>
         </div>
       </div>
@@ -160,76 +160,24 @@
   <section class="py-12 px-[6vw]">
     <div class="max-w-[1200px] mx-auto">
 
-      {% if reviews | length == 0 %}
-      <div class="text-center py-24">
+      <!-- Loading state -->
+      <div id="reviewsLoading" class="text-center py-24">
+        <div class="text-5xl mb-4 animate-pulse">🌱</div>
+        <p class="text-gray-400 text-sm">Loading reviews...</p>
+      </div>
+
+      <!-- Grid (populated by JS) -->
+      <div id="reviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
+
+      <!-- Empty state -->
+      <div id="reviewsEmpty" class="hidden text-center py-24">
         <div class="text-6xl mb-4">🌱</div>
         <p class="text-gray-500 font-semibold text-lg">No reviews yet</p>
         <p class="text-gray-400 text-sm mt-1">Be the first to share your experience!</p>
       </div>
 
-      {% else %}
-      <div id="reviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for r in reviews %}
-        <div class="review-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100" data-name="{{ r.name }}" data-location="{{ r.location }}" data-rating="{{ r.rating }}" data-review="{{ r.review }}">
-          <!-- Quote mark -->
-          <div class="text-gold text-4xl leading-none mb-3 font-playfair">&ldquo;</div>
-
-          <!-- Stars -->
-          <div class="flex gap-0.5 mb-3">
-            {% for i in range(1, 6) %}
-              {% if i <= r.rating %}
-              <span class="text-gold text-base">★</span>
-              {% else %}
-              <span class="text-gray-200 text-base">★</span>
-              {% endif %}
-            {% endfor %}
-          </div>
-
-          <!-- Review text -->
-          <p class="text-sm text-gray-600 leading-relaxed mb-5 rev-body">{{ r.review }}</p>
-
-          <!-- Author -->
-          <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
-            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-main font-bold text-sm shrink-0">
-              {{ r.name[0] | upper }}
-            </div>
-            <div class="min-w-0">
-              <div class="author-name text-sm font-bold text-gray-800 truncate">{{ r.name }}</div>
-              {% if r.location %}
-              <div class="author-loc text-xs text-gray-400 truncate">{{ r.location }}</div>
-              {% endif %}
-            </div>
-            <div class="ml-auto text-xs text-gray-300 shrink-0 whitespace-nowrap">
-              {{ r.created_at | truncdate | replace("T", " ") }}
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-
-      <div class="flex justify-center items-center gap-3 mt-10 mb-2 flex-wrap">
-        {% if page > 1 %}
-        <a href="/reviews?page={{ page - 1 }}" class="px-5 py-2 rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 no-underline transition-colors">&#8592; Prev</a>
-        {% else %}
-        <span class="px-5 py-2 rounded-full border border-gray-100 text-sm font-semibold text-gray-300 cursor-not-allowed select-none">&#8592; Prev</span>
-        {% endif %}
-
-        {% for p in range(1, totalPages + 1) %}
-          {% if p == page %}
-          <span class="w-9 h-9 flex items-center justify-center rounded-full bg-green-main text-white text-sm font-bold">{{ p }}</span>
-          {% else %}
-          <a href="/reviews?page={{ p }}" class="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 no-underline transition-colors">{{ p }}</a>
-          {% endif %}
-        {% endfor %}
-
-        {% if page < totalPages %}
-        <a href="/reviews?page={{ page + 1 }}" class="px-5 py-2 rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 no-underline transition-colors">Next &#8594;</a>
-        {% else %}
-        <span class="px-5 py-2 rounded-full border border-gray-100 text-sm font-semibold text-gray-300 cursor-not-allowed select-none">Next &#8594;</span>
-        {% endif %}
-      </div>
-
-      {% endif %}
+      <!-- Pagination (populated by JS) -->
+      <div id="reviewsPagination" class="flex justify-center items-center gap-3 mt-10 mb-2 flex-wrap"></div>
 
     </div>
   </section>
@@ -271,40 +219,179 @@
     function closeRevPopup() {
       document.getElementById('revPopupModal').style.display = 'none';
     }
+
+    function openRevPopup(name, loc, rating, fullText) {
+      var starsHtml = '';
+      for (var i = 1; i <= 5; i++) {
+        starsHtml += '<span style="font-size:22px;color:' + (i <= rating ? '#d4a843' : '#e5e7eb') + ';">★</span>';
+      }
+      document.getElementById('revPopupTitle').textContent = name;
+      document.getElementById('revPopupStars').innerHTML = starsHtml;
+      document.getElementById('revPopupText').textContent = fullText;
+      document.getElementById('revPopupInitial').textContent = (name || '?')[0].toUpperCase();
+      document.getElementById('revPopupName').textContent = name;
+      var locEl = document.getElementById('revPopupLocation');
+      locEl.textContent = loc;
+      locEl.style.display = loc ? '' : 'none';
+      document.getElementById('revPopupModal').style.display = 'flex';
+    }
+
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closeRevPopup();
     });
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.review-card').forEach(function(card) {
-        var fullText = card.dataset.review || '';
-        var p = card.querySelector('.rev-body');
-        if (!p) return;
-        var words = fullText.trim().split(/\s+/).filter(Boolean);
-        if (words.length <= 30) return;
-        p.textContent = words.slice(0, 30).join(' ') + '...';
+
+    function buildStars(rating) {
+      var html = '';
+      for (var i = 1; i <= 5; i++) {
+        html += '<span class="' + (i <= rating ? 'star-filled' : 'star-empty') + '" style="font-size:16px;">★</span>';
+      }
+      return html;
+    }
+
+    function buildCard(r) {
+      var name     = r.name || 'Anonymous';
+      var loc      = r.location || '';
+      var rating   = parseInt(r.rating) || 5;
+      var fullText = r.review || '';
+      var words    = fullText.trim().split(/\s+/).filter(Boolean);
+      var truncated = words.length > 30;
+      var displayText = truncated ? words.slice(0, 30).join(' ') + '...' : fullText;
+      var initial  = name[0].toUpperCase();
+      var starsHtml = buildStars(rating);
+
+      var viewBtn = '';
+      if (truncated) {
+        var safeText = fullText.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, ' ');
+        var safeName = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        var safeLoc  = loc.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        viewBtn = '<button onclick="openRevPopup(\'' + safeName + '\',\'' + safeLoc + '\',' + rating + ',\'' + safeText + '\')" style="background:none;border:none;cursor:pointer;color:#3a7032;font-size:13px;font-weight:600;padding:4px 0 0;display:block;text-decoration:underline;font-family:inherit;">View full review →</button>';
+      }
+
+      return '<div class="review-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">' +
+        '<div class="text-4xl text-green-main/20 font-playfair leading-none mb-3">"</div>' +
+        '<div class="flex items-center gap-1 mb-3">' + starsHtml + '</div>' +
+        '<p class="rev-body text-gray-700 text-[14px] leading-relaxed mb-1">' + escHtml(displayText) + '</p>' +
+        viewBtn +
+        '<div class="flex items-center gap-3 pt-4 mt-3 border-t border-gray-100">' +
+          '<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-main font-bold text-base flex-shrink-0">' + escHtml(initial) + '</div>' +
+          '<div class="min-w-0">' +
+            '<div class="author-name text-sm font-semibold text-gray-800">' + escHtml(name) + '</div>' +
+            (loc ? '<div class="author-loc text-xs text-gray-400">' + escHtml(loc) + '</div>' : '') +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function buildPagination(page, totalPages) {
+      var container = document.getElementById('reviewsPagination');
+      container.innerHTML = '';
+      if (totalPages <= 1) return;
+
+      function makeBtn(label, targetPage, active, disabled) {
         var btn = document.createElement('button');
-        btn.textContent = 'View full review →';
-        btn.style.cssText = 'background:none;border:none;cursor:pointer;color:#3a7032;font-size:13px;font-weight:600;padding:4px 0 0;display:block;text-decoration:underline;font-family:inherit;';
-        btn.addEventListener('click', function() {
-          var name = card.dataset.name || '';
-          var loc = card.dataset.location || '';
-          var rating = parseInt(card.dataset.rating) || 5;
-          var starsHtml = '';
-          for (var i = 1; i <= 5; i++) {
-            starsHtml += '<span style=\'font-size:22px;color:' + (i <= rating ? '#d4a843' : '#e5e7eb') + ';\'>★</span>';
+        btn.innerHTML = label;
+        btn.style.cssText = 'border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:600;cursor:' + (disabled ? 'default' : 'pointer') + ';font-family:inherit;transition:all 0.2s;';
+        if (active) {
+          btn.style.background = '#3a7032';
+          btn.style.color = 'white';
+        } else if (disabled) {
+          btn.style.background = '#f3f4f6';
+          btn.style.color = '#d1d5db';
+        } else {
+          btn.style.background = '#f3f4f6';
+          btn.style.color = '#374151';
+          btn.addEventListener('mouseenter', function() { this.style.background = '#e5e7eb'; });
+          btn.addEventListener('mouseleave', function() { this.style.background = '#f3f4f6'; });
+        }
+        if (!disabled && !active) {
+          btn.addEventListener('click', function() { loadPage(targetPage); });
+        }
+        return btn;
+      }
+
+      container.appendChild(makeBtn('‹', page - 1, false, page <= 1));
+
+      var start = Math.max(1, page - 2);
+      var end   = Math.min(totalPages, page + 2);
+      if (start > 1) {
+        container.appendChild(makeBtn('1', 1, false, false));
+        if (start > 2) {
+          var dots = document.createElement('span');
+          dots.textContent = '…';
+          dots.style.cssText = 'padding:8px 4px;color:#9ca3af;font-size:14px;';
+          container.appendChild(dots);
+        }
+      }
+      for (var i = start; i <= end; i++) {
+        container.appendChild(makeBtn(i, i, i === page, false));
+      }
+      if (end < totalPages) {
+        if (end < totalPages - 1) {
+          var dots2 = document.createElement('span');
+          dots2.textContent = '…';
+          dots2.style.cssText = 'padding:8px 4px;color:#9ca3af;font-size:14px;';
+          container.appendChild(dots2);
+        }
+        container.appendChild(makeBtn(totalPages, totalPages, false, false));
+      }
+
+      container.appendChild(makeBtn('›', page + 1, false, page >= totalPages));
+    }
+
+    function loadPage(page) {
+      var loading = document.getElementById('reviewsLoading');
+      var grid    = document.getElementById('reviewsGrid');
+      var empty   = document.getElementById('reviewsEmpty');
+
+      loading.classList.remove('hidden');
+      grid.classList.add('hidden');
+      empty.classList.add('hidden');
+
+      fetch('/api/reviews?page=' + page)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (!data.success) throw new Error('API error');
+
+          document.getElementById('statTotal').textContent    = data.total || 0;
+          document.getElementById('statAvg').textContent      = data.avgRating ? data.avgRating.toFixed(1) : '0.0';
+          document.getElementById('statFiveStar').textContent = data.fiveStarPct ? Math.round(data.fiveStarPct) + '%' : '0%';
+
+          loading.classList.add('hidden');
+
+          if (!data.reviews || data.reviews.length === 0) {
+            empty.classList.remove('hidden');
+            return;
           }
-          document.getElementById('revPopupTitle').textContent = name;
-          document.getElementById('revPopupStars').innerHTML = starsHtml;
-          document.getElementById('revPopupText').textContent = fullText;
-          document.getElementById('revPopupInitial').textContent = (name || '?')[0].toUpperCase();
-          document.getElementById('revPopupName').textContent = name;
-          var locEl = document.getElementById('revPopupLocation');
-          locEl.textContent = loc;
-          locEl.style.display = loc ? '' : 'none';
-          document.getElementById('revPopupModal').style.display = 'flex';
+
+          grid.innerHTML = data.reviews.map(buildCard).join('');
+          grid.classList.remove('hidden');
+          buildPagination(data.page || 1, data.totalPages || 1);
+
+          history.pushState(null, '', page > 1 ? '?page=' + page : window.location.pathname);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        })
+        .catch(function() {
+          loading.classList.add('hidden');
+          empty.classList.remove('hidden');
+          document.getElementById('statTotal').textContent    = '—';
+          document.getElementById('statAvg').textContent      = '—';
+          document.getElementById('statFiveStar').textContent = '—';
         });
-        p.parentNode.insertBefore(btn, p.nextSibling);
-      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var params = new URLSearchParams(window.location.search);
+      var page   = parseInt(params.get('page')) || 1;
+      loadPage(page);
     });
   </script>
 
