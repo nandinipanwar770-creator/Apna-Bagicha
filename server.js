@@ -139,9 +139,11 @@ async function initDb() {
       badge_text  TEXT DEFAULT '',
       seed_cat    TEXT DEFAULT '',
       in_stock    BOOLEAN NOT NULL DEFAULT TRUE,
+      quantity    INTEGER NOT NULL DEFAULT 0,
       created_at  TEXT NOT NULL
     )
   `);
+  await pool.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS quantity INTEGER NOT NULL DEFAULT 0`);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quotes (
       id         SERIAL PRIMARY KEY,
@@ -838,6 +840,23 @@ app.post('/admin/products/delete/:id', async (req, res) => {
   if (!req.session.admin) return res.redirect('/admin');
   await pool.query('DELETE FROM products WHERE id=$1', [req.params.id]);
   res.redirect('/admin?view=products');
+});
+
+app.post('/api/admin/products/update/:id', async (req, res) => {
+  if (!req.session.admin) return res.status(403).json({ error: 'Unauthorized' });
+  try {
+    const { name, price, in_stock, quantity, badge_text, description } = req.body;
+    if (!name || !name.trim()) return res.json({ success: false, error: 'Name is required' });
+    const priceVal    = parseFloat(price) || 0;
+    const qtyVal      = Math.max(0, parseInt(quantity) || 0);
+    const inStockVal  = in_stock === 'true' || in_stock === true || in_stock === '1';
+    await pool.query(
+      'UPDATE products SET name=$1, price=$2, in_stock=$3, quantity=$4, badge_text=$5, description=$6 WHERE id=$7',
+      [name.trim(), priceVal, inStockVal, qtyVal, (badge_text || '').trim(), (description || '').trim(), req.params.id]
+    );
+    const row = await pool.query('SELECT * FROM products WHERE id=$1', [req.params.id]);
+    res.json({ success: true, product: row.rows[0] });
+  } catch (e) { res.json({ success: false, error: e.message }); }
 });
 
 // ── Update order delivery address ─────────────────────────────────────────────
