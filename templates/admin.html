@@ -367,8 +367,14 @@
 
         <!-- Products Table -->
         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-          <div class="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
+          <div class="px-5 py-4 border-b border-gray-50 flex flex-wrap items-center gap-3 justify-between">
             <h2 class="font-bold text-gray-800 text-[14px]">Current Products <span class="text-gray-400 font-normal">(<span id="productsCount">—</span>)</span></h2>
+            <div class="relative flex-1 min-w-[160px] max-w-xs">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="productSearchInput" oninput="filterProducts(this.value)" placeholder="Search by name…"
+                class="w-full pl-8 pr-3 py-2 rounded-xl border border-gray-200 text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-main transition-all"
+                style="font-family:'DM Sans',sans-serif;">
+            </div>
           </div>
           <div id="productsTableContainer" class="overflow-x-auto hidden">
             <table class="w-full min-w-[700px]">
@@ -998,6 +1004,8 @@ function buildMessageRow(m) {
 }
 
 // ── Products view ──────────────────────────────────────────────────────────────
+var _allProducts = [];
+
 function loadProducts() {
   var _sp = document.getElementById('productsSpinner');
   if (_sp) _sp.classList.remove('hidden');
@@ -1009,21 +1017,40 @@ function loadProducts() {
   fetch('/api/admin/products').then(function(r){ return r.json(); }).then(function(data) {
     if (_sp) _sp.classList.add('hidden');
     if (!data.success) return;
-    var products  = data.products || [];
-    setText('productsCount',      products.length);
-    setText('exportProductCount', products.length);
-    var container = document.getElementById('productsTableContainer');
-    var empty     = document.getElementById('productsEmptyState');
-    var tbody     = document.getElementById('productsTableBody');
-    if (!products.length) {
-      if (container) container.classList.add('hidden');
-      if (empty) empty.classList.remove('hidden');
-    } else {
-      if (container) container.classList.remove('hidden');
-      if (empty) empty.classList.add('hidden');
-      tbody.innerHTML = products.map(buildProductRow).join('');
-    }
+    _allProducts = data.products || [];
+    setText('productsCount',      _allProducts.length);
+    setText('exportProductCount', _allProducts.length);
+    var si = document.getElementById('productSearchInput');
+    var q = si ? si.value.trim() : '';
+    renderProducts(q ? _allProducts.filter(function(p){ return p.name.toLowerCase().indexOf(q.toLowerCase()) !== -1; }) : _allProducts);
   }).catch(function(e){ if (_sp) _sp.classList.add('hidden'); console.error(e); });
+}
+
+function renderProducts(list) {
+  var container = document.getElementById('productsTableContainer');
+  var empty     = document.getElementById('productsEmptyState');
+  var tbody     = document.getElementById('productsTableBody');
+  if (!list.length) {
+    if (container) container.classList.add('hidden');
+    if (empty) {
+      empty.classList.remove('hidden');
+      empty.innerHTML = _allProducts.length > 0
+        ? '<div class="text-4xl mb-3 opacity-50">🔍</div><p class="text-gray-500 font-semibold">No products match your search</p><p class="text-xs text-gray-400 mt-1.5">Try a different name</p>'
+        : '<div class="text-5xl mb-3 opacity-60">🌿</div><p class="text-gray-500 font-semibold">No products imported yet</p><p class="text-xs text-gray-400 mt-1.5">Download the template, fill it in, and import it above</p>';
+    }
+  } else {
+    if (container) container.classList.remove('hidden');
+    if (empty) empty.classList.add('hidden');
+    tbody.innerHTML = list.map(buildProductRow).join('');
+  }
+}
+
+function filterProducts(q) {
+  var query = (q || '').trim().toLowerCase();
+  if (!query) { renderProducts(_allProducts); return; }
+  renderProducts(_allProducts.filter(function(p) {
+    return p.name.toLowerCase().indexOf(query) !== -1;
+  }));
 }
 
 function buildProductRow(p) {
