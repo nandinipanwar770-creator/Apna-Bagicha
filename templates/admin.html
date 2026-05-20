@@ -376,6 +376,11 @@
                 style="font-family:'DM Sans',sans-serif;">
             </div>
           </div>
+          <div class="px-5 py-3 border-b border-gray-50 flex gap-2 flex-wrap">
+            <button id="pf-all" onclick="setStockFilter('all')" class="filter-tab active">All (<span id="pf-all-count">—</span>)</button>
+            <button id="pf-in_stock" onclick="setStockFilter('in_stock')" class="filter-tab">In Stock (<span id="pf-in_stock-count">—</span>)</button>
+            <button id="pf-out_of_stock" onclick="setStockFilter('out_of_stock')" class="filter-tab">Out of Stock (<span id="pf-out_of_stock-count">—</span>)</button>
+          </div>
           <div id="productsTableContainer" class="overflow-x-auto hidden">
             <table class="w-full min-w-[700px]">
               <thead>
@@ -401,6 +406,7 @@
             <p class="text-gray-500 font-semibold">No products imported yet</p>
             <p class="text-xs text-gray-400 mt-1.5">Download the template, fill it in, and import it above</p>
           </div>
+          <div id="productsPagination" class="hidden px-5 py-3 border-t border-gray-50 flex items-center justify-between flex-wrap gap-3"></div>
         </div>
 
       </div>
@@ -1005,6 +1011,9 @@ function buildMessageRow(m) {
 
 // ── Products view ──────────────────────────────────────────────────────────────
 var _allProducts = [];
+var _curStockFilter = 'all';
+var _curProductPage = 1;
+var _pageSize = 12;
 
 function loadProducts() {
   var _sp = document.getElementById('productsSpinner');
@@ -1013,6 +1022,8 @@ function loadProducts() {
   if (_tc) _tc.classList.add('hidden');
   var _pe = document.getElementById('productsEmptyState');
   if (_pe) _pe.classList.add('hidden');
+  var _pg = document.getElementById('productsPagination');
+  if (_pg) _pg.classList.add('hidden');
 
   fetch('/api/admin/products').then(function(r){ return r.json(); }).then(function(data) {
     if (_sp) _sp.classList.add('hidden');
@@ -1020,37 +1031,129 @@ function loadProducts() {
     _allProducts = data.products || [];
     setText('productsCount',      _allProducts.length);
     setText('exportProductCount', _allProducts.length);
-    var si = document.getElementById('productSearchInput');
-    var q = si ? si.value.trim() : '';
-    renderProducts(q ? _allProducts.filter(function(p){ return p.name.toLowerCase().indexOf(q.toLowerCase()) !== -1; }) : _allProducts);
+    updateStockFilterCounts();
+    applyProductFilters();
   }).catch(function(e){ if (_sp) _sp.classList.add('hidden'); console.error(e); });
 }
 
-function renderProducts(list) {
-  var container = document.getElementById('productsTableContainer');
-  var empty     = document.getElementById('productsEmptyState');
-  var tbody     = document.getElementById('productsTableBody');
-  if (!list.length) {
-    if (container) container.classList.add('hidden');
-    if (empty) {
-      empty.classList.remove('hidden');
-      empty.innerHTML = _allProducts.length > 0
-        ? '<div class="text-4xl mb-3 opacity-50">🔍</div><p class="text-gray-500 font-semibold">No products match your search</p><p class="text-xs text-gray-400 mt-1.5">Try a different name</p>'
-        : '<div class="text-5xl mb-3 opacity-60">🌿</div><p class="text-gray-500 font-semibold">No products imported yet</p><p class="text-xs text-gray-400 mt-1.5">Download the template, fill it in, and import it above</p>';
-    }
-  } else {
-    if (container) container.classList.remove('hidden');
-    if (empty) empty.classList.add('hidden');
-    tbody.innerHTML = list.map(buildProductRow).join('');
-  }
+function updateStockFilterCounts() {
+  var inStock = _allProducts.filter(function(p){ return p.in_stock; }).length;
+  var oos     = _allProducts.length - inStock;
+  setText('pf-all-count',       _allProducts.length);
+  setText('pf-in_stock-count',  inStock);
+  setText('pf-out_of_stock-count', oos);
+}
+
+function setStockFilter(f) {
+  _curStockFilter = f;
+  _curProductPage = 1;
+  ['all','in_stock','out_of_stock'].forEach(function(k) {
+    var btn = document.getElementById('pf-' + k);
+    if (btn) btn.classList.toggle('active', k === f);
+  });
+  applyProductFilters();
 }
 
 function filterProducts(q) {
-  var query = (q || '').trim().toLowerCase();
-  if (!query) { renderProducts(_allProducts); return; }
-  renderProducts(_allProducts.filter(function(p) {
-    return p.name.toLowerCase().indexOf(query) !== -1;
-  }));
+  _curProductPage = 1;
+  applyProductFilters();
+}
+
+function applyProductFilters() {
+  var q = ((document.getElementById('productSearchInput') || {}).value || '').trim().toLowerCase();
+  var list = _allProducts.filter(function(p) {
+    var matchName  = !q || p.name.toLowerCase().indexOf(q) !== -1;
+    var matchStock = _curStockFilter === 'all'
+      || (_curStockFilter === 'in_stock'    &&  p.in_stock)
+      || (_curStockFilter === 'out_of_stock' && !p.in_stock);
+    return matchName && matchStock;
+  });
+  renderProducts(list);
+}
+
+function renderProducts(list) {
+  var container  = document.getElementById('productsTableContainer');
+  var empty      = document.getElementById('productsEmptyState');
+  var tbody      = document.getElementById('productsTableBody');
+  var pagination = document.getElementById('productsPagination');
+
+  if (!list.length) {
+    if (container)  container.classList.add('hidden');
+    if (pagination) pagination.classList.add('hidden');
+    if (empty) {
+      empty.classList.remove('hidden');
+      empty.innerHTML = _allProducts.length > 0
+        ? '<div class="text-4xl mb-3 opacity-50">🔍</div><p class="text-gray-500 font-semibold">No products match your filters</p><p class="text-xs text-gray-400 mt-1.5">Try a different search or filter</p>'
+        : '<div class="text-5xl mb-3 opacity-60">🌿</div><p class="text-gray-500 font-semibold">No products imported yet</p><p class="text-xs text-gray-400 mt-1.5">Download the template, fill it in, and import it above</p>';
+    }
+    return;
+  }
+
+  var totalPages = Math.ceil(list.length / _pageSize);
+  if (_curProductPage > totalPages) _curProductPage = totalPages;
+  var start     = (_curProductPage - 1) * _pageSize;
+  var pageItems = list.slice(start, start + _pageSize);
+
+  if (container) container.classList.remove('hidden');
+  if (empty)     empty.classList.add('hidden');
+  tbody.innerHTML = pageItems.map(buildProductRow).join('');
+
+  if (pagination) {
+    if (totalPages <= 1) {
+      pagination.classList.add('hidden');
+    } else {
+      pagination.classList.remove('hidden');
+      renderProductPagination(totalPages, list.length, list);
+    }
+  }
+}
+
+function renderProductPagination(totalPages, totalCount, list) {
+  var start = (_curProductPage - 1) * _pageSize + 1;
+  var end   = Math.min(_curProductPage * _pageSize, totalCount);
+
+  var pages = [];
+  for (var i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= _curProductPage - 2 && i <= _curProductPage + 2)) {
+      pages.push(i);
+    } else if (pages[pages.length - 1] !== '...') {
+      pages.push('...');
+    }
+  }
+
+  var bc = 'px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer';
+  var html = '<span class="text-xs text-gray-400 font-medium">Showing ' + start + '–' + end + ' of ' + totalCount + '</span>';
+  html += '<div class="flex items-center gap-1">';
+  html += '<button onclick="goToProductPage(' + (_curProductPage - 1) + ')" ' + (_curProductPage === 1 ? 'disabled' : '') + ' class="' + bc + ' ' + (_curProductPage === 1 ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-white' : 'border-gray-200 text-gray-600 hover:bg-gray-50 bg-white') + '">‹</button>';
+  pages.forEach(function(p) {
+    if (p === '...') {
+      html += '<span class="px-2 text-xs text-gray-400">…</span>';
+    } else {
+      var active = p === _curProductPage;
+      html += '<button onclick="goToProductPage(' + p + ')" class="' + bc + ' ' + (active ? 'bg-green-main border-green-main text-white' : 'border-gray-200 text-gray-600 hover:bg-gray-50 bg-white') + '">' + p + '</button>';
+    }
+  });
+  html += '<button onclick="goToProductPage(' + (_curProductPage + 1) + ')" ' + (_curProductPage === totalPages ? 'disabled' : '') + ' class="' + bc + ' ' + (_curProductPage === totalPages ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-white' : 'border-gray-200 text-gray-600 hover:bg-gray-50 bg-white') + '">›</button>';
+  html += '</div>';
+
+  document.getElementById('productsPagination').innerHTML = html;
+}
+
+function goToProductPage(n) {
+  var q = ((document.getElementById('productSearchInput') || {}).value || '').trim().toLowerCase();
+  var list = _allProducts.filter(function(p) {
+    var matchName  = !q || p.name.toLowerCase().indexOf(q) !== -1;
+    var matchStock = _curStockFilter === 'all'
+      || (_curStockFilter === 'in_stock'    &&  p.in_stock)
+      || (_curStockFilter === 'out_of_stock' && !p.in_stock);
+    return matchName && matchStock;
+  });
+  var totalPages = Math.ceil(list.length / _pageSize);
+  if (n < 1 || n > totalPages) return;
+  _curProductPage = n;
+  renderProducts(list);
+  var tc = document.getElementById('productsTableContainer');
+  if (tc) tc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function buildProductRow(p) {
