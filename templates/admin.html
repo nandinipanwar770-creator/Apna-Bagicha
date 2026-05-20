@@ -64,6 +64,7 @@
     .sidebar-link { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; font-size:13.5px; font-weight:500; color:rgba(255,255,255,0.65); text-decoration:none; transition:all 0.2s; }
     .sidebar-link:hover, .sidebar-link.active { background:rgba(255,255,255,0.13); color:white; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes spin { to { transform:rotate(360deg); } }
     .login-card { animation: fadeIn 0.4s ease both; }
   </style>
 </head>
@@ -385,7 +386,11 @@
               <tbody id="productsTableBody"></tbody>
             </table>
           </div>
-          <div id="productsEmptyState" class="py-16 text-center">
+          <div id="productsSpinner" class="py-14 text-center">
+            <div class="inline-block w-7 h-7 border-[3px] border-green-100 border-t-green-main rounded-full" style="animation:spin 0.75s linear infinite;"></div>
+            <p class="text-xs text-gray-400 mt-3 font-medium">Loading products…</p>
+          </div>
+          <div id="productsEmptyState" class="hidden py-16 text-center">
             <div class="text-5xl mb-3 opacity-60">🌿</div>
             <p class="text-gray-500 font-semibold">No products imported yet</p>
             <p class="text-xs text-gray-400 mt-1.5">Download the template, fill it in, and import it above</p>
@@ -434,7 +439,11 @@
               <tbody id="messagesTableBody"></tbody>
             </table>
           </div>
-          <div id="messagesEmptyState" class="py-20 text-center">
+          <div id="messagesSpinner" class="py-14 text-center">
+            <div class="inline-block w-7 h-7 border-[3px] border-green-100 border-t-green-main rounded-full" style="animation:spin 0.75s linear infinite;"></div>
+            <p class="text-xs text-gray-400 mt-3 font-medium">Loading messages…</p>
+          </div>
+          <div id="messagesEmptyState" class="hidden py-20 text-center">
             <div class="text-6xl mb-4 opacity-70">💬</div>
             <p class="text-gray-500 font-semibold">No messages yet</p>
             <p class="text-xs text-gray-400 mt-1.5">Messages from the contact form will appear here</p>
@@ -534,6 +543,10 @@
               </thead>
               <tbody id="ordersTableBody"></tbody>
             </table>
+          </div>
+          <div id="ordersSpinner" class="py-14 text-center">
+            <div class="inline-block w-7 h-7 border-[3px] border-green-100 border-t-green-main rounded-full" style="animation:spin 0.75s linear infinite;"></div>
+            <p class="text-xs text-gray-400 mt-3 font-medium">Loading orders…</p>
           </div>
           <div id="ordersEmptyState" class="hidden py-20 text-center">
             <div class="text-6xl mb-4 opacity-70">📦</div>
@@ -784,7 +797,15 @@ function loadOrders(status, search) {
   var url = '/api/admin/orders?status=' + encodeURIComponent(_curStatus);
   if (_curSearch) url += '&q=' + encodeURIComponent(_curSearch);
 
+  var _sp = document.getElementById('ordersSpinner');
+  if (_sp) _sp.classList.remove('hidden');
+  var _tc = document.getElementById('ordersTableContainer');
+  if (_tc) _tc.classList.add('hidden');
+  var _oe = document.getElementById('ordersEmptyState');
+  if (_oe) _oe.classList.add('hidden');
+
   fetch(url).then(function(r){ return r.json(); }).then(function(data) {
+    if (_sp) _sp.classList.add('hidden');
     if (!data.success) return;
     var st = data.stats || {};
 
@@ -863,7 +884,7 @@ function loadOrders(status, search) {
       tbody.innerHTML = orders.map(function(o) { return buildOrderRow(o, isCancelled); }).join('');
       if (isCancelled) initCancelCheckboxes();
     }
-  }).catch(function(e) { console.error(e); });
+  }).catch(function(e) { if (_sp) _sp.classList.add('hidden'); console.error(e); });
 }
 
 function buildOrderRow(o, isCancelled) {
@@ -931,7 +952,15 @@ function submitDelete(ids) {
 
 // ── Messages view ──────────────────────────────────────────────────────────────
 function loadMessages() {
+  var _sp = document.getElementById('messagesSpinner');
+  if (_sp) _sp.classList.remove('hidden');
+  var _tc = document.getElementById('messagesTableContainer');
+  if (_tc) _tc.classList.add('hidden');
+  var _me = document.getElementById('messagesEmptyState');
+  if (_me) _me.classList.add('hidden');
+
   fetch('/api/admin/messages').then(function(r){ return r.json(); }).then(function(data) {
+    if (_sp) _sp.classList.add('hidden');
     if (!data.success) return;
     var ms = data.msg_stats || {};
     setText('msgStatTotal',   ms.total || 0);
@@ -950,7 +979,7 @@ function loadMessages() {
       if (empty) empty.classList.add('hidden');
       tbody.innerHTML = messages.map(buildMessageRow).join('');
     }
-  }).catch(function(e){ console.error(e); });
+  }).catch(function(e){ if (_sp) _sp.classList.add('hidden'); console.error(e); });
 }
 
 function buildMessageRow(m) {
@@ -970,7 +999,15 @@ function buildMessageRow(m) {
 
 // ── Products view ──────────────────────────────────────────────────────────────
 function loadProducts() {
+  var _sp = document.getElementById('productsSpinner');
+  if (_sp) _sp.classList.remove('hidden');
+  var _tc = document.getElementById('productsTableContainer');
+  if (_tc) _tc.classList.add('hidden');
+  var _pe = document.getElementById('productsEmptyState');
+  if (_pe) _pe.classList.add('hidden');
+
   fetch('/api/admin/products').then(function(r){ return r.json(); }).then(function(data) {
+    if (_sp) _sp.classList.add('hidden');
     if (!data.success) return;
     var products  = data.products || [];
     setText('productsCount',      products.length);
@@ -986,7 +1023,7 @@ function loadProducts() {
       if (empty) empty.classList.add('hidden');
       tbody.innerHTML = products.map(buildProductRow).join('');
     }
-  }).catch(function(e){ console.error(e); });
+  }).catch(function(e){ if (_sp) _sp.classList.add('hidden'); console.error(e); });
 }
 
 function buildProductRow(p) {
