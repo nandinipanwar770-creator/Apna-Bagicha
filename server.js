@@ -743,7 +743,12 @@ app.post('/account/change-password', async (req, res) => {
 
 // ── Products API (public) ─────────────────────────────────────────────────────
 app.get('/api/products', async (req, res) => {
-  const rows = await pool.query('SELECT * FROM products WHERE in_stock=TRUE ORDER BY created_at ASC');
+  const rows = await pool.query('SELECT * FROM products ORDER BY created_at ASC');
+  res.json(rows.rows);
+});
+
+app.get('/api/products/stock', async (req, res) => {
+  const rows = await pool.query('SELECT name, in_stock, quantity FROM products');
   res.json(rows.rows);
 });
 

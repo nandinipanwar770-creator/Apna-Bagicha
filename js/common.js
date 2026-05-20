@@ -182,9 +182,35 @@ function updateCartBadge() {
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+/* stock map: { [productName]: { in_stock, quantity } } — populated on cart open */
+var _stockMap = {};
+var _stockFetched = false;
+
+function fetchStockAndRender() {
+  fetch('/api/products/stock')
+    .then(function(r) { return r.json(); })
+    .then(function(rows) {
+      _stockMap = {};
+      (rows || []).forEach(function(p) { _stockMap[p.name] = p; });
+      _stockFetched = true;
+      renderCartItems();
+    })
+    .catch(function() { renderCartItems(); });
+}
+
+function isItemOOS(item) {
+  if (!_stockFetched) return false;
+  var s = _stockMap[item.name];
+  if (!s) return false; // not a DB product — assume available
+  return !s.in_stock || parseInt(s.quantity) === 0;
+}
+
 function renderCartItems() {
   var cart = getCart();
-  var total = cart.reduce(function(s, i) { return s + i.price * (i.qty || 1); }, 0);
+  var oosCount = cart.filter(function(i) { return isItemOOS(i); }).length;
+  var total = cart.reduce(function(s, i) {
+    return isItemOOS(i) ? s : s + i.price * (i.qty || 1);
+  }, 0);
   var totalCount = cart.reduce(function(s, i) { return s + (i.qty || 1); }, 0);
   var header  = document.getElementById('cartCountHeader');
   var itemsEl = document.getElementById('cartItems');
@@ -202,30 +228,49 @@ function renderCartItems() {
   if (footer) footer.style.display = 'block';
   if (empty)  empty.style.display  = 'none';
   if (itemsEl) {
-    itemsEl.innerHTML = cart.map(function(item, idx) {
+    var oosWarning = oosCount > 0
+      ? '<div style="display:flex;align-items:flex-start;gap:8px;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px;padding:10px 12px;margin-bottom:6px;">'
+          + '<span style="font-size:16px;flex-shrink:0;">⚠️</span>'
+          + '<p style="font-size:12px;color:#9a3412;margin:0;line-height:1.5;">'
+          + '<strong>' + oosCount + ' item' + (oosCount > 1 ? 's are' : ' is') + ' out of stock</strong> and excluded from your total. Remove or wait until restocked.</p>'
+        + '</div>'
+      : '';
+    var rows = cart.map(function(item, idx) {
+      var oos = isItemOOS(item);
       var lineTotal = (item.price * (item.qty || 1)).toLocaleString('en-IN');
-      return '<div style="display:flex;align-items:flex-start;gap:12px;background:#f9fafb;border-radius:12px;padding:12px;">'
-        + '<div style="font-size:22px;margin-top:2px;flex-shrink:0;">🌱</div>'
+      var bg = oos ? '#fff5f5' : '#f9fafb';
+      var border = oos ? '1.5px solid #fecaca' : 'none';
+      var nameLine = escHtml(item.name)
+        + (oos ? ' <span style="font-size:10px;background:#fee2e2;color:#991b1b;font-weight:700;padding:1px 7px;border-radius:999px;vertical-align:middle;margin-left:4px;">OUT OF STOCK</span>' : '');
+      var priceLine = oos
+        ? '<p style="color:#9ca3af;font-size:13px;margin:0 0 8px;text-decoration:line-through;">₹' + item.price.toLocaleString('en-IN') + ' × ' + (item.qty || 1) + ' = ₹' + lineTotal + '</p>'
+        : '<p style="color:#3a7032;font-weight:700;font-size:13px;margin:0 0 8px;">₹' + item.price.toLocaleString('en-IN') + ' × ' + (item.qty || 1) + ' = ₹' + lineTotal + '</p>';
+      var qtyControls = oos
+        ? ''
+        : '<button onclick="updateCartItemQty(' + idx + ',-1)" style="width:28px;height:28px;border-radius:50%;border:1px solid #d1d5db;background:white;color:#374151;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;">−</button>'
+          + '<span style="width:24px;text-align:center;font-size:13px;font-weight:700;color:#1f2937;">' + (item.qty || 1) + '</span>'
+          + '<button onclick="updateCartItemQty(' + idx + ',1)" style="width:28px;height:28px;border-radius:50%;border:1px solid #d1d5db;background:white;color:#374151;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;">+</button>';
+      return '<div style="display:flex;align-items:flex-start;gap:12px;background:' + bg + ';border-radius:12px;padding:12px;border:' + border + ';">'
+        + '<div style="font-size:22px;margin-top:2px;flex-shrink:0;">' + (oos ? '🚫' : '🌱') + '</div>'
         + '<div style="flex:1;min-width:0;">'
-          + '<p style="font-weight:600;font-size:13px;color:#1f2937;margin:0 0 4px;line-height:1.4;">' + escHtml(item.name) + '</p>'
-          + '<p style="color:#3a7032;font-weight:700;font-size:13px;margin:0 0 8px;">₹' + item.price.toLocaleString('en-IN') + ' × ' + (item.qty || 1) + ' = ₹' + lineTotal + '</p>'
+          + '<p style="font-weight:600;font-size:13px;color:' + (oos ? '#9ca3af' : '#1f2937') + ';margin:0 0 4px;line-height:1.4;">' + nameLine + '</p>'
+          + priceLine
           + '<div style="display:flex;align-items:center;gap:6px;">'
-            + '<button onclick="updateCartItemQty(' + idx + ',-1)" style="width:28px;height:28px;border-radius:50%;border:1px solid #d1d5db;background:white;color:#374151;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;">−</button>'
-            + '<span style="width:24px;text-align:center;font-size:13px;font-weight:700;color:#1f2937;">' + (item.qty || 1) + '</span>'
-            + '<button onclick="updateCartItemQty(' + idx + ',1)" style="width:28px;height:28px;border-radius:50%;border:1px solid #d1d5db;background:white;color:#374151;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;">+</button>'
-            + '<button onclick="removeFromCart(' + idx + ')" style="width:28px;height:28px;border-radius:50%;border:1px solid #fecaca;background:white;color:#f87171;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:4px;" title="Remove">🗑</button>'
+            + qtyControls
+            + '<button onclick="removeFromCart(' + idx + ')" style="width:28px;height:28px;border-radius:50%;border:1px solid #fecaca;background:white;color:#f87171;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;' + (oos ? '' : 'margin-left:4px;') + '" title="Remove">🗑</button>'
           + '</div>'
         + '</div>'
       + '</div>';
     }).join('');
+    itemsEl.innerHTML = oosWarning + rows;
   }
 }
 function openCart() {
-  renderCartItems();
   var s = document.getElementById('cartSidebar');
   var o = document.getElementById('cartOverlay');
   if (s) s.style.transform = 'translateX(0)';
   if (o) o.style.display = 'block';
+  fetchStockAndRender();
 }
 function closeCart() {
   var s = document.getElementById('cartSidebar');
