@@ -245,18 +245,12 @@ app.post('/send-message', async (req, res) => {
 });
 
 // ── Checkout ──────────────────────────────────────────────────────────────────
-app.get(['/checkout', '/checkout.html'], async (req, res) => {
+app.get(['/checkout', '/checkout.html'], (req, res) => {
   if (!req.session.user) {
     const q = new URLSearchParams(req.query).toString();
     return res.redirect('/login?next=' + encodeURIComponent('/checkout' + (q ? '?' + q : '')));
   }
-  const userRow = await pool.query('SELECT * FROM users WHERE id=$1', [req.session.user.id]);
-  res.render('checkout.html', {
-    product_name:  req.query.name  || '',
-    product_price: req.query.price || '0',
-    product_img:   req.query.img   || '',
-    user_data:     userRow.rows[0] || null,
-  });
+  res.sendFile(path.join(__dirname, 'templates', 'checkout.html'));
 });
 
 // ── Place Order ───────────────────────────────────────────────────────────────
@@ -284,9 +278,28 @@ app.post('/place-order', async (req, res) => {
 });
 
 // ── Order Success ─────────────────────────────────────────────────────────────
-app.get('/order-success/:order_id', async (req, res) => {
-  const row = await pool.query('SELECT * FROM orders WHERE order_id=$1', [req.params.order_id]);
-  res.render('order_success.html', { order: row.rows[0] || null });
+app.get('/order-success/:order_id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'order_success.html'));
+});
+
+app.get('/api/orders/:order_id', async (req, res) => {
+  try {
+    const row = await pool.query('SELECT * FROM orders WHERE order_id=$1', [req.params.order_id]);
+    if (!row.rows.length) return res.json({ success: false, error: 'Order not found' });
+    const o = row.rows[0];
+    res.json({ success: true, order: {
+      order_id:         o.order_id,
+      product_name:     o.product_name,
+      quantity:         o.quantity,
+      payment_method:   o.payment_method,
+      customer_city:    o.customer_city,
+      customer_state:   o.customer_state,
+      customer_pincode: o.customer_pincode,
+      total_amount:     o.total_amount,
+    }});
+  } catch (e) {
+    res.json({ success: false, error: e.message });
+  }
 });
 
 // ── Razorpay: Create Order ────────────────────────────────────────────────────
@@ -523,6 +536,49 @@ app.get('/api/me', (req, res) => {
   res.json(null);
 });
 
+app.get('/api/user/profile', async (req, res) => {
+  if (!req.session.user) return res.json({ success: false, error: 'Not logged in' });
+  try {
+    const row = await pool.query('SELECT * FROM users WHERE id=$1', [req.session.user.id]);
+    if (!row.rows.length) return res.json({ success: false, error: 'User not found' });
+    const u = row.rows[0];
+    res.json({ success: true, user: {
+      name: u.name, email: u.email, phone: u.phone || '',
+      address: u.address || '', city: u.city || '',
+      state: u.state || '', pincode: u.pincode || '',
+    }});
+  } catch (e) {
+    res.json({ success: false, error: e.message });
+  }
+});
+
+app.get('/api/account/orders', async (req, res) => {
+  if (!req.session.user) return res.json({ success: false, error: 'Not logged in' });
+  try {
+    const PER_PAGE = 10;
+    const reqPage = Math.max(1, parseInt(req.query.page) || 1);
+    const [ordersRes, countRes] = await Promise.all([
+      pool.query('SELECT * FROM orders WHERE user_id=$1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
+        [req.session.user.id, PER_PAGE, (reqPage - 1) * PER_PAGE]),
+      pool.query('SELECT COUNT(*) FROM orders WHERE user_id=$1', [req.session.user.id]),
+    ]);
+    const totalOrders = parseInt(countRes.rows[0].count);
+    const totalPages  = Math.max(1, Math.ceil(totalOrders / PER_PAGE));
+    const page        = Math.min(reqPage, totalPages);
+    const orders = ordersRes.rows.map(o => {
+      const m = (o.notes || '').match(/\[Admin\] Items marked unavailable by admin:\s*(.+)/);
+      return { ...o, admin_removed: m ? m[1].trim() : null };
+    });
+    res.json({
+      success: true, orders, page, totalPages, totalOrders,
+      startItem: totalOrders === 0 ? 0 : (page - 1) * PER_PAGE + 1,
+      endItem: Math.min(page * PER_PAGE, totalOrders),
+    });
+  } catch (e) {
+    res.json({ success: false, error: e.message });
+  }
+});
+
 // ── OTP Auth ──────────────────────────────────────────────────────────────────
 app.post('/api/otp/send', async (req, res) => {
   const digits = (req.body.phone || '').replace(/\D/g, '').slice(-10);
@@ -655,68 +711,10 @@ app.get('/user/logout', (req, res) => {
 });
 
 // ── Account Dashboard ─────────────────────────────────────────────────────────
-app.get('/account', async (req, res) => {
+app.get('/account', (req, res) => {
   if (!req.session.user)
     return res.redirect('/login?next=/account&error=' + encodeURIComponent('Please log in to view your account'));
-  const view = req.query.view || 'orders';
-  const uRow = await pool.query('SELECT * FROM users WHERE id=$1', [req.session.user.id]);
-  if (!uRow.rows.length) { req.session.user = null; return res.redirect('/login'); }
-  const u = uRow.rows[0];
-
-  if (view === 'profile') {
-    return res.render('account.html', {
-      user: u, view: 'profile',
-      profile_error:   req.query.profile_error   || null,
-      profile_success: !!req.query.profile_success,
-    });
-  }
-  if (view === 'changepass') {
-    return res.render('account.html', {
-      user: u, view: 'changepass',
-      cp_error:   req.query.cp_error   || null,
-      cp_success: !!req.query.cp_success,
-    });
-  }
-  // orders (default) — paginated
-  const PER_PAGE = 10;
-  const reqPage = Math.max(1, parseInt(req.query.page) || 1);
-
-  const [ordersRes, countRes] = await Promise.all([
-    pool.query('SELECT * FROM orders WHERE user_id=$1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
-      [u.id, PER_PAGE, (reqPage - 1) * PER_PAGE]),
-    pool.query('SELECT COUNT(*) FROM orders WHERE user_id=$1', [u.id]),
-  ]);
-  const totalOrders = parseInt(countRes.rows[0].count);
-  const totalPages  = Math.max(1, Math.ceil(totalOrders / PER_PAGE));
-  const page        = Math.min(reqPage, totalPages);
-
-  const processedOrders = ordersRes.rows.map(o => {
-    const adminMatch = (o.notes || '').match(/\[Admin\] Items marked unavailable by admin:\s*(.+)/);
-    return Object.assign({}, o, { admin_removed: adminMatch ? adminMatch[1].trim() : null });
-  });
-
-  // Page-button array: integers for clickable pages, null for ellipsis
-  const buildPageButtons = (cur, total) => {
-    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-    const btns = [1];
-    if (cur > 3) btns.push(null);
-    for (let p = Math.max(2, cur - 1); p <= Math.min(total - 1, cur + 1); p++) btns.push(p);
-    if (cur < total - 2) btns.push(null);
-    if (total > 1) btns.push(total);
-    return btns;
-  };
-
-  return res.render('account.html', {
-    user: u, view: 'orders', orders: processedOrders,
-    cancel_error:   req.query.cancel_error   || null,
-    cancel_success: !!req.query.cancel_success,
-    page, totalPages, totalOrders,
-    startItem:   totalOrders === 0 ? 0 : (page - 1) * PER_PAGE + 1,
-    endItem:     Math.min(page * PER_PAGE, totalOrders),
-    prevPage:    page > 1          ? page - 1 : null,
-    nextPage:    page < totalPages ? page + 1 : null,
-    pageButtons: buildPageButtons(page, totalPages),
-  });
+  res.sendFile(path.join(__dirname, 'templates', 'account.html'));
 });
 
 app.post('/account/update-profile', async (req, res) => {

@@ -79,27 +79,25 @@
     <!-- User card -->
     <div class="px-5 py-4 border-b border-white/10">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-[16px] flex-shrink-0">
-          {{ user.name[0] | upper }}
-        </div>
+        <div id="sidebarInitial" class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-[16px] flex-shrink-0">…</div>
         <div class="min-w-0">
-          <div class="font-semibold text-[13.5px] truncate">{{ user.name }}</div>
-          <div class="text-[11px] text-white/50 truncate">{{ user.email }}</div>
+          <div id="sidebarName" class="font-semibold text-[13.5px] truncate">Loading…</div>
+          <div id="sidebarEmail" class="text-[11px] text-white/50 truncate"></div>
         </div>
       </div>
     </div>
 
     <!-- Nav -->
     <nav class="flex-1 px-3 py-4 space-y-0.5">
-      <a href="/account?view=orders" class="sidebar-link {% if view == 'orders' %}active{% endif %}">
+      <a href="/account?view=orders" data-view="orders" class="sidebar-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
         My Orders
       </a>
-      <a href="/account?view=profile" class="sidebar-link {% if view == 'profile' %}active{% endif %}">
+      <a href="/account?view=profile" data-view="profile" class="sidebar-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         My Profile
       </a>
-      <a href="/account?view=changepass" class="sidebar-link {% if view == 'changepass' %}active{% endif %}">
+      <a href="/account?view=changepass" data-view="changepass" class="sidebar-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
         Change Password
       </a>
@@ -123,24 +121,13 @@
     <!-- Top Bar -->
     <header class="bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between sticky top-0 z-10">
       <div>
-        {% if view == 'orders' %}
-        <h1 class="text-[17px] font-bold text-gray-800">My Orders</h1>
-        <p class="text-xs text-gray-400 mt-0.5">Track and view all your orders</p>
-        {% elif view == 'profile' %}
-        <h1 class="text-[17px] font-bold text-gray-800">My Profile</h1>
-        <p class="text-xs text-gray-400 mt-0.5">Update your personal details and address</p>
-        {% elif view == 'changepass' %}
-        <h1 class="text-[17px] font-bold text-gray-800">Change Password</h1>
-        <p class="text-xs text-gray-400 mt-0.5">Update your account password</p>
-        {% endif %}
+        <h1 id="headerTitle" class="text-[17px] font-bold text-gray-800">My Account</h1>
+        <p id="headerSubtitle" class="text-xs text-gray-400 mt-0.5"></p>
       </div>
       <div class="flex items-center gap-3">
-        <!-- Mobile user badge -->
         <span class="lg:hidden flex items-center gap-2 text-sm font-semibold text-gray-700">
-          <span class="w-7 h-7 rounded-full bg-green-main text-white text-xs font-bold flex items-center justify-center">
-            {{ user.name[0] | upper }}
-          </span>
-          {{ user.name.split(' ')[0] }}
+          <span id="mobileInitial" class="w-7 h-7 rounded-full bg-green-main text-white text-xs font-bold flex items-center justify-center">…</span>
+          <span id="mobileFirstName"></span>
         </span>
         <a href="/user/logout"
           class="text-xs bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-600 font-semibold px-3 py-1.5 rounded-lg transition-all no-underline">
@@ -151,16 +138,13 @@
 
     <!-- Mobile sidebar links -->
     <div class="lg:hidden flex gap-2 overflow-x-auto px-5 py-3 border-b border-gray-100 bg-white">
-      <a href="/account?view=orders" class="whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full border transition-all no-underline
-        {% if view == 'orders' %}bg-green-main text-white border-green-main{% else %}border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main{% endif %}">
+      <a href="/account?view=orders" data-view="orders" class="mobile-tab whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full border transition-all no-underline border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main">
         📦 My Orders
       </a>
-      <a href="/account?view=profile" class="whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full border transition-all no-underline
-        {% if view == 'profile' %}bg-green-main text-white border-green-main{% else %}border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main{% endif %}">
+      <a href="/account?view=profile" data-view="profile" class="mobile-tab whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full border transition-all no-underline border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main">
         👤 My Profile
       </a>
-      <a href="/account?view=changepass" class="whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full border transition-all no-underline
-        {% if view == 'changepass' %}bg-green-main text-white border-green-main{% else %}border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main{% endif %}">
+      <a href="/account?view=changepass" data-view="changepass" class="mobile-tab whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full border transition-all no-underline border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main">
         🔒 Change Password
       </a>
       <a href="/products" class="whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main transition-all no-underline">
@@ -170,255 +154,138 @@
 
     <div class="p-5 sm:p-6 space-y-5">
 
-      {% if view == 'orders' %}
       <!-- ══════════════════ ORDERS ══════════════════ -->
+      <div id="panel-orders" class="hidden space-y-5">
 
-      {% if cancel_success %}
-      <div class="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-        Your order has been cancelled successfully.
-      </div>
-      {% endif %}
-      {% if cancel_error %}
-      <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
-        {{ cancel_error }}
-      </div>
-      {% endif %}
-
-      {% set has_removed = false %}
-      {% for o in orders %}{% if o.admin_removed %}{% set has_removed = true %}{% endif %}{% endfor %}
-      {% if has_removed %}
-      <div class="flex items-start gap-3 bg-amber-50 border border-amber-300 text-amber-800 text-sm px-4 py-3 rounded-xl">
-        <span class="text-xl flex-shrink-0">⚠️</span>
-        <div>
-          <p class="font-bold text-[13px]">Action Required — Some Items Were Unavailable</p>
-          <p class="text-[12px] mt-0.5 text-amber-700">One or more of your orders had items that were not available. The order total has been updated. Check the highlighted order(s) below for details. Please contact us if you have any questions.</p>
-        </div>
-      </div>
-      {% endif %}
-
-      {% if orders and orders | length > 0 %}
-      <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-        <div class="overflow-x-auto">
-          <table class="w-full min-w-[620px]">
-            <thead>
-              <tr class="bg-gray-50/70 border-b border-gray-100 text-left">
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Order ID</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Product</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Amount</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Payment</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Date</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-50">
-              {% for order in orders %}
-              <tr class="hover:bg-gray-50/50 transition-colors{% if order.admin_removed %} bg-red-50/40{% endif %}">
-                <td class="px-4 py-3.5">
-                  <div class="font-mono text-xs font-bold text-gray-700 bg-gray-100 inline-block px-2 py-0.5 rounded">{{ order.order_id }}</div>
-                </td>
-                <td class="px-4 py-3.5">
-                  <div class="font-semibold text-sm text-gray-800 max-w-[220px] truncate" title="{{ order.product_name }}">{{ order.product_name }}</div>
-                  <div class="text-xs text-gray-400 mt-0.5">Qty: {{ order.quantity }}</div>
-                  {% if order.admin_removed %}
-                  <div class="mt-1.5 flex items-start gap-1.5 bg-red-50 border border-red-200 rounded-lg px-2.5 py-1.5 max-w-[240px]">
-                    <span class="text-red-500 flex-shrink-0 mt-0.5">⚠️</span>
-                    <div>
-                      <p class="text-[11px] font-bold text-red-700 leading-tight">Items Unavailable</p>
-                      <p class="text-[11px] text-red-600 mt-0.5 leading-snug">{{ order.admin_removed }}</p>
-                    </div>
-                  </div>
-                  {% endif %}
-                </td>
-                <td class="px-4 py-3.5">
-                  <span class="font-bold text-green-dark text-sm">₹{{ order.total_amount | format_int }}</span>
-                </td>
-                <td class="px-4 py-3.5">
-                  <span class="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                    {% if 'Razorpay' in order.payment_method %}Online{% else %}{{ order.payment_method }}{% endif %}
-                  </span>
-                </td>
-                <td class="px-4 py-3.5">
-                  <span class="status-badge s-{{ order.status }}">{{ order.status }}</span>
-                </td>
-                <td class="px-4 py-3.5">
-                  <div class="text-xs text-gray-500">{{ order.created_at | truncdate }}</div>
-                </td>
-                <td class="px-4 py-3.5">
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <!-- View button always shown -->
-                    <button type="button"
-                      onclick="viewOrder(this)"
-                      data-id="{{ order.order_id }}"
-                      data-product="{{ order.product_name }}"
-                      data-qty="{{ order.quantity }}"
-                      data-amount="{{ order.total_amount }}"
-                      data-payment="{{ order.payment_method }}"
-                      data-status="{{ order.status }}"
-                      data-date="{{ order.created_at | truncdate }}"
-                      data-cname="{{ order.customer_name }}"
-                      data-cphone="{{ order.customer_phone }}"
-                      data-cemail="{{ order.customer_email }}"
-                      data-caddress="{{ order.customer_address }}"
-                      data-ccity="{{ order.customer_city }}"
-                      data-cstate="{{ order.customer_state }}"
-                      data-cpincode="{{ order.customer_pincode }}"
-                      data-notes="{{ order.admin_removed }}"
-                      class="text-xs bg-green-50 hover:bg-green-main text-green-main hover:text-white border border-green-200 hover:border-green-main font-semibold px-3 py-1.5 rounded-lg transition-all whitespace-nowrap">
-                      View
-                    </button>
-                    <!-- Cancel if pending -->
-                    {% if order.status == 'Pending' %}
-                    <form method="POST" action="/account/cancel-order" id="cancelForm-{{ order.order_id }}">
-                      <input type="hidden" name="order_id" value="{{ order.order_id }}">
-                      <button type="button"
-                        onclick="openCancelModal('{{ order.order_id }}', '{{ order.product_name | replace("'", "") }}')"
-                        class="text-xs bg-red-50 hover:bg-red-500 text-red-600 hover:text-white border border-red-200 hover:border-red-500 font-semibold px-3 py-1.5 rounded-lg transition-all whitespace-nowrap">
-                        Cancel
-                      </button>
-                    </form>
-                    {% endif %}
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Pagination -->
-      {% if totalOrders > 0 %}
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-1">
-        <p class="text-sm text-gray-400">
-          Showing <span class="font-semibold text-gray-600">{{ startItem }}–{{ endItem }}</span>
-          of <span class="font-semibold text-gray-600">{{ totalOrders }}</span> orders
-        </p>
-        {% if totalPages > 1 %}
-        <div class="flex items-center gap-1.5">
-          {% if prevPage %}
-          <a href="/account?view=orders&page={{ prevPage }}"
-            class="px-3 py-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main transition-all no-underline">← Prev</a>
-          {% else %}
-          <span class="px-3 py-1.5 text-sm font-semibold rounded-lg border border-gray-100 text-gray-300 select-none cursor-not-allowed">← Prev</span>
-          {% endif %}
-
-          {% for p in pageButtons %}
-          {% if p %}
-            {% if p == page %}
-            <span class="w-8 h-8 flex items-center justify-center text-sm font-bold rounded-lg bg-green-main text-white">{{ p }}</span>
-            {% else %}
-            <a href="/account?view=orders&page={{ p }}"
-              class="w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main transition-all no-underline">{{ p }}</a>
-            {% endif %}
-          {% else %}
-          <span class="text-gray-300 text-sm px-0.5 select-none">…</span>
-          {% endif %}
-          {% endfor %}
-
-          {% if nextPage %}
-          <a href="/account?view=orders&page={{ nextPage }}"
-            class="px-3 py-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main transition-all no-underline">Next →</a>
-          {% else %}
-          <span class="px-3 py-1.5 text-sm font-semibold rounded-lg border border-gray-100 text-gray-300 select-none cursor-not-allowed">Next →</span>
-          {% endif %}
-        </div>
-        {% endif %}
-      </div>
-      {% endif %}
-
-      {% if orders and orders | length > 0 %}
-      <!-- Write a Review prompt -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-green-50 border border-green-100 rounded-2xl px-5 py-4 mt-2">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </div>
-          <div>
-            <p class="font-semibold text-green-dark text-sm leading-snug">Happy with your purchase?</p>
-            <p class="text-xs text-gray-500 mt-0.5">Your review helps other farmers make better choices</p>
+        <div id="ordersAlert" class="hidden"></div>
+        <div id="adminRemovedAlert" class="hidden">
+          <div class="flex items-start gap-3 bg-amber-50 border border-amber-300 text-amber-800 text-sm px-4 py-3 rounded-xl">
+            <span class="text-xl flex-shrink-0">⚠️</span>
+            <div>
+              <p class="font-bold text-[13px]">Action Required — Some Items Were Unavailable</p>
+              <p class="text-[12px] mt-0.5 text-amber-700">One or more of your orders had items that were not available. The order total has been updated. Check the highlighted order(s) below for details.</p>
+            </div>
           </div>
         </div>
-        <button onclick="openGlobalReviewModal()"
-          class="flex-shrink-0 inline-flex items-center gap-2 bg-green-main hover:bg-green-dark text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm whitespace-nowrap" style="border:0;cursor:pointer;font-family:inherit;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          Write a Review
-        </button>
-      </div>
-      {% endif %}
 
-      {% else %}
-      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm py-20 text-center">
-        <div class="text-6xl mb-4 opacity-60">📦</div>
-        <p class="text-gray-600 font-semibold text-[15px]">No orders yet</p>
-        <p class="text-sm text-gray-400 mt-1.5 mb-6">Start shopping and your orders will appear here</p>
-        <a href="/products" class="inline-block bg-green-main hover:bg-green-dark text-white font-bold px-6 py-2.5 rounded-xl transition-all text-sm no-underline">
-          Browse Products →
-        </a>
-      </div>
-      {% endif %}
+        <!-- Loading state -->
+        <div id="ordersLoading" class="bg-white rounded-2xl border border-gray-100 shadow-sm py-16 text-center">
+          <div class="text-4xl mb-3 animate-pulse">📦</div>
+          <p class="text-gray-400 text-sm">Loading your orders…</p>
+        </div>
 
-      {% elif view == 'profile' %}
+        <!-- Orders table (populated by JS) -->
+        <div id="ordersTable" class="hidden bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[620px]">
+              <thead>
+                <tr class="bg-gray-50/70 border-b border-gray-100 text-left">
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Order ID</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Product</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Amount</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Payment</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Date</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersBody" class="divide-y divide-gray-50"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Empty orders -->
+        <div id="ordersEmpty" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm py-20 text-center">
+          <div class="text-6xl mb-4 opacity-60">📦</div>
+          <p class="text-gray-600 font-semibold text-[15px]">No orders yet</p>
+          <p class="text-sm text-gray-400 mt-1.5 mb-6">Start shopping and your orders will appear here</p>
+          <a href="/products" class="inline-block bg-green-main hover:bg-green-dark text-white font-bold px-6 py-2.5 rounded-xl transition-all text-sm no-underline">
+            Browse Products →
+          </a>
+        </div>
+
+        <!-- Pagination -->
+        <div id="ordersPaginationWrap" class="hidden flex flex-col sm:flex-row items-center justify-between gap-3 px-1">
+          <p id="ordersCount" class="text-sm text-gray-400"></p>
+          <div id="ordersPagination" class="flex items-center gap-1.5 flex-wrap"></div>
+        </div>
+
+        <!-- Write Review prompt -->
+        <div id="reviewPrompt" class="hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-green-50 border border-green-100 rounded-2xl px-5 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3a7032" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-green-dark text-sm leading-snug">Happy with your purchase?</p>
+              <p class="text-xs text-gray-500 mt-0.5">Your review helps other farmers make better choices</p>
+            </div>
+          </div>
+          <button onclick="openGlobalReviewModal()"
+            class="flex-shrink-0 inline-flex items-center gap-2 bg-green-main hover:bg-green-dark text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm whitespace-nowrap" style="border:0;cursor:pointer;font-family:inherit;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Write a Review
+          </button>
+        </div>
+
+      </div>
+
       <!-- ══════════════════ PROFILE ══════════════════ -->
-      <div class="max-w-lg">
+      <div id="panel-profile" class="hidden max-w-lg">
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7">
 
-          {% if profile_success %}
-          <div class="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-5">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Profile updated successfully!
-          </div>
-          {% endif %}
-          {% if profile_error %}
-          <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
-            {{ profile_error }}
-          </div>
-          {% endif %}
+          <div id="profileAlert" class="hidden mb-5"></div>
 
           <form method="POST" action="/account/update-profile" class="space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
-                <input type="text" name="name" class="form-input" value="{{ user.name }}" required>
+                <input type="text" id="pf_name" name="name" class="form-input" required>
               </div>
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number</label>
-                <input type="tel" name="phone" class="form-input" value="{{ user.phone or '' }}" placeholder="+91 98765 43210">
+                <input type="tel" id="pf_phone" name="phone" class="form-input" placeholder="+91 98765 43210">
               </div>
             </div>
 
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
-              <input type="email" class="form-input bg-gray-50 text-gray-400 cursor-not-allowed" value="{{ user.email }}" disabled>
+              <input type="email" id="pf_email" class="form-input bg-gray-50 text-gray-400 cursor-not-allowed" disabled>
               <p class="text-[11px] text-gray-400 mt-1">Email cannot be changed</p>
             </div>
 
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1.5">Delivery Address</label>
-              <textarea name="address" class="form-input" rows="2" placeholder="House No., Street, Area">{{ user.address or '' }}</textarea>
+              <textarea id="pf_address" name="address" class="form-input" rows="2" placeholder="House No., Street, Area"></textarea>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">City</label>
-                <input type="text" name="city" class="form-input" value="{{ user.city or '' }}" placeholder="Lucknow">
+                <input type="text" id="pf_city" name="city" class="form-input" placeholder="Lucknow">
               </div>
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">PIN Code</label>
-                <input type="text" name="pincode" class="form-input" value="{{ user.pincode or '' }}" placeholder="226001" pattern="[0-9]{6}" maxlength="6">
+                <input type="text" id="pf_pincode" name="pincode" class="form-input" placeholder="226001" pattern="[0-9]{6}" maxlength="6">
               </div>
             </div>
 
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1.5">State</label>
-              <select name="state" class="form-input">
-                {% set states = ['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Delhi','Chandigarh','Puducherry','Jammu & Kashmir','Ladakh','Other'] %}
-                {% for s in states %}
-                <option value="{{ s }}" {% if user.state == s %}selected{% endif %}>{{ s }}</option>
-                {% endfor %}
+              <select id="pf_state" name="state" class="form-input">
+                <option value="">— Select State —</option>
+                <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option>
+                <option>Bihar</option><option>Chhattisgarh</option><option>Goa</option>
+                <option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option>
+                <option>Jharkhand</option><option>Karnataka</option><option>Kerala</option>
+                <option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option>
+                <option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option>
+                <option>Odisha</option><option>Punjab</option><option>Rajasthan</option>
+                <option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option>
+                <option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option>
+                <option>West Bengal</option><option>Delhi</option><option>Chandigarh</option>
+                <option>Puducherry</option><option>Jammu &amp; Kashmir</option><option>Ladakh</option>
+                <option>Other</option>
               </select>
             </div>
 
@@ -430,23 +297,11 @@
         </div>
       </div>
 
-      {% elif view == 'changepass' %}
       <!-- ══════════════════ CHANGE PASSWORD ══════════════════ -->
-      <div class="max-w-md">
+      <div id="panel-changepass" class="hidden max-w-md">
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7">
 
-          {% if cp_success %}
-          <div class="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-5">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Password updated successfully!
-          </div>
-          {% endif %}
-          {% if cp_error %}
-          <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
-            {{ cp_error }}
-          </div>
-          {% endif %}
+          <div id="cpAlert" class="hidden mb-5"></div>
 
           <form method="POST" action="/account/change-password" class="space-y-4">
             <div>
@@ -484,23 +339,17 @@
         </div>
       </div>
 
-      {% endif %}
     </div>
   </div>
 </div>
 
 <!-- Cancel Order Confirmation Modal -->
 <div id="cancelModal" class="fixed inset-0 z-[9999] hidden items-center justify-center px-4">
-  <!-- Backdrop -->
   <div class="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onclick="closeCancelModal()"></div>
-  <!-- Card -->
   <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-[400px] p-7 text-center" style="animation: popIn 0.2s ease both;">
-    <!-- Icon -->
     <div class="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="15" y1="9" x2="9" y2="15"/>
-        <line x1="9" y1="9" x2="15" y2="15"/>
+        <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
       </svg>
     </div>
     <h3 class="text-[17px] font-bold text-gray-800 mb-1.5">Cancel Order?</h3>
@@ -526,7 +375,6 @@
 <div id="orderViewModal" class="fixed inset-0 z-[9999] hidden items-center justify-center px-4">
   <div class="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onclick="closeOrderView()"></div>
   <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-[520px] max-h-[85vh] overflow-y-auto" style="animation: popIn 0.2s ease both;">
-    <!-- Sticky header -->
     <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-start justify-between z-10">
       <div>
         <div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Order Details</div>
@@ -536,10 +384,7 @@
       <button onclick="closeOrderView()" style="background:none;border:0;cursor:pointer;font-size:24px;line-height:1;color:#9ca3af;" onmouseover="this.style.color='#374151'" onmouseout="this.style.color='#9ca3af'">&times;</button>
     </div>
 
-    <!-- Body -->
     <div class="px-6 py-5 space-y-5">
-
-      <!-- Items -->
       <div>
         <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3">Products Ordered</div>
         <div id="ovItems" class="space-y-2"></div>
@@ -549,7 +394,6 @@
         </div>
       </div>
 
-      <!-- Payment & Date -->
       <div class="grid grid-cols-2 gap-3">
         <div class="bg-gray-50 rounded-xl px-4 py-3">
           <div class="text-[11px] text-gray-400 font-semibold mb-1">Payment Method</div>
@@ -561,7 +405,6 @@
         </div>
       </div>
 
-      <!-- Delivery Address -->
       <div>
         <div class="flex items-center justify-between mb-3">
           <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Delivery Address</div>
@@ -571,7 +414,6 @@
           </button>
         </div>
 
-        <!-- View mode -->
         <div id="ovAddrView" class="bg-gray-50 rounded-xl px-4 py-3.5 space-y-1.5">
           <div class="text-sm font-bold text-gray-800" id="ovCname"></div>
           <div class="text-sm text-gray-500" id="ovCphone"></div>
@@ -579,7 +421,6 @@
           <div class="text-sm text-gray-600 leading-relaxed" id="ovCaddress"></div>
         </div>
 
-        <!-- Edit mode (hidden) -->
         <div id="ovAddrEdit" style="display:none;" class="space-y-3">
           <div class="grid grid-cols-2 gap-3">
             <div>
@@ -634,7 +475,6 @@
         </div>
       </div>
 
-      <!-- Admin note -->
       <div id="ovNoteWrap" class="hidden">
         <div class="flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
           <span class="text-amber-500 text-base flex-shrink-0 mt-0.5">⚠️</span>
@@ -653,11 +493,223 @@
 @keyframes popIn { from { opacity:0; transform:scale(0.92) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
 </style>
 
+<!-- Cancel form (hidden, submitted programmatically) -->
+<form id="cancelForm" method="POST" action="/account/cancel-order" style="display:none;">
+  <input type="hidden" id="cancelOrderId" name="order_id">
+</form>
+
 <script>
-var _cancelFormId = null;
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function escH(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtAmt(n) { return Math.round(parseFloat(n)||0).toLocaleString('en-IN'); }
+function truncDate(s) { return s ? String(s).slice(0,16) : ''; }
+
+function showAlert(containerId, type, msg) {
+  var el = document.getElementById(containerId);
+  if (!el || !msg) return;
+  var isOk = type === 'success';
+  el.innerHTML = '<div class="flex items-center gap-2 ' + (isOk ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700') + ' border text-sm px-4 py-3 rounded-xl">' +
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
+    (isOk ? '<polyline points="20 6 9 17 4 12"/>' : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>') +
+    '</svg>' + escH(msg) + '</div>';
+  el.classList.remove('hidden');
+}
+
+// ── View routing ──────────────────────────────────────────────────────────────
+var _params = new URLSearchParams(window.location.search);
+var _view   = _params.get('view') || 'orders';
+var _page   = parseInt(_params.get('page')) || 1;
+
+var _viewTitles = {
+  orders:     ['My Orders',       'Track and view all your orders'],
+  profile:    ['My Profile',      'Update your personal details and address'],
+  changepass: ['Change Password', 'Update your account password'],
+};
+
+(function initView() {
+  var t = _viewTitles[_view] || _viewTitles.orders;
+  document.getElementById('headerTitle').textContent    = t[0];
+  document.getElementById('headerSubtitle').textContent = t[1];
+
+  ['orders', 'profile', 'changepass'].forEach(function(v) {
+    var panel = document.getElementById('panel-' + v);
+    if (panel) panel.classList.toggle('hidden', v !== _view);
+  });
+
+  document.querySelectorAll('[data-view]').forEach(function(el) {
+    var active = el.dataset.view === _view;
+    if (el.classList.contains('sidebar-link')) {
+      el.classList.toggle('active', active);
+    } else if (el.classList.contains('mobile-tab')) {
+      if (active) {
+        el.classList.add('bg-green-main', 'text-white', 'border-green-main');
+        el.classList.remove('border-gray-200', 'text-gray-600');
+      }
+    }
+  });
+
+  // URL param alerts
+  if (_view === 'orders') {
+    if (_params.get('cancel_success')) showAlert('ordersAlert', 'success', 'Your order has been cancelled successfully.');
+    if (_params.get('cancel_error'))   showAlert('ordersAlert', 'error',   decodeURIComponent(_params.get('cancel_error')));
+  }
+  if (_view === 'profile') {
+    if (_params.get('profile_success')) showAlert('profileAlert', 'success', 'Profile updated successfully!');
+    if (_params.get('profile_error'))   showAlert('profileAlert', 'error',   decodeURIComponent(_params.get('profile_error')));
+  }
+  if (_view === 'changepass') {
+    if (_params.get('cp_success')) showAlert('cpAlert', 'success', 'Password updated successfully!');
+    if (_params.get('cp_error'))   showAlert('cpAlert', 'error',   decodeURIComponent(_params.get('cp_error')));
+  }
+})();
+
+// ── Fetch user profile ────────────────────────────────────────────────────────
+fetch('/api/user/profile')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.success) { window.location.href = '/login'; return; }
+    var u = data.user;
+    var init = (u.name || '?')[0].toUpperCase();
+
+    document.getElementById('sidebarInitial').textContent  = init;
+    document.getElementById('sidebarName').textContent     = u.name;
+    document.getElementById('sidebarEmail').textContent    = u.email;
+    document.getElementById('mobileInitial').textContent   = init;
+    document.getElementById('mobileFirstName').textContent = (u.name || '').split(' ')[0];
+
+    if (_view === 'profile') fillProfileForm(u);
+  })
+  .catch(function() {});
+
+function fillProfileForm(u) {
+  var set = function(id, val) { var el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('pf_name',    u.name);
+  set('pf_phone',   u.phone);
+  set('pf_email',   u.email);
+  set('pf_address', u.address);
+  set('pf_city',    u.city);
+  set('pf_pincode', u.pincode);
+  if (u.state) {
+    var sel = document.getElementById('pf_state');
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === u.state) { sel.selectedIndex = i; break; }
+    }
+  }
+}
+
+// ── Fetch + render orders ─────────────────────────────────────────────────────
+function loadOrders(page) {
+  document.getElementById('ordersLoading').classList.remove('hidden');
+  document.getElementById('ordersTable').classList.add('hidden');
+  document.getElementById('ordersEmpty').classList.add('hidden');
+  document.getElementById('ordersPaginationWrap').classList.add('hidden');
+  document.getElementById('reviewPrompt').classList.add('hidden');
+
+  fetch('/api/account/orders?page=' + page)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      document.getElementById('ordersLoading').classList.add('hidden');
+      if (!data.success) { document.getElementById('ordersEmpty').classList.remove('hidden'); return; }
+
+      if (!data.orders || data.orders.length === 0) {
+        document.getElementById('ordersEmpty').classList.remove('hidden');
+        return;
+      }
+
+      // Check for admin-removed items
+      var hasRemoved = data.orders.some(function(o) { return o.admin_removed; });
+      if (hasRemoved) document.getElementById('adminRemovedAlert').classList.remove('hidden');
+
+      // Build rows
+      var tbody = document.getElementById('ordersBody');
+      tbody.innerHTML = data.orders.map(function(o) {
+        var pay = (o.payment_method || '').indexOf('Razorpay') >= 0 ? 'Online' : escH(o.payment_method);
+        var statusClass = 's-' + (o.status || 'Pending');
+        var removedHtml = o.admin_removed
+          ? '<div class="mt-1.5 flex items-start gap-1.5 bg-red-50 border border-red-200 rounded-lg px-2.5 py-1.5 max-w-[240px]"><span class="text-red-500 flex-shrink-0 mt-0.5">⚠️</span><div><p class="text-[11px] font-bold text-red-700 leading-tight">Items Unavailable</p><p class="text-[11px] text-red-600 mt-0.5 leading-snug">' + escH(o.admin_removed) + '</p></div></div>'
+          : '';
+        var cancelBtn = o.status === 'Pending'
+          ? '<button type="button" onclick="openCancelModal(\'' + escH(o.order_id) + '\',\'' + escH((o.product_name||'').replace(/'/g,"&#39;")) + '\')" class="text-xs bg-red-50 hover:bg-red-500 text-red-600 hover:text-white border border-red-200 hover:border-red-500 font-semibold px-3 py-1.5 rounded-lg transition-all whitespace-nowrap">Cancel</button>'
+          : '';
+        var safeNote = escH(o.admin_removed || '');
+        return '<tr class="hover:bg-gray-50/50 transition-colors' + (o.admin_removed ? ' bg-red-50/40' : '') + '">' +
+          '<td class="px-4 py-3.5"><div class="font-mono text-xs font-bold text-gray-700 bg-gray-100 inline-block px-2 py-0.5 rounded">' + escH(o.order_id) + '</div></td>' +
+          '<td class="px-4 py-3.5"><div class="font-semibold text-sm text-gray-800 max-w-[220px] truncate" title="' + escH(o.product_name) + '">' + escH(o.product_name) + '</div><div class="text-xs text-gray-400 mt-0.5">Qty: ' + (o.quantity||1) + '</div>' + removedHtml + '</td>' +
+          '<td class="px-4 py-3.5"><span class="font-bold text-green-dark text-sm">₹' + fmtAmt(o.total_amount) + '</span></td>' +
+          '<td class="px-4 py-3.5"><span class="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">' + pay + '</span></td>' +
+          '<td class="px-4 py-3.5"><span class="status-badge ' + statusClass + '">' + escH(o.status) + '</span></td>' +
+          '<td class="px-4 py-3.5"><div class="text-xs text-gray-500">' + truncDate(o.created_at) + '</div></td>' +
+          '<td class="px-4 py-3.5"><div class="flex items-center gap-2 flex-wrap">' +
+            '<button type="button" onclick="viewOrderFromData(' + JSON.stringify({
+              id: o.order_id, product: o.product_name, qty: o.quantity,
+              amount: o.total_amount, payment: o.payment_method,
+              status: o.status, date: truncDate(o.created_at),
+              cname: o.customer_name, cphone: o.customer_phone,
+              cemail: o.customer_email, caddress: o.customer_address,
+              ccity: o.customer_city, cstate: o.customer_state,
+              cpincode: o.customer_pincode, notes: o.admin_removed || '',
+            }).replace(/'/g,"&#39;") + ')" class="text-xs bg-green-50 hover:bg-green-main text-green-main hover:text-white border border-green-200 hover:border-green-main font-semibold px-3 py-1.5 rounded-lg transition-all whitespace-nowrap">View</button>' +
+            cancelBtn +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+
+      document.getElementById('ordersTable').classList.remove('hidden');
+      document.getElementById('reviewPrompt').classList.remove('hidden');
+
+      // Pagination
+      var wrap = document.getElementById('ordersPaginationWrap');
+      document.getElementById('ordersCount').textContent = 'Showing ' + data.startItem + '–' + data.endItem + ' of ' + data.totalOrders + ' orders';
+      buildOrdersPagination(data.page, data.totalPages);
+      if (data.totalOrders > 0) wrap.classList.remove('hidden');
+
+      history.pushState(null, '', page > 1 ? '?view=orders&page=' + page : '?view=orders');
+    })
+    .catch(function() {
+      document.getElementById('ordersLoading').classList.add('hidden');
+      document.getElementById('ordersEmpty').classList.remove('hidden');
+    });
+}
+
+function buildOrdersPagination(page, totalPages) {
+  var cont = document.getElementById('ordersPagination');
+  cont.innerHTML = '';
+  if (totalPages <= 1) return;
+
+  function mkBtn(label, pg, active, disabled) {
+    var btn = document.createElement(disabled || active ? 'span' : 'a');
+    btn.innerHTML = label;
+    if (!disabled && !active) {
+      btn.href = '/account?view=orders&page=' + pg;
+      btn.addEventListener('click', function(e) { e.preventDefault(); loadOrders(pg); });
+      btn.className = 'px-3 py-1.5 text-sm font-semibold rounded-lg border border-gray-200 text-gray-600 hover:border-green-main hover:text-green-main transition-all no-underline cursor-pointer';
+    } else if (active) {
+      btn.className = 'w-8 h-8 flex items-center justify-center text-sm font-bold rounded-lg bg-green-main text-white';
+    } else {
+      btn.className = 'px-3 py-1.5 text-sm font-semibold rounded-lg border border-gray-100 text-gray-300 select-none cursor-not-allowed';
+    }
+    return btn;
+  }
+
+  cont.appendChild(mkBtn('← Prev', page - 1, false, page <= 1));
+
+  var start = Math.max(1, page - 2), end = Math.min(totalPages, page + 2);
+  if (start > 1) { cont.appendChild(mkBtn('1', 1, false, false)); if (start > 2) { var d = document.createElement('span'); d.textContent='…'; d.className='text-gray-300 text-sm px-0.5 select-none'; cont.appendChild(d); } }
+  for (var p = start; p <= end; p++) cont.appendChild(mkBtn(p, p, p === page, false));
+  if (end < totalPages) { if (end < totalPages - 1) { var d2 = document.createElement('span'); d2.textContent='…'; d2.className='text-gray-300 text-sm px-0.5 select-none'; cont.appendChild(d2); } cont.appendChild(mkBtn(totalPages, totalPages, false, false)); }
+
+  cont.appendChild(mkBtn('Next →', page + 1, false, page >= totalPages));
+}
+
+if (_view === 'orders') loadOrders(_page);
+
+// ── Cancel order modal ────────────────────────────────────────────────────────
+var _cancelOrderId = null;
 
 function openCancelModal(orderId, productName) {
-  _cancelFormId = 'cancelForm-' + orderId;
+  _cancelOrderId = orderId;
   document.getElementById('cancelProductName').textContent = '"' + productName + '"';
   var modal = document.getElementById('cancelModal');
   modal.classList.remove('hidden');
@@ -665,79 +717,49 @@ function openCancelModal(orderId, productName) {
 }
 
 function closeCancelModal() {
-  var modal = document.getElementById('cancelModal');
-  modal.classList.add('hidden');
-  modal.classList.remove('flex');
-  _cancelFormId = null;
+  document.getElementById('cancelModal').classList.add('hidden');
+  document.getElementById('cancelModal').classList.remove('flex');
+  _cancelOrderId = null;
 }
 
 function confirmCancel() {
-  if (_cancelFormId) {
-    document.getElementById(_cancelFormId).submit();
-  }
+  if (!_cancelOrderId) return;
+  document.getElementById('cancelOrderId').value = _cancelOrderId;
+  document.getElementById('cancelForm').submit();
 }
 
-// Close on Escape key
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') { closeCancelModal(); closeOrderView(); }
-});
-
-// ── Order View Modal ──────────────────────────────────────────────────────────
+// ── Order view modal ──────────────────────────────────────────────────────────
 var _currentOrder = {};
 
-function viewOrder(btn) {
-  var d = btn.dataset;
+function viewOrderFromData(d) {
   _currentOrder = d;
-
   document.getElementById('ovOrderId').textContent = d.id;
 
-  // Status badge
   var statusMap = { Pending:'#854d0e:#fef9c3', Confirmed:'#166534:#dcfce7', Shipped:'#1e40af:#dbeafe', Delivered:'#065f46:#d1fae5', Cancelled:'#991b1b:#fee2e2' };
   var parts = (statusMap[d.status] || '#374151:#f3f4f6').split(':');
-  document.getElementById('ovStatus').innerHTML =
-    '<span style="display:inline-block;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:700;background:' + parts[1] + ';color:' + parts[0] + ';">' + d.status + '</span>';
+  document.getElementById('ovStatus').innerHTML = '<span style="display:inline-block;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:700;background:' + parts[1] + ';color:' + parts[0] + ';">' + escH(d.status) + '</span>';
 
-  // Parse items from product_name
-  var productName = d.product;
-  var items = [];
-  var cartMatch = productName.match(/^Cart Order \(\d+ items?\):\s*(.+)$/i);
-  if (cartMatch) {
-    items = cartMatch[1].split(',').map(function(s) { return s.trim(); }).filter(Boolean);
-  } else {
-    items = [productName];
-  }
+  var cartMatch = (d.product || '').match(/^Cart Order \(\d+ items?\):\s*(.+)$/i);
+  var items = cartMatch ? cartMatch[1].split(',').map(function(s){return s.trim();}).filter(Boolean) : [d.product];
   var qty = parseInt(d.qty) || 1;
   document.getElementById('ovItems').innerHTML = items.map(function(item) {
-    return '<div class="flex items-center justify-between bg-white border border-gray-100 rounded-xl px-4 py-2.5">' +
-      '<span style="font-size:13.5px;font-weight:600;color:#1f2937;">' + item + '</span>' +
-      (items.length === 1 ? '<span style="font-size:12px;color:#9ca3af;">Qty: ' + qty + '</span>' : '') +
-      '</div>';
+    return '<div class="flex items-center justify-between bg-white border border-gray-100 rounded-xl px-4 py-2.5"><span style="font-size:13.5px;font-weight:600;color:#1f2937;">' + escH(item) + '</span>' + (items.length === 1 ? '<span style="font-size:12px;color:#9ca3af;">Qty: ' + qty + '</span>' : '') + '</div>';
   }).join('');
 
-  // Total
-  var amount = parseFloat(d.amount) || 0;
-  document.getElementById('ovTotal').textContent = '₹' + Math.round(amount).toLocaleString('en-IN');
+  document.getElementById('ovTotal').textContent = '₹' + fmtAmt(d.amount);
 
-  // Payment — shorten Razorpay payment ID
-  var pay = d.payment;
+  var pay = (d.payment||'');
   if (pay.indexOf('Razorpay') >= 0 || pay.indexOf('razorpay') >= 0) pay = 'Online (Razorpay)';
   document.getElementById('ovPayment').textContent = pay || '—';
-
   document.getElementById('ovDate').textContent = d.date || '—';
 
-  // Address (view mode)
   renderAddressView(d.cname, d.cphone, d.cemail, d.caddress, d.ccity, d.cstate, d.cpincode);
 
-  // Show Edit Address button only for Pending orders
-  var editBtn = document.getElementById('ovEditAddrBtn');
-  editBtn.style.display = d.status === 'Pending' ? '' : 'none';
-
-  // Reset to view mode
+  document.getElementById('ovEditAddrBtn').style.display = d.status === 'Pending' ? '' : 'none';
   cancelAddressEdit(true);
 
-  // Admin note
   var noteWrap = document.getElementById('ovNoteWrap');
-  if (d.notes && d.notes.trim() && d.notes.trim() !== 'null') {
+  if (d.notes && d.notes.trim() && d.notes !== 'null') {
     document.getElementById('ovNote').textContent = d.notes;
     noteWrap.classList.remove('hidden');
   } else {
@@ -754,23 +776,20 @@ function renderAddressView(cname, cphone, cemail, caddress, ccity, cstate, cpinc
   document.getElementById('ovCphone').textContent = cphone ? '📞 ' + cphone : '';
   var emailEl = document.getElementById('ovCemail');
   if (cemail && cemail.indexOf('@apnabagicha.local') === -1) {
-    emailEl.textContent = '✉ ' + cemail;
-    emailEl.style.display = '';
+    emailEl.textContent = '✉ ' + cemail; emailEl.style.display = '';
   } else {
     emailEl.style.display = 'none';
   }
-  var addrParts = [caddress, ccity, (cstate || '') + (cpincode ? ' — ' + cpincode : '')].filter(function(s) { return s && s.trim() && s.trim() !== '—'; });
-  document.getElementById('ovCaddress').textContent = addrParts.join(', ');
+  var parts = [caddress, ccity, (cstate||'') + (cpincode ? ' — ' + cpincode : '')].filter(function(s){return s&&s.trim()&&s.trim()!=='—';});
+  document.getElementById('ovCaddress').textContent = parts.join(', ');
 }
 
 function closeOrderView() {
-  var modal = document.getElementById('orderViewModal');
-  modal.classList.add('hidden');
-  modal.classList.remove('flex');
+  document.getElementById('orderViewModal').classList.add('hidden');
+  document.getElementById('orderViewModal').classList.remove('flex');
   cancelAddressEdit(true);
 }
 
-// ── Address Edit ──────────────────────────────────────────────────────────────
 function showAddressEdit() {
   var d = _currentOrder;
   document.getElementById('oeAddrName').value  = d.cname    || '';
@@ -778,11 +797,8 @@ function showAddressEdit() {
   document.getElementById('oeAddrAddr').value  = d.caddress || '';
   document.getElementById('oeAddrCity').value  = d.ccity    || '';
   document.getElementById('oeAddrPin').value   = d.cpincode || '';
-  // Select matching state option
   var sel = document.getElementById('oeAddrState');
-  for (var i = 0; i < sel.options.length; i++) {
-    if (sel.options[i].value === d.cstate) { sel.selectedIndex = i; break; }
-  }
+  for (var i = 0; i < sel.options.length; i++) { if (sel.options[i].value === d.cstate) { sel.selectedIndex = i; break; } }
   document.getElementById('oeAddrErr').style.display     = 'none';
   document.getElementById('oeAddrSuccess').style.display = 'none';
   document.getElementById('ovAddrView').style.display    = 'none';
@@ -793,11 +809,7 @@ function showAddressEdit() {
 function cancelAddressEdit(silent) {
   document.getElementById('ovAddrView').style.display = '';
   document.getElementById('ovAddrEdit').style.display = 'none';
-  if (!silent) {
-    var d = _currentOrder;
-    document.getElementById('ovEditAddrBtn').style.display =
-      d.status === 'Pending' ? '' : 'none';
-  }
+  if (!silent) document.getElementById('ovEditAddrBtn').style.display = _currentOrder.status === 'Pending' ? '' : 'none';
 }
 
 function saveAddressEdit() {
@@ -810,60 +822,33 @@ function saveAddressEdit() {
   var errEl   = document.getElementById('oeAddrErr');
   var btn     = document.getElementById('oeAddrSaveBtn');
 
-  if (!name || !address || !city || !state || !pincode) {
-    errEl.textContent = 'Please fill all required fields.';
-    errEl.style.display = '';
-    return;
-  }
-  if (!/^\d{6}$/.test(pincode)) {
-    errEl.textContent = 'PIN code must be 6 digits.';
-    errEl.style.display = '';
-    return;
-  }
-  errEl.style.display = 'none';
-  btn.disabled = true;
-  btn.textContent = 'Saving…';
+  if (!name || !address || !city || !state || !pincode) { errEl.textContent = 'Please fill all required fields.'; errEl.style.display = ''; return; }
+  if (!/^\d{6}$/.test(pincode)) { errEl.textContent = 'PIN code must be 6 digits.'; errEl.style.display = ''; return; }
+  errEl.style.display = 'none'; btn.disabled = true; btn.textContent = 'Saving…';
 
   fetch('/account/update-order-address', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      order_id: _currentOrder.id,
-      customer_name: name, customer_phone: phone,
-      customer_address: address, customer_city: city,
-      customer_state: state, customer_pincode: pincode
-    })
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ order_id: _currentOrder.id, customer_name: name, customer_phone: phone, customer_address: address, customer_city: city, customer_state: state, customer_pincode: pincode })
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
-    btn.disabled = false;
-    btn.textContent = 'Save Changes';
+    btn.disabled = false; btn.textContent = 'Save Changes';
     if (data.success) {
-      // Update in-memory current order data so view refreshes correctly
-      _currentOrder.cname    = name;
-      _currentOrder.cphone   = phone;
-      _currentOrder.caddress = address;
-      _currentOrder.ccity    = city;
-      _currentOrder.cstate   = state;
-      _currentOrder.cpincode = pincode;
+      _currentOrder.cname = name; _currentOrder.cphone = phone; _currentOrder.caddress = address;
+      _currentOrder.ccity = city; _currentOrder.cstate = state; _currentOrder.cpincode = pincode;
       renderAddressView(name, phone, _currentOrder.cemail, address, city, state, pincode);
       document.getElementById('oeAddrSuccess').style.display = '';
-      setTimeout(function() {
-        document.getElementById('oeAddrSuccess').style.display = 'none';
-        cancelAddressEdit();
-      }, 1800);
+      setTimeout(function() { document.getElementById('oeAddrSuccess').style.display = 'none'; cancelAddressEdit(); }, 1800);
     } else {
-      errEl.textContent = data.error || 'Something went wrong. Please try again.';
-      errEl.style.display = '';
+      errEl.textContent = data.error || 'Something went wrong.'; errEl.style.display = '';
     }
   })
-  .catch(function() {
-    btn.disabled = false;
-    btn.textContent = 'Save Changes';
-    errEl.textContent = 'Network error. Please try again.';
-    errEl.style.display = '';
-  });
+  .catch(function() { btn.disabled = false; btn.textContent = 'Save Changes'; errEl.textContent = 'Network error.'; errEl.style.display = ''; });
 }
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { closeCancelModal(); closeOrderView(); }
+});
 </script>
 
 <!-- ── Review Modal ─────────────────────────────────────────────────── -->
@@ -945,43 +930,25 @@ function saveAddressEdit() {
     var _ars = document.getElementById('acRevSuccess');
     _ars.style.display = 'none';
     _ars.querySelectorAll('.ty-spark,.ty-circle,.ty-heading,.ty-subtext,.ty-emoji,.ty-btn').forEach(function(el){el.classList.remove('go');});
-    document.getElementById('acRevName').value = '';
-    document.getElementById('acRevLoc').value = '';
-    document.getElementById('acRevText').value = '';
-    document.getElementById('acRevErr').style.display = 'none';
-    var btn = document.getElementById('acRevBtn');
-    btn.disabled = false; btn.textContent = 'Submit Review';
-    setAcStars(5);
-    modal.style.display = 'flex';
+    document.getElementById('acRevName').value = ''; document.getElementById('acRevLoc').value = '';
+    document.getElementById('acRevText').value = ''; document.getElementById('acRevErr').style.display = 'none';
+    var btn = document.getElementById('acRevBtn'); btn.disabled = false; btn.textContent = 'Submit Review';
+    setAcStars(5); modal.style.display = 'flex';
   }
 
-  function closeAcctRevModal() {
-    document.getElementById('acctRevModal').style.display = 'none';
-  }
+  function closeAcctRevModal() { document.getElementById('acctRevModal').style.display = 'none'; }
 
-  document.getElementById('acctRevModal').addEventListener('click', function(e) {
-    if (e.target === this) closeAcctRevModal();
-  });
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeAcctRevModal();
-  });
+  document.getElementById('acctRevModal').addEventListener('click', function(e) { if (e.target === this) closeAcctRevModal(); });
 
   function setAcStars(val) {
-    _acRevRating = val;
-    document.getElementById('acRevRating').value = val;
-    highlightAcStars(val);
+    _acRevRating = val; document.getElementById('acRevRating').value = val; highlightAcStars(val);
   }
-
   function highlightAcStars(val) {
     document.querySelectorAll('.ac-star').forEach(function(s) {
       var v = parseInt(s.dataset.v);
-      s.textContent = v <= val ? '★' : '☆';
-      s.style.color = v <= val ? '#d4a843' : '#d1d5db';
-      s.style.transform = v <= val ? 'scale(1.1)' : '';
+      s.textContent = v <= val ? '★' : '☆'; s.style.color = v <= val ? '#d4a843' : '#d1d5db'; s.style.transform = v <= val ? 'scale(1.1)' : '';
     });
   }
-
   document.querySelectorAll('.ac-star').forEach(function(s) {
     s.addEventListener('click', function() { setAcStars(parseInt(this.dataset.v)); });
     s.addEventListener('mouseenter', function() { highlightAcStars(parseInt(this.dataset.v)); });
@@ -1006,51 +973,20 @@ function saveAddressEdit() {
     var review = (document.getElementById('acRevText').value || '').trim();
     var errEl  = document.getElementById('acRevErr');
     var btn    = document.getElementById('acRevBtn');
-
-    if (!name || !review) {
-      errEl.textContent = 'Please fill in your name and review.';
-      errEl.style.display = 'block';
-      return;
-    }
-    if (isGibberish(name)) {
-      errEl.textContent = 'Please enter a valid name.';
-      errEl.style.display = 'block';
-      return;
-    }
-    if (isGibberish(review)) {
-      errEl.textContent = 'Please write a meaningful review.';
-      errEl.style.display = 'block';
-      return;
-    }
-    errEl.style.display = 'none';
-    btn.disabled = true;
-    btn.textContent = 'Submitting…';
-
-    fetch('/api/reviews', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name, location: loc, rating: rating, review: review })
-    })
-    .then(function(r) { return r.json(); })
+    if (!name || !review) { errEl.textContent = 'Please fill in your name and review.'; errEl.style.display = 'block'; return; }
+    if (isGibberish(name))   { errEl.textContent = 'Please enter a valid name.';          errEl.style.display = 'block'; return; }
+    if (isGibberish(review)) { errEl.textContent = 'Please write a meaningful review.';   errEl.style.display = 'block'; return; }
+    errEl.style.display = 'none'; btn.disabled = true; btn.textContent = 'Submitting…';
+    fetch('/api/reviews', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name:name,location:loc,rating:rating,review:review}) })
+    .then(function(r){return r.json();})
     .then(function(data) {
       if (data.success) {
         document.getElementById('acctRevForm').style.display = 'none';
-        var ars = document.getElementById('acRevSuccess');
-        ars.style.display = 'flex';
+        var ars = document.getElementById('acRevSuccess'); ars.style.display = 'flex';
         ars.querySelectorAll('.ty-spark,.ty-circle,.ty-heading,.ty-subtext,.ty-emoji,.ty-btn').forEach(function(el){el.classList.add('go');});
-      } else {
-        errEl.textContent = data.error || 'Something went wrong. Please try again.';
-        errEl.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Submit Review';
-      }
+      } else { errEl.textContent = data.error || 'Something went wrong.'; errEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'Submit Review'; }
     })
-    .catch(function() {
-      errEl.textContent = 'Network error. Please try again.';
-      errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Submit Review';
-    });
+    .catch(function() { errEl.textContent = 'Network error.'; errEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'Submit Review'; });
   }
 </script>
 

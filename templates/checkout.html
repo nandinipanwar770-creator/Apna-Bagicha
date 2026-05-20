@@ -181,18 +181,15 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="form-label">Full Name *</label>
-                <input type="text" name="customer_name" class="form-input" placeholder="Ramesh Kumar" required autocomplete="name"
-                  value="{{ user_data.name if user_data else '' }}">
+                <input type="text" id="f_name" name="customer_name" class="form-input" placeholder="Ramesh Kumar" required autocomplete="name">
               </div>
               <div>
                 <label class="form-label">Mobile Number *</label>
-                <input type="tel" name="customer_phone" class="form-input" placeholder="+91 98765 43210" pattern="[0-9+\s\-]{10,15}" required autocomplete="tel"
-                  value="{{ user_data.phone if user_data else '' }}">
+                <input type="tel" id="f_phone" name="customer_phone" class="form-input" placeholder="+91 98765 43210" pattern="[0-9+\s\-]{10,15}" required autocomplete="tel">
               </div>
               <div class="sm:col-span-2">
                 <label class="form-label">Email Address <span class="text-gray-400 font-normal text-xs">(optional — for order confirmation)</span></label>
-                <input type="email" name="customer_email" class="form-input" placeholder="ramesh@example.com" autocomplete="email"
-                  value="{{ user_data.email if user_data else '' }}">
+                <input type="email" id="f_email" name="customer_email" class="form-input" placeholder="ramesh@example.com" autocomplete="email">
               </div>
             </div>
           </div>
@@ -206,12 +203,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="sm:col-span-2">
                 <label class="form-label">Street / Village / Colony *</label>
-                <textarea name="customer_address" class="form-input" rows="2" placeholder="House No., Street Name, Village / Area" required autocomplete="street-address">{{ user_data.address if user_data else '' }}</textarea>
+                <textarea id="f_address" name="customer_address" class="form-input" rows="2" placeholder="House No., Street Name, Village / Area" required autocomplete="street-address"></textarea>
               </div>
               <div>
                 <label class="form-label">City / District *</label>
-                <input type="text" name="customer_city" class="form-input" placeholder="Lucknow" required autocomplete="address-level2"
-                  value="{{ user_data.city if user_data else '' }}">
+                <input type="text" id="f_city" name="customer_city" class="form-input" placeholder="Lucknow" required autocomplete="address-level2">
               </div>
               <div>
                 <label class="form-label">State *</label>
@@ -231,8 +227,7 @@
               </div>
               <div>
                 <label class="form-label">PIN Code *</label>
-                <input type="text" name="customer_pincode" class="form-input" placeholder="226001" pattern="[0-9]{6}" maxlength="6" required autocomplete="postal-code"
-                  value="{{ user_data.pincode if user_data else '' }}">
+                <input type="text" id="f_pincode" name="customer_pincode" class="form-input" placeholder="226001" pattern="[0-9]{6}" maxlength="6" required autocomplete="postal-code">
               </div>
             </div>
           </div>
@@ -288,17 +283,13 @@
             <!-- Single product (direct buy) -->
             <div id="singleProductSummary">
               <div class="flex gap-3 mb-5 pb-5 border-b border-gray-100">
-                {% if product_img %}
-                <img src="/images/{{ product_img }}" alt="{{ product_name }}"
-                  class="w-[76px] h-[76px] object-cover rounded-xl border border-gray-100 flex-shrink-0"
-                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="w-[76px] h-[76px] rounded-xl bg-green-50 border border-green-100 items-center justify-center text-4xl flex-shrink-0" style="display:none">🌱</div>
-                {% else %}
-                <div class="w-[76px] h-[76px] rounded-xl bg-green-50 border border-green-100 flex items-center justify-center text-4xl flex-shrink-0">🌱</div>
-                {% endif %}
+                <img id="productImg" src="" alt=""
+                  class="w-[76px] h-[76px] object-cover rounded-xl border border-gray-100 flex-shrink-0 hidden"
+                  onerror="this.classList.add('hidden');document.getElementById('productImgFallback').classList.remove('hidden')">
+                <div id="productImgFallback" class="w-[76px] h-[76px] rounded-xl bg-green-50 border border-green-100 flex items-center justify-center text-4xl flex-shrink-0">🌱</div>
                 <div class="flex-1 min-w-0">
-                  <p class="font-semibold text-gray-800 text-sm leading-snug line-clamp-2">{{ product_name or 'Product' }}</p>
-                  <p class="text-green-main font-bold text-lg mt-1">₹{{ product_price }}</p>
+                  <p id="productNameDisplay" class="font-semibold text-gray-800 text-sm leading-snug line-clamp-2">Product</p>
+                  <p id="productPriceDisplay" class="text-green-main font-bold text-lg mt-1">₹0</p>
                   <p class="text-xs text-gray-400">per unit · Free Delivery</p>
                 </div>
               </div>
@@ -320,7 +311,7 @@
             <div class="space-y-2.5 pb-4 border-b border-gray-100 mb-4">
               <div class="flex justify-between text-sm">
                 <span class="text-gray-500">Subtotal</span>
-                <span class="font-medium text-gray-800" id="subtotalDisplay">₹{{ product_price }}</span>
+                <span class="font-medium text-gray-800" id="subtotalDisplay">₹0</span>
               </div>
               <div class="flex justify-between text-sm">
                 <span class="text-gray-500">Delivery Charges</span>
@@ -329,12 +320,12 @@
             </div>
             <div class="flex justify-between items-center font-bold text-base mb-5">
               <span class="text-gray-800">Total Payable</span>
-              <span class="text-green-dark text-xl" id="totalDisplay">₹{{ product_price }}</span>
+              <span class="text-green-dark text-xl" id="totalDisplay">₹0</span>
             </div>
 
             <!-- Hidden Form Fields -->
-            <input type="hidden" id="hiddenProductName" name="product_name" value="{{ product_name }}">
-            <input type="hidden" id="hiddenProductPrice" name="product_price" value="{{ product_price }}">
+            <input type="hidden" id="hiddenProductName" name="product_name" value="">
+            <input type="hidden" id="hiddenProductPrice" name="product_price" value="0">
             <input type="hidden" id="qtyInput" name="quantity" value="1">
 
             <!-- Trust Indicators -->
@@ -376,12 +367,58 @@
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-    var unitPrice = parseFloat('{{ product_price }}') || 0;
+    var _qp = new URLSearchParams(window.location.search);
+    var unitPrice = parseFloat(_qp.get('price')) || 0;
     var qty = 1;
+
+    // ── Prefill product summary from URL params ───────────────────────────────
+    (function() {
+      var name  = _qp.get('name') || 'Product';
+      var price = unitPrice;
+      var img   = _qp.get('img') || '';
+
+      document.getElementById('productNameDisplay').textContent = name;
+      document.getElementById('productPriceDisplay').textContent = '₹' + price.toLocaleString('en-IN');
+      document.getElementById('hiddenProductName').value  = name;
+      document.getElementById('hiddenProductPrice').value = price;
+
+      var fmt = '₹' + price.toLocaleString('en-IN');
+      document.getElementById('subtotalDisplay').textContent = fmt;
+      document.getElementById('totalDisplay').textContent    = fmt;
+
+      if (img) {
+        var imgEl = document.getElementById('productImg');
+        imgEl.src = '/images/' + img;
+        imgEl.alt = name;
+        imgEl.classList.remove('hidden');
+        document.getElementById('productImgFallback').classList.add('hidden');
+      }
+    })();
+
+    // ── Prefill form from user profile API ───────────────────────────────────
+    fetch('/api/user/profile')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.success) return;
+        var u = data.user;
+        if (u.name)    document.getElementById('f_name').value    = u.name;
+        if (u.phone)   document.getElementById('f_phone').value   = u.phone;
+        if (u.email)   document.getElementById('f_email').value   = u.email;
+        if (u.address) document.getElementById('f_address').value = u.address;
+        if (u.city)    document.getElementById('f_city').value    = u.city;
+        if (u.pincode) document.getElementById('f_pincode').value = u.pincode;
+        if (u.state) {
+          var sel = document.querySelector('select[name="customer_state"]');
+          for (var i = 0; i < sel.options.length; i++) {
+            if (sel.options[i].value === u.state) { sel.selectedIndex = i; break; }
+          }
+        }
+      })
+      .catch(function() {});
 
     // ── Cart mode ─────────────────────────────────────────────────────────────
     (function() {
-      var fromCart = new URLSearchParams(window.location.search).get('from') === 'cart';
+      var fromCart = _qp.get('from') === 'cart';
       if (!fromCart) return;
       var cart;
       try { cart = JSON.parse(localStorage.getItem('apnaBagichaCart') || '[]'); } catch(e) { cart = []; }
