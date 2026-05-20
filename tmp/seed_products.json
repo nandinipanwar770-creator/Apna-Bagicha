@@ -564,7 +564,9 @@
     "name": "Okra Seeds (Lady Finger) भिंडी बीज",
     "price": 89,
     "desc": "High-yield, disease-resistant. 92% germination.",
-    "slug": "tomato"
+    "slug": "tomato",
+    "in_stock": false,
+    "quantity": 0
   },
   {
     "category": "seeds",
@@ -573,7 +575,9 @@
     "name": "Ridge Gourd (तोरई) F-1 Hybrid Seeds",
     "price": 59,
     "desc": "Long purple variety, 88% germination. Kharif season.",
-    "slug": "brinjal"
+    "slug": "brinjal",
+    "in_stock": false,
+    "quantity": 0
   },
   {
     "category": "seeds",
@@ -582,7 +586,9 @@
     "name": "Bitter Gourd (Long) F-1 Hybrid Seeds",
     "price": 79,
     "desc": "Long red fruits, high capsaicin. 90% germination.",
-    "slug": "chilli"
+    "slug": "chilli",
+    "in_stock": false,
+    "quantity": 0
   },
   {
     "category": "seeds",
@@ -1077,7 +1083,9 @@
     "name": "Palak (Spinach)",
     "price": 49,
     "desc": "Dark iron-rich leaves, ready in 30–35 days. 93% germ.",
-    "slug": "palak"
+    "slug": "palak",
+    "in_stock": false,
+    "quantity": 0
   },
   {
     "category": "seeds",

@@ -195,11 +195,19 @@ async function initDb() {
           `INSERT INTO products (slug, name, category, price, emoji, image, description, badge_text, seed_cat, in_stock, quantity, created_at)
            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
            ON CONFLICT (slug) DO NOTHING`,
-          [p.slug, p.name, p.category, p.price || 0, p.emoji || '', p.image || '', p.desc || '', '', p.seed_cat || '', true, 100, now]
+          [p.slug, p.name, p.category, p.price || 0, p.emoji || '', p.image || '', p.desc || '', '', p.seed_cat || '', p.in_stock !== false, p.quantity != null ? p.quantity : 100, now]
         );
       }
       console.log(`✅ Seeded ${seedData.length} products into DB`);
     }
+  }
+
+  // One-time: mark vegetable seeds as out of stock
+  const vegOosFlag = await pool.query("SELECT value FROM admin_config WHERE key='veg_oos_applied'");
+  if (vegOosFlag.rows.length === 0) {
+    await pool.query(`UPDATE products SET in_stock=false, quantity=0 WHERE seed_cat='vegetable'`);
+    await pool.query("INSERT INTO admin_config (key, value) VALUES ('veg_oos_applied', '1')");
+    console.log('✅ Vegetable seeds marked out of stock');
   }
 
   // Seed password hash if not set
