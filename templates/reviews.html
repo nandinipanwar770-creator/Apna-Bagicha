@@ -362,7 +362,7 @@
           if (!data.success) throw new Error('API error');
 
           document.getElementById('statTotal').textContent    = data.total || 0;
-          document.getElementById('statAvg').textContent      = data.avgRating ? data.avgRating.toFixed(1) : '0.0';
+          document.getElementById('statAvg').textContent      = data.avgRating || '0.0';
           document.getElementById('statFiveStar').textContent = data.fiveStarPct ? Math.round(data.fiveStarPct) + '%' : '0%';
 
           loading.classList.add('hidden');
