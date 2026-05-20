@@ -359,91 +359,69 @@ app.post('/verify-payment', async (req, res) => {
 const VALID_STATUSES     = ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
 const VALID_MSG_STATUSES = ['New', 'Read', 'Replied'];
 
-app.get('/admin', async (req, res) => {
-  let error = null;
+app.get('/admin', (req, res) => {
   if (!req.session.admin)
     return res.render('admin.html', { logged_in: false, error: null });
+  res.render('admin.html', { logged_in: true, view: req.query.view || 'orders' });
+});
 
-  const view = req.query.view || 'orders';
-  const counts = await sidebarCounts();
+app.get('/api/admin/counts', async (req, res) => {
+  if (!req.session.admin) return res.status(403).json({ error: 'Unauthorized' });
+  try { res.json({ success: true, ...(await sidebarCounts()) }); }
+  catch (e) { res.json({ success: false, error: e.message }); }
+});
 
-  if (view === 'products') {
-    const prods = await pool.query('SELECT * FROM products ORDER BY created_at DESC');
-    const import_error   = req.query.import_error   || null;
-    const import_success = req.query.import_success  || null;
-    return res.render('admin.html', {
-      logged_in: true, view: 'products',
-      products: prods.rows,
-      import_error,
-      import_success,
-      ...counts,
-    });
-  }
-
-  if (view === 'changepass') {
-    const errorMap = {
-      wrong_current: 'Current password is incorrect.',
-      too_short:     'New password must be at least 6 characters.',
-      mismatch:      'New password and confirmation do not match.',
-    };
-    return res.render('admin.html', {
-      logged_in: true, view: 'changepass',
-      cp_error:   errorMap[req.query.error] || null,
-      cp_success: !!req.query.success,
-      ...counts,
-    });
-  }
-
-  if (view === 'messages') {
-    const messages  = await pool.query('SELECT * FROM contact_messages ORDER BY created_at DESC');
-    const statsRow  = await pool.query(`
-      SELECT COUNT(*) total,
-        SUM(CASE WHEN status='New'     THEN 1 ELSE 0 END) new_count,
-        SUM(CASE WHEN status='Read'    THEN 1 ELSE 0 END) read_count,
-        SUM(CASE WHEN status='Replied' THEN 1 ELSE 0 END) replied_count
-      FROM contact_messages`);
-    return res.render('admin.html', {
-      logged_in: true, view: 'messages',
-      messages:  messages.rows,
-      msg_stats: statsRow.rows[0],
-      ...counts,
-    });
-  }
-
-  // Orders view
-  const statusFilter = req.query.status || 'all';
-  const search = (req.query.q || '').trim();
-  const like = `%${search}%`;
-  let ordersQ;
-  if (statusFilter === 'all') {
-    ordersQ = search
-      ? pool.query('SELECT * FROM orders WHERE order_id ILIKE $1 OR customer_name ILIKE $1 ORDER BY created_at DESC', [like])
-      : pool.query('SELECT * FROM orders ORDER BY created_at DESC');
-  } else {
-    ordersQ = search
-      ? pool.query('SELECT * FROM orders WHERE status=$1 AND (order_id ILIKE $2 OR customer_name ILIKE $2) ORDER BY created_at DESC', [statusFilter, like])
-      : pool.query('SELECT * FROM orders WHERE status=$1 ORDER BY created_at DESC', [statusFilter]);
-  }
-  const [ordersRes, statsRes] = await Promise.all([
-    ordersQ,
-    pool.query(`
-      SELECT COUNT(*) total,
+app.get('/api/admin/orders', async (req, res) => {
+  if (!req.session.admin) return res.status(403).json({ error: 'Unauthorized' });
+  try {
+    const statusFilter = req.query.status || 'all';
+    const search = (req.query.q || '').trim();
+    const like = `%${search}%`;
+    let ordersQ;
+    if (statusFilter === 'all') {
+      ordersQ = search
+        ? pool.query('SELECT * FROM orders WHERE order_id ILIKE $1 OR customer_name ILIKE $1 ORDER BY created_at DESC', [like])
+        : pool.query('SELECT * FROM orders ORDER BY created_at DESC');
+    } else {
+      ordersQ = search
+        ? pool.query('SELECT * FROM orders WHERE status=$1 AND (order_id ILIKE $2 OR customer_name ILIKE $2) ORDER BY created_at DESC', [statusFilter, like])
+        : pool.query('SELECT * FROM orders WHERE status=$1 ORDER BY created_at DESC', [statusFilter]);
+    }
+    const [ordersRes, statsRes] = await Promise.all([
+      ordersQ,
+      pool.query(`SELECT COUNT(*) total,
         SUM(CASE WHEN status='Pending'   THEN 1 ELSE 0 END) pending,
         SUM(CASE WHEN status='Confirmed' THEN 1 ELSE 0 END) confirmed,
         SUM(CASE WHEN status='Shipped'   THEN 1 ELSE 0 END) shipped,
         SUM(CASE WHEN status='Delivered' THEN 1 ELSE 0 END) delivered,
         SUM(CASE WHEN status='Cancelled' THEN 1 ELSE 0 END) cancelled,
-        SUM(total_amount) revenue
-      FROM orders`)
-  ]);
-  res.render('admin.html', {
-    logged_in: true, view: 'orders',
-    orders: ordersRes.rows,
-    stats:  statsRes.rows[0],
-    status_filter: statusFilter,
-    search,
-    ...counts,
-  });
+        SUM(total_amount) revenue FROM orders`),
+    ]);
+    res.json({ success: true, orders: ordersRes.rows, stats: statsRes.rows[0], statusFilter, search });
+  } catch (e) { res.json({ success: false, error: e.message }); }
+});
+
+app.get('/api/admin/messages', async (req, res) => {
+  if (!req.session.admin) return res.status(403).json({ error: 'Unauthorized' });
+  try {
+    const [messagesRes, statsRes] = await Promise.all([
+      pool.query('SELECT * FROM contact_messages ORDER BY created_at DESC'),
+      pool.query(`SELECT COUNT(*) total,
+        SUM(CASE WHEN status='New'     THEN 1 ELSE 0 END) new_count,
+        SUM(CASE WHEN status='Read'    THEN 1 ELSE 0 END) read_count,
+        SUM(CASE WHEN status='Replied' THEN 1 ELSE 0 END) replied_count
+        FROM contact_messages`),
+    ]);
+    res.json({ success: true, messages: messagesRes.rows, msg_stats: statsRes.rows[0] });
+  } catch (e) { res.json({ success: false, error: e.message }); }
+});
+
+app.get('/api/admin/products', async (req, res) => {
+  if (!req.session.admin) return res.status(403).json({ error: 'Unauthorized' });
+  try {
+    const rows = await pool.query('SELECT * FROM products ORDER BY created_at DESC');
+    res.json({ success: true, products: rows.rows });
+  } catch (e) { res.json({ success: false, error: e.message }); }
 });
 
 app.post('/admin', async (req, res) => {

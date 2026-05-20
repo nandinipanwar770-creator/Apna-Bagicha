@@ -35,7 +35,7 @@
       font-weight: 600;
       border: 1.5px solid #e0e7e0;
       cursor: pointer;
-      text-decoration: none;
+      background: white;
       color: #6b7280;
       transition: all 0.2s;
       white-space: nowrap;
@@ -63,7 +63,6 @@
     select.s-select:focus { border-color: #3a7032; }
     .sidebar-link { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; font-size:13.5px; font-weight:500; color:rgba(255,255,255,0.65); text-decoration:none; transition:all 0.2s; }
     .sidebar-link:hover, .sidebar-link.active { background:rgba(255,255,255,0.13); color:white; }
-    /* login */
     @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
     .login-card { animation: fadeIn 0.4s ease both; }
   </style>
@@ -139,16 +138,12 @@
       <a href="/admin?view=orders" class="sidebar-link {% if view == 'orders' %}active{% endif %}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
         Orders
-        {% if pending_orders > 0 %}
-        <span class="ml-auto text-[10px] bg-yellow-400 text-yellow-900 font-bold px-1.5 py-0.5 rounded-full leading-none">{{ pending_orders }}</span>
-        {% endif %}
+        <span id="sidebarPendingBadge" class="ml-auto text-[10px] bg-yellow-400 text-yellow-900 font-bold px-1.5 py-0.5 rounded-full leading-none hidden"></span>
       </a>
       <a href="/admin?view=messages" class="sidebar-link {% if view == 'messages' %}active{% endif %}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
         Messages
-        {% if new_messages > 0 %}
-        <span class="ml-auto text-[10px] bg-red-400 text-white font-bold px-1.5 py-0.5 rounded-full leading-none">{{ new_messages }}</span>
-        {% endif %}
+        <span id="sidebarMsgBadge" class="ml-auto text-[10px] bg-red-400 text-white font-bold px-1.5 py-0.5 rounded-full leading-none hidden"></span>
       </a>
       <a href="/products" target="_blank" class="sidebar-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
@@ -195,7 +190,7 @@
       <div class="flex items-center gap-3">
         {% if view == 'orders' %}
         <span class="hidden sm:block text-xs font-semibold text-gray-400">
-          Total: <span class="text-gray-700">{{ stats.total or 0 }}</span> orders
+          Total: <span class="text-gray-700" id="headerTotalOrders">—</span> orders
         </span>
         {% endif %}
         <a href="/admin/logout"
@@ -209,7 +204,7 @@
 
       {% if view == 'changepass' %}
       <!-- ═══════════ CHANGE PASSWORD VIEW ═══════════ -->
-      <div class="max-w-md">
+      <div id="changepassPanel" class="max-w-md">
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7">
           <div class="flex items-center gap-3 mb-6">
             <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
@@ -221,18 +216,14 @@
             </div>
           </div>
 
-          {% if cp_success %}
-          <div class="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-5">
+          <div id="cpSuccessAlert" class="hidden flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-5">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
             Password updated successfully!
           </div>
-          {% endif %}
-          {% if cp_error %}
-          <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">
+          <div id="cpErrorAlert" class="hidden flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            {{ cp_error }}
+            <span id="cpErrorMsg"></span>
           </div>
-          {% endif %}
 
           <form method="POST" action="/admin/change-password" class="space-y-4">
             <div>
@@ -281,519 +272,280 @@
 
       {% elif view == 'products' %}
       <!-- ═══════════ PRODUCTS VIEW ═══════════ -->
+      <div id="productsPanel">
 
-      <!-- Alert banners -->
-      {% if import_success %}
-      <div class="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-        {{ import_success }}
-      </div>
-      {% endif %}
-      {% if import_error %}
-      <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Import error: {{ import_error }}
-      </div>
-      {% endif %}
+        <!-- Alert banners (populated by JS from URL params) -->
+        <div id="importSuccessAlert" class="hidden flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="importSuccessMsg"></span>
+        </div>
+        <div id="importErrorAlert" class="hidden flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Import error: <span id="importErrorMsg"></span>
+        </div>
 
-      <!-- Action Cards: Import / Export / Template -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- Action Cards: Import / Export / Template -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-        <!-- Import -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <!-- Import -->
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-800 text-[14px]">Import Products</h3>
+                <p class="text-xs text-gray-400">Upload CSV + product images</p>
+              </div>
             </div>
-            <div>
-              <h3 class="font-bold text-gray-800 text-[14px]">Import Products</h3>
-              <p class="text-xs text-gray-400">Upload CSV + product images</p>
+            <form method="POST" action="/admin/products/import" enctype="multipart/form-data" class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">CSV File <span class="text-red-400">*</span></label>
+                <input type="file" name="csv" accept=".csv" required
+                  class="block w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-gray-200 rounded-xl px-3 py-2">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Product Images <span class="text-gray-400">(optional)</span></label>
+                <input type="file" name="images" multiple accept="image/*"
+                  class="block w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 cursor-pointer border border-gray-200 rounded-xl px-3 py-2">
+                <p class="text-[11px] text-gray-400 mt-1">Filenames must match the <code>image</code> column in your CSV</p>
+              </div>
+              <button type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl transition-all text-sm">
+                Import →
+              </button>
+            </form>
+          </div>
+
+          <!-- Export -->
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-800 text-[14px]">Export Products</h3>
+                <p class="text-xs text-gray-400">Download all products as CSV</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-500 mb-4 leading-relaxed">
+              Downloads a CSV of all <strong id="exportProductCount">—</strong> product(s) currently in your catalogue.
+            </p>
+            <a href="/admin/products/export"
+              class="block w-full text-center bg-green-main hover:bg-green-dark text-white font-bold py-2 rounded-xl transition-all text-sm">
+              Download CSV →
+            </a>
+          </div>
+
+          <!-- Template -->
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-xl bg-yellow-50 flex items-center justify-center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-800 text-[14px]">Download Template</h3>
+                <p class="text-xs text-gray-400">Sample CSV to fill and import</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-500 mb-4 leading-relaxed">
+              Get a ready-to-fill CSV template with all required columns and example rows.
+            </p>
+            <a href="/admin/products/template"
+              class="block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 rounded-xl transition-all text-sm">
+              Download Template →
+            </a>
+            <div class="mt-3 text-[11px] text-gray-400 space-y-0.5 leading-relaxed">
+              <div><strong>category:</strong> <code>garden</code> or <code>seeds</code></div>
+              <div><strong>seed_cat:</strong> <code>vegetable</code>, <code>flower</code>, <code>herb</code></div>
+              <div><strong>in_stock:</strong> <code>true</code> or <code>false</code></div>
             </div>
           </div>
-          <form method="POST" action="/admin/products/import" enctype="multipart/form-data" class="space-y-3">
-            <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">CSV File <span class="text-red-400">*</span></label>
-              <input type="file" name="csv" accept=".csv" required
-                class="block w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-gray-200 rounded-xl px-3 py-2">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Product Images <span class="text-gray-400">(optional)</span></label>
-              <input type="file" name="images" multiple accept="image/*"
-                class="block w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 cursor-pointer border border-gray-200 rounded-xl px-3 py-2">
-              <p class="text-[11px] text-gray-400 mt-1">Filenames must match the <code>image</code> column in your CSV</p>
-            </div>
-            <button type="submit"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl transition-all text-sm">
-              Import →
-            </button>
-          </form>
+
         </div>
 
-        <!-- Export -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            </div>
-            <div>
-              <h3 class="font-bold text-gray-800 text-[14px]">Export Products</h3>
-              <p class="text-xs text-gray-400">Download all products as CSV</p>
-            </div>
+        <!-- Products Table -->
+        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+          <div class="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
+            <h2 class="font-bold text-gray-800 text-[14px]">Current Products <span class="text-gray-400 font-normal">(<span id="productsCount">—</span>)</span></h2>
           </div>
-          <p class="text-sm text-gray-500 mb-4 leading-relaxed">
-            Downloads a CSV of all <strong>{{ products | length }}</strong> product(s) currently in your catalogue.
-          </p>
-          <a href="/admin/products/export"
-            class="block w-full text-center bg-green-main hover:bg-green-dark text-white font-bold py-2 rounded-xl transition-all text-sm">
-            Download CSV →
-          </a>
-        </div>
-
-        <!-- Template -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-yellow-50 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            </div>
-            <div>
-              <h3 class="font-bold text-gray-800 text-[14px]">Download Template</h3>
-              <p class="text-xs text-gray-400">Sample CSV to fill and import</p>
-            </div>
+          <div id="productsTableContainer" class="overflow-x-auto hidden">
+            <table class="w-full min-w-[700px]">
+              <thead>
+                <tr class="bg-gray-50/70 border-b border-gray-100 text-left">
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Product</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Category</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Price</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Added</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Delete</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody"></tbody>
+            </table>
           </div>
-          <p class="text-sm text-gray-500 mb-4 leading-relaxed">
-            Get a ready-to-fill CSV template with all required columns and example rows.
-          </p>
-          <a href="/admin/products/template"
-            class="block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 rounded-xl transition-all text-sm">
-            Download Template →
-          </a>
-          <div class="mt-3 text-[11px] text-gray-400 space-y-0.5 leading-relaxed">
-            <div><strong>category:</strong> <code>garden</code> or <code>seeds</code></div>
-            <div><strong>seed_cat:</strong> <code>vegetable</code>, <code>flower</code>, <code>herb</code></div>
-            <div><strong>in_stock:</strong> <code>true</code> or <code>false</code></div>
+          <div id="productsEmptyState" class="py-16 text-center">
+            <div class="text-5xl mb-3 opacity-60">🌿</div>
+            <p class="text-gray-500 font-semibold">No products imported yet</p>
+            <p class="text-xs text-gray-400 mt-1.5">Download the template, fill it in, and import it above</p>
           </div>
         </div>
 
-      </div>
-
-      <!-- Products Table -->
-      <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-        <div class="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
-          <h2 class="font-bold text-gray-800 text-[14px]">Current Products <span class="text-gray-400 font-normal">({{ products | length }})</span></h2>
-        </div>
-        {% if products %}
-        <div class="overflow-x-auto">
-          <table class="w-full min-w-[700px]">
-            <thead>
-              <tr class="bg-gray-50/70 border-b border-gray-100 text-left">
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Product</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Category</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Price</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Added</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Delete</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-50">
-              {% for p in products %}
-              <tr class="hover:bg-gray-50/60 transition-colors">
-                <td class="px-4 py-3.5">
-                  <div class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
-                      {% if p.image %}
-                      <img src="/images/products/{{ p.image }}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
-                      <div style="display:none" class="w-full h-full items-center justify-center text-lg">{{ p.emoji or '🌿' }}</div>
-                      {% else %}
-                      <span class="text-lg">{{ p.emoji or '🌿' }}</span>
-                      {% endif %}
-                    </div>
-                    <div>
-                      <div class="font-semibold text-sm text-gray-800">{{ p.name }}</div>
-                      <div class="text-[11px] text-gray-400 font-mono">{{ p.slug }}</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-4 py-3.5">
-                  <span class="text-xs font-semibold px-2 py-0.5 rounded-full
-                    {% if p.category == 'garden' %}bg-green-100 text-green-700
-                    {% elif p.category == 'seeds' %}bg-yellow-100 text-yellow-700
-                    {% else %}bg-gray-100 text-gray-600{% endif %}">
-                    {{ p.category }}{% if p.seed_cat %} / {{ p.seed_cat }}{% endif %}
-                  </span>
-                </td>
-                <td class="px-4 py-3.5">
-                  <span class="font-bold text-green-dark text-sm">₹{{ p.price | format_int }}</span>
-                </td>
-                <td class="px-4 py-3.5">
-                  {% if p.in_stock %}
-                  <span class="text-[11px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">In Stock</span>
-                  {% else %}
-                  <span class="text-[11px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">Out of Stock</span>
-                  {% endif %}
-                </td>
-                <td class="px-4 py-3.5">
-                  <span class="text-xs text-gray-400">{{ p.created_at | truncdate }}</span>
-                </td>
-                <td class="px-4 py-3.5">
-                  <form method="POST" action="/admin/products/delete/{{ p.id }}" onsubmit="return confirm('Delete {{ p.name }}?')">
-                    <button type="submit"
-                      class="text-xs bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-1.5 rounded-lg transition-all">
-                      Delete
-                    </button>
-                  </form>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% else %}
-        <div class="py-16 text-center">
-          <div class="text-5xl mb-3 opacity-60">🌿</div>
-          <p class="text-gray-500 font-semibold">No products imported yet</p>
-          <p class="text-xs text-gray-400 mt-1.5">Download the template, fill it in, and import it above</p>
-        </div>
-        {% endif %}
       </div>
 
       {% elif view == 'messages' %}
       <!-- ═══════════ MESSAGES VIEW ═══════════ -->
+      <div id="messagesPanel">
 
-      <!-- Message Stats -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div class="stat-card col-span-2 sm:col-span-1">
-          <div class="text-2xl font-bold text-gray-800">{{ msg_stats.total or 0 }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">Total Messages</div>
+        <!-- Message Stats -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="stat-card col-span-2 sm:col-span-1">
+            <div class="text-2xl font-bold text-gray-800" id="msgStatTotal">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">Total Messages</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-2xl font-bold text-red-500" id="msgStatNew">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">New / Unread</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-2xl font-bold text-blue-500" id="msgStatRead">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">Read</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-2xl font-bold text-green-600" id="msgStatReplied">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">Replied</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="text-2xl font-bold text-red-500">{{ msg_stats.new_count or 0 }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">New / Unread</div>
+
+        <!-- Messages Table -->
+        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+          <div id="messagesTableContainer" class="overflow-x-auto hidden">
+            <table class="w-full min-w-[700px]">
+              <thead>
+                <tr class="bg-gray-50/70 border-b border-gray-100 text-left">
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Sender</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Message</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Date</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Update</th>
+                </tr>
+              </thead>
+              <tbody id="messagesTableBody"></tbody>
+            </table>
+          </div>
+          <div id="messagesEmptyState" class="py-20 text-center">
+            <div class="text-6xl mb-4 opacity-70">💬</div>
+            <p class="text-gray-500 font-semibold">No messages yet</p>
+            <p class="text-xs text-gray-400 mt-1.5">Messages from the contact form will appear here</p>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="text-2xl font-bold text-blue-500">{{ msg_stats.read_count or 0 }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">Read</div>
-        </div>
-        <div class="stat-card">
-          <div class="text-2xl font-bold text-green-600">{{ msg_stats.replied_count or 0 }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">Replied</div>
-        </div>
-      </div>
 
-      <!-- Messages Table -->
-      <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-        {% if messages %}
-        <div class="overflow-x-auto">
-          <table class="w-full min-w-[700px]">
-            <thead>
-              <tr class="bg-gray-50/70 border-b border-gray-100 text-left">
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Sender</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Message</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Date</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Update</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-50">
-              {% for m in messages %}
-              <tr class="hover:bg-gray-50/60 transition-colors {% if m.status == 'New' %}bg-blue-50/30{% endif %}">
-
-                <!-- Sender -->
-                <td class="px-4 py-3.5">
-                  <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm flex-shrink-0">
-                      {{ m.name[0]|upper }}
-                    </div>
-                    <div>
-                      <div class="font-semibold text-sm text-gray-800 flex items-center gap-1.5">
-                        {{ m.name }}
-                        {% if m.status == 'New' %}
-                        <span class="text-[9px] bg-red-400 text-white font-bold px-1.5 py-0.5 rounded-full">NEW</span>
-                        {% endif %}
-                      </div>
-                      <a href="mailto:{{ m.email }}" class="text-xs text-blue-500 hover:underline">{{ m.email }}</a>
-                      {% if m.phone %}
-                      <div class="text-xs text-gray-400">{{ m.phone }}</div>
-                      {% endif %}
-                    </div>
-                  </div>
-                </td>
-
-                <!-- Message -->
-                <td class="px-4 py-3.5 max-w-[320px]">
-                  <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{{ m.message }}</p>
-                </td>
-
-                <!-- Date -->
-                <td class="px-4 py-3.5">
-                  <div class="text-xs text-gray-500">{{ m.created_at | truncdate }}</div>
-                </td>
-
-                <!-- Status Badge -->
-                <td class="px-4 py-3.5">
-                  {% if m.status == 'New' %}
-                  <span class="status-badge" style="background:#fee2e2;color:#991b1b;">New</span>
-                  {% elif m.status == 'Read' %}
-                  <span class="status-badge" style="background:#dbeafe;color:#1e40af;">Read</span>
-                  {% else %}
-                  <span class="status-badge" style="background:#d1fae5;color:#065f46;">Replied</span>
-                  {% endif %}
-                </td>
-
-                <!-- Update Form -->
-                <td class="px-4 py-3.5">
-                  <form method="POST" action="/admin/messages/update-status" class="flex items-center gap-1.5">
-                    <input type="hidden" name="msg_id" value="{{ m.id }}">
-                    <select name="status" class="s-select">
-                      {% for s in ['New', 'Read', 'Replied'] %}
-                      <option value="{{ s }}" {% if m.status == s %}selected{% endif %}>{{ s }}</option>
-                      {% endfor %}
-                    </select>
-                    <button type="submit"
-                      class="text-xs bg-green-main hover:bg-green-dark text-white font-bold px-2.5 py-[6px] rounded-lg transition-all whitespace-nowrap">
-                      Save
-                    </button>
-                  </form>
-                </td>
-
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% else %}
-        <div class="py-20 text-center">
-          <div class="text-6xl mb-4 opacity-70">💬</div>
-          <p class="text-gray-500 font-semibold">No messages yet</p>
-          <p class="text-xs text-gray-400 mt-1.5">Messages from the contact form will appear here</p>
-        </div>
-        {% endif %}
       </div>
 
       {% else %}
       <!-- ═══════════ ORDERS VIEW ═══════════ -->
+      <div id="ordersPanel">
 
-      <!-- Stats Row -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div class="stat-card sm:col-span-1 col-span-2">
-          <div class="text-2xl font-bold text-gray-800">{{ stats.total or 0 }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">Total Orders</div>
+        <!-- Stats Row -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div class="stat-card sm:col-span-1 col-span-2">
+            <div class="text-2xl font-bold text-gray-800" id="statTotal">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">Total Orders</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-2xl font-bold text-yellow-600" id="statPending">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">Pending</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-2xl font-bold text-green-600" id="statConfirmed">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">Confirmed</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-2xl font-bold text-blue-600" id="statShipped">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">Shipped</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-2xl font-bold text-emerald-700" id="statDelivered">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">Delivered</div>
+          </div>
+          <div class="stat-card sm:col-span-1 col-span-2">
+            <div class="text-2xl font-bold text-green-dark" id="statRevenue">—</div>
+            <div class="text-xs text-gray-400 mt-0.5 font-medium">Total Revenue</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="text-2xl font-bold text-yellow-600">{{ stats.pending or 0 }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">Pending</div>
-        </div>
-        <div class="stat-card">
-          <div class="text-2xl font-bold text-green-600">{{ stats.confirmed or 0 }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">Confirmed</div>
-        </div>
-        <div class="stat-card">
-          <div class="text-2xl font-bold text-blue-600">{{ stats.shipped or 0 }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">Shipped</div>
-        </div>
-        <div class="stat-card">
-          <div class="text-2xl font-bold text-emerald-700">{{ stats.delivered or 0 }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">Delivered</div>
-        </div>
-        <div class="stat-card sm:col-span-1 col-span-2">
-          <div class="text-2xl font-bold text-green-dark">₹{{ stats.revenue | format_int }}</div>
-          <div class="text-xs text-gray-400 mt-0.5 font-medium">Total Revenue</div>
-        </div>
-      </div>
 
-      <!-- Search Bar -->
-      <form method="GET" action="/admin" class="flex gap-2 items-center">
-        <input type="hidden" name="view" value="orders">
-        <input type="hidden" name="status" value="{{ status_filter }}">
-        <div class="flex-1 relative">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" name="q" value="{{ search or '' }}"
-            placeholder="Search by Order ID or Customer Name…"
-            class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-main transition-all">
+        <!-- Search Bar -->
+        <div class="flex gap-2 items-center">
+          <div class="flex-1 relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" oninput="scheduleSearch(this.value)"
+              placeholder="Search by Order ID or Customer Name…"
+              class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-main transition-all">
+          </div>
+          <button onclick="doSearch()"
+            class="bg-green-main hover:bg-green-dark text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all whitespace-nowrap">
+            Search
+          </button>
+          <button id="clearSearchBtn" onclick="clearSearch()"
+            class="hidden flex items-center gap-1 text-sm text-gray-500 border border-gray-200 bg-white hover:bg-gray-50 px-3 py-2.5 rounded-xl transition-all whitespace-nowrap">
+            ✕ Clear
+          </button>
         </div>
-        <button type="submit"
-          class="bg-green-main hover:bg-green-dark text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all whitespace-nowrap">
-          Search
-        </button>
-        {% if search %}
-        <a href="/admin?view=orders&status={{ status_filter }}"
-          class="flex items-center gap-1 text-sm text-gray-500 border border-gray-200 bg-white hover:bg-gray-50 px-3 py-2.5 rounded-xl transition-all whitespace-nowrap">
-          ✕ Clear
-        </a>
-        {% endif %}
-      </form>
 
-      <!-- Filter Tabs -->
-      <div class="flex flex-wrap gap-2">
-        <a href="/admin?view=orders&status=all"
-          class="filter-tab {% if status_filter == 'all' %}active{% endif %}">
-          All ({{ stats.total or 0 }})
-        </a>
-        <a href="/admin?view=orders&status=Pending"
-          class="filter-tab {% if status_filter == 'Pending' %}active{% endif %}">
-          Pending ({{ stats.pending or 0 }})
-        </a>
-        <a href="/admin?view=orders&status=Confirmed"
-          class="filter-tab {% if status_filter == 'Confirmed' %}active{% endif %}">
-          Confirmed ({{ stats.confirmed or 0 }})
-        </a>
-        <a href="/admin?view=orders&status=Shipped"
-          class="filter-tab {% if status_filter == 'Shipped' %}active{% endif %}">
-          Shipped ({{ stats.shipped or 0 }})
-        </a>
-        <a href="/admin?view=orders&status=Delivered"
-          class="filter-tab {% if status_filter == 'Delivered' %}active{% endif %}">
-          Delivered ({{ stats.delivered or 0 }})
-        </a>
-        <a href="/admin?view=orders&status=Cancelled"
-          class="filter-tab {% if status_filter == 'Cancelled' %}active{% endif %}">
-          Cancelled ({{ stats.cancelled or 0 }})
-        </a>
-      </div>
-
-      <!-- Orders Table -->
-      {% if status_filter == 'Cancelled' and orders %}
-      <div class="flex items-center justify-between bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">
-        <div class="flex items-center gap-2 text-sm text-red-700">
-          <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-gray-300 accent-red-500 cursor-pointer">
-          <span><span id="selectedCount">0</span> of {{ orders|length }} selected</span>
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="filterOrders('all')" id="ftab-all" class="filter-tab active">All (<span id="ftab-all-count">—</span>)</button>
+          <button onclick="filterOrders('Pending')" id="ftab-Pending" class="filter-tab">Pending (<span id="ftab-Pending-count">—</span>)</button>
+          <button onclick="filterOrders('Confirmed')" id="ftab-Confirmed" class="filter-tab">Confirmed (<span id="ftab-Confirmed-count">—</span>)</button>
+          <button onclick="filterOrders('Shipped')" id="ftab-Shipped" class="filter-tab">Shipped (<span id="ftab-Shipped-count">—</span>)</button>
+          <button onclick="filterOrders('Delivered')" id="ftab-Delivered" class="filter-tab">Delivered (<span id="ftab-Delivered-count">—</span>)</button>
+          <button onclick="filterOrders('Cancelled')" id="ftab-Cancelled" class="filter-tab">Cancelled (<span id="ftab-Cancelled-count">—</span>)</button>
         </div>
-        <button onclick="deleteSelected()"
-          id="deleteSelBtn"
-          disabled
-          class="bg-red-500 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-4 py-2 rounded-lg transition-all">
-          Delete Selected
-        </button>
+
+        <!-- Cancelled bulk-action bar (shown by JS when status=Cancelled and has orders) -->
+        <div id="cancelledBar" class="hidden items-center justify-between bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">
+          <div class="flex items-center gap-2 text-sm text-red-700">
+            <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-gray-300 accent-red-500 cursor-pointer">
+            <span><span id="selectedCount">0</span> of <span id="cancelledTotal">0</span> selected</span>
+          </div>
+          <button onclick="deleteSelected()"
+            id="deleteSelBtn"
+            disabled
+            class="bg-red-500 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold px-4 py-2 rounded-lg transition-all">
+            Delete Selected
+          </button>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+          <div id="ordersTableContainer" class="overflow-x-auto hidden">
+            <table class="w-full min-w-[800px]">
+              <thead id="ordersTableHead">
+                <tr class="bg-gray-50/70 border-b border-gray-100 text-left">
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Order ID</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Product</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Customer</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Amount</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Payment</th>
+                  <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
+                  <th id="actionsColHeader" class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Update</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody"></tbody>
+            </table>
+          </div>
+          <div id="ordersEmptyState" class="hidden py-20 text-center">
+            <div class="text-6xl mb-4 opacity-70">📦</div>
+            <p class="text-gray-500 font-semibold">No orders found</p>
+            <p class="text-xs text-gray-400 mt-1.5">
+              <span id="ordersEmptyMsg">Orders will appear here once customers place them from the products page.</span>
+              <a id="ordersEmptyLink" href="/admin?view=orders" class="text-green-main hover:underline ml-1 hidden">View all orders</a>
+            </p>
+          </div>
+        </div>
+
       </div>
       {% endif %}
-      <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-        {% if orders %}
-        <div class="overflow-x-auto">
-          <table class="w-full min-w-[800px]">
-            <thead>
-              <tr class="bg-gray-50/70 border-b border-gray-100 text-left">
-                {% if status_filter == 'Cancelled' %}
-                <th class="px-4 py-3 w-8"></th>
-                {% endif %}
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Order ID</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Product</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Customer</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Amount</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Payment</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">Status</th>
-                <th class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-4 py-3">{% if status_filter == 'Cancelled' %}Actions{% else %}Update{% endif %}</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-50">
-              {% for order in orders %}
-              <tr class="hover:bg-gray-50/60 transition-colors group">
-
-                {% if status_filter == 'Cancelled' %}
-                <td class="px-4 py-3.5 w-8">
-                  <input type="checkbox" class="cancel-cb w-4 h-4 rounded border-gray-300 accent-red-500 cursor-pointer" value="{{ order.order_id }}">
-                </td>
-                {% endif %}
-
-                <!-- Order ID + Date -->
-                <td class="px-4 py-3.5">
-                  <div class="font-mono text-xs font-bold text-gray-700 bg-gray-100 inline-block px-2 py-0.5 rounded">{{ order.order_id }}</div>
-                  <div class="text-[11px] text-gray-400 mt-1">{{ order.created_at | truncdate }}</div>
-                </td>
-
-                <!-- Product -->
-                <td class="px-4 py-3.5">
-                  <div class="font-semibold text-sm text-gray-800 max-w-[200px]" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ order.product_name }}">
-                    {{ order.product_name }}
-                  </div>
-                  <div class="text-xs text-gray-400 mt-0.5">Qty: {{ order.quantity }}</div>
-                  {% if 'Cart Order' in order.product_name %}
-                  <button onclick="openOrderView(this)"
-                    data-order-id="{{ order.order_id }}"
-                    data-product-name="{{ order.product_name }}"
-                    data-quantity="{{ order.quantity }}"
-                    data-product-price="{{ order.product_price }}"
-                    data-total="{{ order.total_amount }}"
-                    data-customer="{{ order.customer_name }}"
-                    data-phone="{{ order.customer_phone }}"
-                    data-email="{{ order.customer_email }}"
-                    data-address="{{ order.customer_address }}"
-                    data-city="{{ order.customer_city }}"
-                    data-state="{{ order.customer_state }}"
-                    data-pincode="{{ order.customer_pincode }}"
-                    data-payment="{{ order.payment_method }}"
-                    data-status="{{ order.status }}"
-                    class="mt-1.5 text-[11px] font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2 py-0.5 rounded-lg transition-all cursor-pointer">
-                    👁 View Items
-                  </button>
-                  {% endif %}
-                </td>
-
-                <!-- Customer -->
-                <td class="px-4 py-3.5">
-                  <div class="font-semibold text-sm text-gray-800">{{ order.customer_name }}</div>
-                  <div class="text-xs text-gray-400">{{ order.customer_phone }}</div>
-                  <div class="text-xs text-gray-400">{{ order.customer_city }}, {{ order.customer_state }}</div>
-                </td>
-
-                <!-- Amount -->
-                <td class="px-4 py-3.5">
-                  <div class="font-bold text-sm text-green-dark">₹{{ order.total_amount | format_int }}</div>
-                </td>
-
-                <!-- Payment -->
-                <td class="px-4 py-3.5">
-                  <span class="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{{ order.payment_method }}</span>
-                </td>
-
-                <!-- Status Badge -->
-                <td class="px-4 py-3.5">
-                  <span class="status-badge s-{{ order.status }}">{{ order.status }}</span>
-                </td>
-
-                <!-- Status Update / Delete -->
-                <td class="px-4 py-3.5">
-                  <form method="POST" action="/admin/update-status" class="flex items-center gap-1.5 flex-wrap">
-                    <input type="hidden" name="order_id" value="{{ order.order_id }}">
-                    <input type="hidden" name="current_filter" value="{{ status_filter }}">
-                    <select name="status" class="s-select">
-                      {% for s in ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'] %}
-                      <option value="{{ s }}" {% if order.status == s %}selected{% endif %}>{{ s }}</option>
-                      {% endfor %}
-                    </select>
-                    <button type="submit"
-                      class="text-xs bg-green-main hover:bg-green-dark text-white font-bold px-2.5 py-[6px] rounded-lg transition-all whitespace-nowrap">
-                      Save
-                    </button>
-                  </form>
-                  {% if status_filter == 'Cancelled' %}
-                  <button onclick="deleteSingle('{{ order.order_id }}')"
-                    class="mt-1.5 text-xs bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-[6px] rounded-lg transition-all w-full">
-                    Delete
-                  </button>
-                  {% endif %}
-                </td>
-
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% else %}
-        <div class="py-20 text-center">
-          <div class="text-6xl mb-4 opacity-70">📦</div>
-          <p class="text-gray-500 font-semibold">No orders found</p>
-          <p class="text-xs text-gray-400 mt-1.5">
-            {% if status_filter != 'all' %}
-            No {{ status_filter }} orders yet.
-            <a href="/admin" class="text-green-main hover:underline ml-1">View all orders</a>
-            {% else %}
-            Orders will appear here once customers place them from the products page.
-            {% endif %}
-          </p>
-        </div>
-        {% endif %}
-      </div>
-
-      {% endif %}{# end view == 'messages' / orders #}
 
     </div>
   </div>
@@ -803,7 +555,6 @@
 <!-- ═══ ORDER VIEW MODAL ═══ -->
 <div id="orderViewOverlay" onclick="closeOrderView()" class="fixed inset-0 bg-black/50 z-[3000] hidden"></div>
 <div id="orderViewModal" class="fixed z-[3001] hidden top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[500px] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col" style="max-height:90vh;">
-  <!-- Header -->
   <div style="background:linear-gradient(135deg,#2d5a27,#3a7032);flex-shrink:0;" class="px-5 py-4 flex items-center justify-between">
     <div>
       <h3 class="text-white font-bold text-base">Order Details</h3>
@@ -811,17 +562,13 @@
     </div>
     <button onclick="closeOrderView()" class="text-white/70 hover:text-white text-2xl leading-none bg-transparent border-0 cursor-pointer">&times;</button>
   </div>
-  <!-- Scrollable Body -->
   <div class="overflow-y-auto flex-1 px-5 py-4 space-y-4">
-    <!-- Customer -->
     <div class="bg-gray-50 rounded-xl p-3 space-y-1">
       <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Customer</p>
       <p id="ovCustomer" class="text-sm font-bold text-gray-800"></p>
       <p id="ovContact" class="text-xs text-gray-500"></p>
       <p id="ovAddress" class="text-xs text-gray-500"></p>
     </div>
-
-    <!-- Items with availability checkboxes -->
     <div>
       <div class="flex items-center justify-between mb-2">
         <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Items Ordered</p>
@@ -829,8 +576,6 @@
       </div>
       <div id="ovProducts" class="space-y-2"></div>
     </div>
-
-    <!-- Live total -->
     <div class="flex justify-between items-center bg-green-50 rounded-xl px-4 py-3 border border-green-100">
       <div>
         <span class="font-bold text-gray-700 text-sm">Payable Total</span>
@@ -838,8 +583,6 @@
       </div>
       <span id="ovTotal" class="font-bold text-green-dark text-lg"></span>
     </div>
-
-    <!-- Payment & Status -->
     <div class="flex gap-3">
       <div class="flex-1 bg-gray-50 rounded-xl px-3 py-2">
         <p class="text-[11px] text-gray-400 mb-0.5">Payment</p>
@@ -850,12 +593,8 @@
         <p id="ovStatus" class="text-xs font-semibold"></p>
       </div>
     </div>
-
-    <!-- Save feedback -->
     <div id="ovSaveMsg" class="hidden text-center text-sm font-semibold py-2 rounded-xl"></div>
   </div>
-
-  <!-- Footer -->
   <div style="flex-shrink:0;" class="px-5 pb-5 pt-3 border-t border-gray-100 space-y-2">
     <button id="ovSaveBtn" onclick="saveAvailableItems()" class="w-full bg-green-main hover:bg-green-dark text-white font-bold py-2.5 rounded-xl text-sm transition-all cursor-pointer hidden">
       ✅ Confirm Available Items &amp; Update Order
@@ -863,244 +602,6 @@
     <button onclick="closeOrderView()" class="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold py-2.5 rounded-xl text-sm transition-all cursor-pointer">Close</button>
   </div>
 </div>
-
-<script>
-var _ovOrderId = '';
-var _ovItems = []; // [{name, qty, price, itemStr}]
-
-function openOrderView(btn) {
-  var d = btn.dataset;
-  _ovOrderId = d.orderId;
-  _ovItems = [];
-
-  document.getElementById('ovOrderId').textContent = '#' + d.orderId;
-  document.getElementById('ovCustomer').textContent = d.customer || '—';
-  document.getElementById('ovContact').textContent = (d.phone || '') + (d.email ? '  ·  ' + d.email : '');
-  document.getElementById('ovAddress').textContent = [d.address, d.city, d.state, d.pincode].filter(Boolean).join(', ');
-  document.getElementById('ovPayment').textContent = d.payment || '—';
-  document.getElementById('ovSaveMsg').classList.add('hidden');
-  document.getElementById('ovRemovedNote').classList.add('hidden');
-
-  var statusEl = document.getElementById('ovStatus');
-  var s = d.status || '';
-  statusEl.textContent = s;
-  var colors = { Pending:'text-yellow-700', Confirmed:'text-blue-700', Shipped:'text-purple-700', Delivered:'text-green-700', Cancelled:'text-red-600' };
-  statusEl.className = 'text-xs font-semibold ' + (colors[s] || 'text-gray-700');
-
-  // Parse "Cart Order (N items): Item ×qty @price, ..."
-  var productsEl = document.getElementById('ovProducts');
-  var name = d.productName || '';
-  var cartMatch = name.match(/^Cart Order \(\d+ items?\):\s*(.+)$/i);
-
-  if (cartMatch) {
-    var itemStrings = cartMatch[1].split(/,\s*/);
-    itemStrings.forEach(function(item, idx) {
-      var m = item.match(/^(.+?)\s*×(\d+)\s*@(\d+(?:\.\d+)?)$/);
-      _ovItems.push({
-        name:    m ? m[1].trim() : item.trim(),
-        qty:     m ? parseInt(m[2])   : 1,
-        price:   m ? parseFloat(m[3]) : 0,
-        itemStr: item.trim()
-      });
-    });
-
-    productsEl.innerHTML = _ovItems.map(function(it, idx) {
-      var lineTotal = it.price * it.qty;
-      var hasPrices = it.price > 0;
-      return '<label class="flex items-start gap-3 rounded-xl border px-3 py-2.5 cursor-pointer transition-all border-green-200 bg-green-50" id="ovRow' + idx + '">' +
-        '<input type="checkbox" class="ov-check mt-0.5 accent-green-700 w-4 h-4 flex-shrink-0 cursor-pointer" data-idx="' + idx + '" checked onchange="ovRecalc()">' +
-        '<span class="text-base flex-shrink-0 mt-0.5">🌱</span>' +
-        '<div class="flex-1 min-w-0">' +
-          '<p class="text-[13px] font-semibold text-gray-800 leading-snug">' + escH(it.name) + '</p>' +
-          '<p class="text-xs text-gray-400 mt-0.5">Qty: ' + it.qty + (hasPrices ? ' · ₹' + it.price.toLocaleString('en-IN') + ' per unit' : '') + '</p>' +
-        '</div>' +
-        (hasPrices ? '<span class="text-[13px] font-bold text-green-main flex-shrink-0 mt-0.5">₹' + lineTotal.toLocaleString('en-IN') + '</span>' : '') +
-      '</label>';
-    }).join('');
-
-    document.getElementById('ovSaveBtn').classList.remove('hidden');
-    ovRecalc();
-  } else {
-    productsEl.innerHTML = '<div class="text-sm text-gray-500 text-center py-2">No item breakdown available</div>';
-    document.getElementById('ovSaveBtn').classList.add('hidden');
-    document.getElementById('ovTotal').textContent = '₹' + Math.round(parseFloat(d.total) || 0).toLocaleString('en-IN');
-  }
-
-  document.getElementById('orderViewOverlay').classList.remove('hidden');
-  document.getElementById('orderViewModal').classList.remove('hidden');
-}
-
-function ovRecalc() {
-  var checks = document.querySelectorAll('.ov-check');
-  var newTotal = 0;
-  var removedNames = [];
-  checks.forEach(function(cb) {
-    var idx = parseInt(cb.dataset.idx);
-    var it = _ovItems[idx];
-    var row = document.getElementById('ovRow' + idx);
-    if (cb.checked) {
-      newTotal += it.price * it.qty;
-      if (row) { row.className = row.className.replace('border-red-200 bg-red-50',''); row.classList.add('border-green-200','bg-green-50'); }
-    } else {
-      removedNames.push(it.name);
-      if (row) { row.classList.remove('border-green-200','bg-green-50'); row.classList.add('border-red-200','bg-red-50'); }
-    }
-  });
-  document.getElementById('ovTotal').textContent = '₹' + newTotal.toLocaleString('en-IN');
-  var noteEl = document.getElementById('ovRemovedNote');
-  if (removedNames.length) {
-    noteEl.textContent = 'Removing: ' + removedNames.join(', ');
-    noteEl.classList.remove('hidden');
-  } else {
-    noteEl.classList.add('hidden');
-  }
-}
-
-function saveAvailableItems() {
-  var checks = document.querySelectorAll('.ov-check');
-  var kept = [], removed = [], newTotal = 0;
-  checks.forEach(function(cb) {
-    var it = _ovItems[parseInt(cb.dataset.idx)];
-    if (cb.checked) {
-      kept.push(it.itemStr);
-      newTotal += it.price * it.qty;
-    } else {
-      removed.push(it.name + ' ×' + it.qty);
-    }
-  });
-
-  var saveBtn = document.getElementById('ovSaveBtn');
-  var msgEl   = document.getElementById('ovSaveMsg');
-  saveBtn.disabled = true;
-  saveBtn.textContent = 'Saving…';
-
-  var body = new URLSearchParams();
-  body.append('order_id', _ovOrderId);
-  kept.forEach(function(s) { body.append('kept_items', s); });
-  removed.forEach(function(s) { body.append('removed_items', s); });
-  body.append('new_total', newTotal);
-
-  fetch('/admin/update-order-items', { method:'POST', body: body })
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-      if (res.success) {
-        msgEl.textContent = '✅ Order updated successfully! Page will refresh.';
-        msgEl.className = 'text-center text-sm font-semibold py-2 rounded-xl bg-green-50 text-green-700';
-        msgEl.classList.remove('hidden');
-        setTimeout(function() { window.location.reload(); }, 1500);
-      } else {
-        throw new Error(res.error || 'Update failed');
-      }
-    })
-    .catch(function(err) {
-      msgEl.textContent = '❌ ' + err.message;
-      msgEl.className = 'text-center text-sm font-semibold py-2 rounded-xl bg-red-50 text-red-600';
-      msgEl.classList.remove('hidden');
-      saveBtn.disabled = false;
-      saveBtn.textContent = '✅ Confirm Available Items & Update Order';
-    });
-}
-
-function closeOrderView() {
-  document.getElementById('orderViewOverlay').classList.add('hidden');
-  document.getElementById('orderViewModal').classList.add('hidden');
-}
-function escH(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-</script>
-
-<script>
-function togglePass(inputId, btn) {
-  var inp = document.getElementById(inputId);
-  var show = inp.type === 'password';
-  inp.type = show ? 'text' : 'password';
-  btn.innerHTML = show
-    ? '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
-    : '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
-}
-</script>
-
-{% if logged_in and view == 'orders' and status_filter == 'Cancelled' %}
-<script>
-  var selectAll = document.getElementById('selectAll');
-  var deleteSelBtn = document.getElementById('deleteSelBtn');
-
-  if (selectAll) {
-    selectAll.addEventListener('change', function () {
-      document.querySelectorAll('.cancel-cb').forEach(function (cb) { cb.checked = selectAll.checked; });
-      updateBtn();
-    });
-  }
-
-  document.querySelectorAll('.cancel-cb').forEach(function (cb) {
-    cb.addEventListener('change', function () {
-      selectAll.checked = document.querySelectorAll('.cancel-cb:checked').length === document.querySelectorAll('.cancel-cb').length;
-      updateBtn();
-    });
-  });
-
-  function updateBtn() {
-    var n = document.querySelectorAll('.cancel-cb:checked').length;
-    document.getElementById('selectedCount').textContent = n;
-    deleteSelBtn.disabled = n === 0;
-  }
-
-  var _pendingDeleteIds = [];
-
-  function deleteSelected() {
-    var ids = Array.from(document.querySelectorAll('.cancel-cb:checked')).map(function (cb) { return cb.value; });
-    if (!ids.length) return;
-    _pendingDeleteIds = ids;
-    document.getElementById('deleteModalTitle').textContent = 'Delete ' + ids.length + ' Order' + (ids.length > 1 ? 's' : '') + '?';
-    document.getElementById('deleteModalBody').textContent = 'You are about to permanently delete ' + ids.length + ' cancelled order' + (ids.length > 1 ? 's' : '') + '. This cannot be undone.';
-    openDeleteModal();
-  }
-
-  function deleteSingle(orderId) {
-    _pendingDeleteIds = [orderId];
-    document.getElementById('deleteModalTitle').textContent = 'Delete Order?';
-    document.getElementById('deleteModalBody').textContent = 'Are you sure you want to permanently delete order ' + orderId + '? This cannot be undone.';
-    openDeleteModal();
-  }
-
-  function openDeleteModal() {
-    var m = document.getElementById('adminDeleteModal');
-    m.classList.remove('hidden');
-    m.classList.add('flex');
-  }
-
-  function closeDeleteModal() {
-    var m = document.getElementById('adminDeleteModal');
-    m.classList.add('hidden');
-    m.classList.remove('flex');
-    _pendingDeleteIds = [];
-  }
-
-  function confirmDelete() {
-    submitDelete(_pendingDeleteIds);
-  }
-
-  function submitDelete(ids) {
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/admin/delete-orders';
-    ids.forEach(function (id) {
-      var inp = document.createElement('input');
-      inp.type = 'hidden';
-      inp.name = 'order_ids';
-      inp.value = id;
-      form.appendChild(inp);
-    });
-    document.body.appendChild(form);
-    form.submit();
-  }
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeDeleteModal();
-  });
-</script>
-{% endif %}
 
 <!-- Delete Confirmation Modal -->
 <div id="adminDeleteModal" class="fixed inset-0 z-[9999] hidden items-center justify-center px-4">
@@ -1128,9 +629,456 @@ function togglePass(inputId, btn) {
     </div>
   </div>
 </div>
+
 <style>
 @keyframes popIn { from { opacity:0; transform:scale(0.92) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
 </style>
+
+<script>
+// ── Utilities ──────────────────────────────────────────────────────────────────
+function setText(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+function fmtInt(n) { return Math.round(parseFloat(n) || 0).toLocaleString('en-IN'); }
+function truncDate(s) { return s ? String(s).slice(0, 16) : ''; }
+function escH(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// ── Sidebar counts ─────────────────────────────────────────────────────────────
+function loadCounts() {
+  fetch('/api/admin/counts').then(function(r){ return r.json(); }).then(function(data) {
+    if (!data.success) return;
+    var pb = document.getElementById('sidebarPendingBadge');
+    var mb = document.getElementById('sidebarMsgBadge');
+    if (pb) { if (data.pending_orders > 0) { pb.textContent = data.pending_orders; pb.classList.remove('hidden'); } else pb.classList.add('hidden'); }
+    if (mb) { if (data.new_messages > 0) { mb.textContent = data.new_messages; mb.classList.remove('hidden'); } else mb.classList.add('hidden'); }
+  }).catch(function(){});
+}
+
+// ── Orders view ────────────────────────────────────────────────────────────────
+var _curStatus = 'all';
+var _curSearch = '';
+var _searchTimer = null;
+var _pendingDeleteIds = [];
+
+function filterOrders(status) {
+  _curStatus = status;
+  _curSearch = '';
+  var si = document.getElementById('searchInput');
+  if (si) si.value = '';
+  updateClearBtn();
+  history.pushState(null, '', '/admin?view=orders' + (status !== 'all' ? '&status=' + encodeURIComponent(status) : ''));
+  loadOrders(status, '');
+}
+
+function doSearch() {
+  var q = ((document.getElementById('searchInput') || {}).value || '').trim();
+  _curSearch = q;
+  updateClearBtn();
+  history.pushState(null, '', '/admin?view=orders&status=' + encodeURIComponent(_curStatus) + (q ? '&q=' + encodeURIComponent(q) : ''));
+  loadOrders(_curStatus, q);
+}
+
+function clearSearch() {
+  _curSearch = '';
+  var si = document.getElementById('searchInput');
+  if (si) si.value = '';
+  updateClearBtn();
+  history.pushState(null, '', '/admin?view=orders' + (_curStatus !== 'all' ? '&status=' + encodeURIComponent(_curStatus) : ''));
+  loadOrders(_curStatus, '');
+}
+
+function scheduleSearch(val) {
+  clearTimeout(_searchTimer);
+  _searchTimer = setTimeout(doSearch, 600);
+}
+
+function updateClearBtn() {
+  var btn = document.getElementById('clearSearchBtn');
+  if (btn) { if (_curSearch) btn.classList.remove('hidden'); else btn.classList.add('hidden'); }
+}
+
+function loadOrders(status, search) {
+  _curStatus = status || 'all';
+  _curSearch = search || '';
+  var url = '/api/admin/orders?status=' + encodeURIComponent(_curStatus);
+  if (_curSearch) url += '&q=' + encodeURIComponent(_curSearch);
+
+  fetch(url).then(function(r){ return r.json(); }).then(function(data) {
+    if (!data.success) return;
+    var st = data.stats || {};
+
+    // Stats
+    setText('statTotal',     st.total || 0);
+    setText('statPending',   st.pending || 0);
+    setText('statConfirmed', st.confirmed || 0);
+    setText('statShipped',   st.shipped || 0);
+    setText('statDelivered', st.delivered || 0);
+    setText('statRevenue',   '₹' + fmtInt(st.revenue || 0));
+    setText('headerTotalOrders', st.total || 0);
+
+    // Filter tab counts + active state
+    ['all','Pending','Confirmed','Shipped','Delivered','Cancelled'].forEach(function(s) {
+      var btn = document.getElementById('ftab-' + s);
+      if (btn) btn.classList.toggle('active', s === _curStatus);
+    });
+    setText('ftab-all-count',       st.total || 0);
+    setText('ftab-Pending-count',   st.pending || 0);
+    setText('ftab-Confirmed-count', st.confirmed || 0);
+    setText('ftab-Shipped-count',   st.shipped || 0);
+    setText('ftab-Delivered-count', st.delivered || 0);
+    setText('ftab-Cancelled-count', st.cancelled || 0);
+
+    // Update actions column header
+    var actHdr = document.getElementById('actionsColHeader');
+    if (actHdr) actHdr.textContent = _curStatus === 'Cancelled' ? 'Actions' : 'Update';
+
+    var orders = data.orders || [];
+    var isCancelled = _curStatus === 'Cancelled';
+    var tbody     = document.getElementById('ordersTableBody');
+    var container = document.getElementById('ordersTableContainer');
+    var empty     = document.getElementById('ordersEmptyState');
+    var bar       = document.getElementById('cancelledBar');
+
+    // Cancelled bulk bar
+    if (bar) {
+      if (isCancelled && orders.length > 0) {
+        bar.classList.remove('hidden'); bar.classList.add('flex');
+        setText('cancelledTotal', orders.length);
+        setText('selectedCount', '0');
+        var dsb = document.getElementById('deleteSelBtn');
+        if (dsb) dsb.disabled = true;
+        var sa = document.getElementById('selectAll');
+        if (sa) sa.checked = false;
+      } else {
+        bar.classList.add('hidden'); bar.classList.remove('flex');
+      }
+    }
+
+    // Checkbox column in thead
+    var thead = document.getElementById('ordersTableHead');
+    if (thead) {
+      var existing = document.getElementById('cancelCheckTh');
+      if (isCancelled && !existing) {
+        var th = document.createElement('th');
+        th.id = 'cancelCheckTh';
+        th.className = 'px-4 py-3 w-8';
+        thead.querySelector('tr').prepend(th);
+      } else if (!isCancelled && existing) {
+        existing.remove();
+      }
+    }
+
+    if (!orders.length) {
+      if (container) container.classList.add('hidden');
+      if (empty) {
+        empty.classList.remove('hidden');
+        setText('ordersEmptyMsg', _curStatus !== 'all' ? 'No ' + _curStatus + ' orders yet.' : 'Orders will appear here once customers place them from the products page.');
+        var link = document.getElementById('ordersEmptyLink');
+        if (link) link.classList.toggle('hidden', _curStatus === 'all');
+      }
+    } else {
+      if (container) container.classList.remove('hidden');
+      if (empty) empty.classList.add('hidden');
+      tbody.innerHTML = orders.map(function(o) { return buildOrderRow(o, isCancelled); }).join('');
+      if (isCancelled) initCancelCheckboxes();
+    }
+  }).catch(function(e) { console.error(e); });
+}
+
+function buildOrderRow(o, isCancelled) {
+  var productCell = '<div class="font-semibold text-sm text-gray-800 max-w-[200px]" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + escH(o.product_name) + '">' + escH(o.product_name) + '</div><div class="text-xs text-gray-400 mt-0.5">Qty: ' + escH(String(o.quantity)) + '</div>';
+  if (o.product_name && o.product_name.indexOf('Cart Order') === 0) {
+    productCell += '<button onclick="openOrderView(this)" data-order-id="' + escH(o.order_id) + '" data-product-name="' + escH(o.product_name) + '" data-quantity="' + escH(String(o.quantity)) + '" data-product-price="' + escH(String(o.product_price)) + '" data-total="' + escH(String(o.total_amount)) + '" data-customer="' + escH(o.customer_name) + '" data-phone="' + escH(o.customer_phone) + '" data-email="' + escH(o.customer_email || '') + '" data-address="' + escH(o.customer_address) + '" data-city="' + escH(o.customer_city) + '" data-state="' + escH(o.customer_state) + '" data-pincode="' + escH(o.customer_pincode) + '" data-payment="' + escH(o.payment_method) + '" data-status="' + escH(o.status) + '" class="mt-1.5 text-[11px] font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2 py-0.5 rounded-lg transition-all cursor-pointer">👁 View Items</button>';
+  }
+  var opts = ['Pending','Confirmed','Shipped','Delivered','Cancelled'].map(function(s){ return '<option value="' + s + '"' + (o.status===s?' selected':'') + '>' + s + '</option>'; }).join('');
+  var updateCell = '<form method="POST" action="/admin/update-status" class="flex items-center gap-1.5 flex-wrap"><input type="hidden" name="order_id" value="' + escH(o.order_id) + '"><input type="hidden" name="current_filter" value="' + escH(_curStatus) + '"><select name="status" class="s-select">' + opts + '</select><button type="submit" class="text-xs bg-green-main hover:bg-green-dark text-white font-bold px-2.5 py-[6px] rounded-lg transition-all whitespace-nowrap">Save</button></form>';
+  if (isCancelled) updateCell += '<button onclick="deleteSingle(\'' + escH(o.order_id) + '\')" class="mt-1.5 text-xs bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-[6px] rounded-lg transition-all w-full">Delete</button>';
+
+  return '<tr class="hover:bg-gray-50/60 transition-colors group">' +
+    (isCancelled ? '<td class="px-4 py-3.5 w-8"><input type="checkbox" class="cancel-cb w-4 h-4 rounded border-gray-300 accent-red-500 cursor-pointer" value="' + escH(o.order_id) + '" onchange="updateCancelBtn()"></td>' : '') +
+    '<td class="px-4 py-3.5"><div class="font-mono text-xs font-bold text-gray-700 bg-gray-100 inline-block px-2 py-0.5 rounded">' + escH(o.order_id) + '</div><div class="text-[11px] text-gray-400 mt-1">' + truncDate(o.created_at) + '</div></td>' +
+    '<td class="px-4 py-3.5">' + productCell + '</td>' +
+    '<td class="px-4 py-3.5"><div class="font-semibold text-sm text-gray-800">' + escH(o.customer_name) + '</div><div class="text-xs text-gray-400">' + escH(o.customer_phone) + '</div><div class="text-xs text-gray-400">' + escH(o.customer_city) + ', ' + escH(o.customer_state) + '</div></td>' +
+    '<td class="px-4 py-3.5"><div class="font-bold text-sm text-green-dark">₹' + fmtInt(o.total_amount) + '</div></td>' +
+    '<td class="px-4 py-3.5"><span class="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">' + escH(o.payment_method) + '</span></td>' +
+    '<td class="px-4 py-3.5"><span class="status-badge s-' + escH(o.status) + '">' + escH(o.status) + '</span></td>' +
+    '<td class="px-4 py-3.5">' + updateCell + '</td>' +
+    '</tr>';
+}
+
+function initCancelCheckboxes() {
+  var sa = document.getElementById('selectAll');
+  if (sa) { sa.checked = false; sa.onchange = function() { document.querySelectorAll('.cancel-cb').forEach(function(cb){ cb.checked = sa.checked; }); updateCancelBtn(); }; }
+}
+
+function updateCancelBtn() {
+  var n = document.querySelectorAll('.cancel-cb:checked').length;
+  var total = document.querySelectorAll('.cancel-cb').length;
+  setText('selectedCount', n);
+  var btn = document.getElementById('deleteSelBtn');
+  if (btn) btn.disabled = n === 0;
+  var sa = document.getElementById('selectAll');
+  if (sa) sa.checked = n > 0 && n === total;
+}
+
+function deleteSelected() {
+  var ids = Array.from(document.querySelectorAll('.cancel-cb:checked')).map(function(cb){ return cb.value; });
+  if (!ids.length) return;
+  _pendingDeleteIds = ids;
+  setText('deleteModalTitle', 'Delete ' + ids.length + ' Order' + (ids.length > 1 ? 's' : '') + '?');
+  setText('deleteModalBody', 'You are about to permanently delete ' + ids.length + ' cancelled order' + (ids.length > 1 ? 's' : '') + '. This cannot be undone.');
+  openDeleteModal();
+}
+
+function deleteSingle(orderId) {
+  _pendingDeleteIds = [orderId];
+  setText('deleteModalTitle', 'Delete Order?');
+  setText('deleteModalBody', 'Are you sure you want to permanently delete order ' + orderId + '? This cannot be undone.');
+  openDeleteModal();
+}
+
+function openDeleteModal() { var m=document.getElementById('adminDeleteModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+function closeDeleteModal() { var m=document.getElementById('adminDeleteModal'); m.classList.add('hidden'); m.classList.remove('flex'); _pendingDeleteIds=[]; }
+function confirmDelete() { submitDelete(_pendingDeleteIds); }
+
+function submitDelete(ids) {
+  var form = document.createElement('form');
+  form.method = 'POST'; form.action = '/admin/delete-orders';
+  ids.forEach(function(id){ var inp=document.createElement('input'); inp.type='hidden'; inp.name='order_ids'; inp.value=id; form.appendChild(inp); });
+  document.body.appendChild(form); form.submit();
+}
+
+// ── Messages view ──────────────────────────────────────────────────────────────
+function loadMessages() {
+  fetch('/api/admin/messages').then(function(r){ return r.json(); }).then(function(data) {
+    if (!data.success) return;
+    var ms = data.msg_stats || {};
+    setText('msgStatTotal',   ms.total || 0);
+    setText('msgStatNew',     ms.new_count || 0);
+    setText('msgStatRead',    ms.read_count || 0);
+    setText('msgStatReplied', ms.replied_count || 0);
+    var messages  = data.messages || [];
+    var container = document.getElementById('messagesTableContainer');
+    var empty     = document.getElementById('messagesEmptyState');
+    var tbody     = document.getElementById('messagesTableBody');
+    if (!messages.length) {
+      if (container) container.classList.add('hidden');
+      if (empty) empty.classList.remove('hidden');
+    } else {
+      if (container) container.classList.remove('hidden');
+      if (empty) empty.classList.add('hidden');
+      tbody.innerHTML = messages.map(buildMessageRow).join('');
+    }
+  }).catch(function(e){ console.error(e); });
+}
+
+function buildMessageRow(m) {
+  var initial = (m.name || '?').charAt(0).toUpperCase();
+  var newBadge = m.status === 'New' ? '<span class="text-[9px] bg-red-400 text-white font-bold px-1.5 py-0.5 rounded-full">NEW</span>' : '';
+  var phone = m.phone ? '<div class="text-xs text-gray-400">' + escH(m.phone) + '</div>' : '';
+  var badge = m.status === 'New' ? '<span class="status-badge" style="background:#fee2e2;color:#991b1b;">New</span>' : m.status === 'Read' ? '<span class="status-badge" style="background:#dbeafe;color:#1e40af;">Read</span>' : '<span class="status-badge" style="background:#d1fae5;color:#065f46;">Replied</span>';
+  var opts = ['New','Read','Replied'].map(function(s){ return '<option value="' + s + '"' + (m.status===s?' selected':'') + '>' + s + '</option>'; }).join('');
+  return '<tr class="hover:bg-gray-50/60 transition-colors' + (m.status==='New'?' bg-blue-50/30':'') + '">' +
+    '<td class="px-4 py-3.5"><div class="flex items-center gap-2.5"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm flex-shrink-0">' + escH(initial) + '</div><div><div class="font-semibold text-sm text-gray-800 flex items-center gap-1.5">' + escH(m.name) + ' ' + newBadge + '</div><a href="mailto:' + escH(m.email) + '" class="text-xs text-blue-500 hover:underline">' + escH(m.email) + '</a>' + phone + '</div></div></td>' +
+    '<td class="px-4 py-3.5 max-w-[320px]"><p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">' + escH(m.message) + '</p></td>' +
+    '<td class="px-4 py-3.5"><div class="text-xs text-gray-500">' + truncDate(m.created_at) + '</div></td>' +
+    '<td class="px-4 py-3.5">' + badge + '</td>' +
+    '<td class="px-4 py-3.5"><form method="POST" action="/admin/messages/update-status" class="flex items-center gap-1.5"><input type="hidden" name="msg_id" value="' + escH(String(m.id)) + '"><select name="status" class="s-select">' + opts + '</select><button type="submit" class="text-xs bg-green-main hover:bg-green-dark text-white font-bold px-2.5 py-[6px] rounded-lg transition-all whitespace-nowrap">Save</button></form></td>' +
+    '</tr>';
+}
+
+// ── Products view ──────────────────────────────────────────────────────────────
+function loadProducts() {
+  fetch('/api/admin/products').then(function(r){ return r.json(); }).then(function(data) {
+    if (!data.success) return;
+    var products  = data.products || [];
+    setText('productsCount',      products.length);
+    setText('exportProductCount', products.length);
+    var container = document.getElementById('productsTableContainer');
+    var empty     = document.getElementById('productsEmptyState');
+    var tbody     = document.getElementById('productsTableBody');
+    if (!products.length) {
+      if (container) container.classList.add('hidden');
+      if (empty) empty.classList.remove('hidden');
+    } else {
+      if (container) container.classList.remove('hidden');
+      if (empty) empty.classList.add('hidden');
+      tbody.innerHTML = products.map(buildProductRow).join('');
+    }
+  }).catch(function(e){ console.error(e); });
+}
+
+function buildProductRow(p) {
+  var catColor = p.category === 'garden' ? 'bg-green-100 text-green-700' : p.category === 'seeds' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600';
+  var catLabel = escH(p.category || '') + (p.seed_cat ? ' / ' + escH(p.seed_cat) : '');
+  var imgEl = p.image
+    ? '<img src="/images/products/' + escH(p.image) + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">' +
+      '<div style="display:none" class="w-full h-full items-center justify-center text-lg">' + escH(p.emoji || '🌿') + '</div>'
+    : '<span class="text-lg">' + escH(p.emoji || '🌿') + '</span>';
+  var stock = p.in_stock ? '<span class="text-[11px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">In Stock</span>' : '<span class="text-[11px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">Out of Stock</span>';
+  return '<tr class="hover:bg-gray-50/60 transition-colors">' +
+    '<td class="px-4 py-3.5"><div class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">' + imgEl + '</div><div><div class="font-semibold text-sm text-gray-800">' + escH(p.name) + '</div><div class="text-[11px] text-gray-400 font-mono">' + escH(p.slug || '') + '</div></div></div></td>' +
+    '<td class="px-4 py-3.5"><span class="text-xs font-semibold px-2 py-0.5 rounded-full ' + catColor + '">' + catLabel + '</span></td>' +
+    '<td class="px-4 py-3.5"><span class="font-bold text-green-dark text-sm">₹' + fmtInt(p.price) + '</span></td>' +
+    '<td class="px-4 py-3.5">' + stock + '</td>' +
+    '<td class="px-4 py-3.5"><span class="text-xs text-gray-400">' + truncDate(p.created_at || '') + '</span></td>' +
+    '<td class="px-4 py-3.5"><form method="POST" action="/admin/products/delete/' + escH(String(p.id)) + '" onsubmit="return confirm(\'Delete ' + escH(p.name).replace(/'/g, "\\'") + '?\')"><button type="submit" class="text-xs bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-1.5 rounded-lg transition-all">Delete</button></form></td>' +
+    '</tr>';
+}
+
+// ── Order view modal ──────────────────────────────────────────────────────────
+var _ovOrderId = '';
+var _ovItems = [];
+
+function openOrderView(btn) {
+  var d = btn.dataset;
+  _ovOrderId = d.orderId;
+  _ovItems = [];
+  document.getElementById('ovOrderId').textContent = '#' + d.orderId;
+  document.getElementById('ovCustomer').textContent = d.customer || '—';
+  document.getElementById('ovContact').textContent = (d.phone || '') + (d.email ? '  ·  ' + d.email : '');
+  document.getElementById('ovAddress').textContent = [d.address, d.city, d.state, d.pincode].filter(Boolean).join(', ');
+  document.getElementById('ovPayment').textContent = d.payment || '—';
+  document.getElementById('ovSaveMsg').classList.add('hidden');
+  document.getElementById('ovRemovedNote').classList.add('hidden');
+  var statusEl = document.getElementById('ovStatus');
+  var s = d.status || '';
+  statusEl.textContent = s;
+  var colors = { Pending:'text-yellow-700', Confirmed:'text-blue-700', Shipped:'text-purple-700', Delivered:'text-green-700', Cancelled:'text-red-600' };
+  statusEl.className = 'text-xs font-semibold ' + (colors[s] || 'text-gray-700');
+  var productsEl = document.getElementById('ovProducts');
+  var name = d.productName || '';
+  var cartMatch = name.match(/^Cart Order \(\d+ items?\):\s*(.+)$/i);
+  if (cartMatch) {
+    var itemStrings = cartMatch[1].split(/,\s*/);
+    itemStrings.forEach(function(item, idx) {
+      var m = item.match(/^(.+?)\s*×(\d+)\s*@(\d+(?:\.\d+)?)$/);
+      _ovItems.push({ name: m ? m[1].trim() : item.trim(), qty: m ? parseInt(m[2]) : 1, price: m ? parseFloat(m[3]) : 0, itemStr: item.trim() });
+    });
+    productsEl.innerHTML = _ovItems.map(function(it, idx) {
+      var lineTotal = it.price * it.qty;
+      var hasPrices = it.price > 0;
+      return '<label class="flex items-start gap-3 rounded-xl border px-3 py-2.5 cursor-pointer transition-all border-green-200 bg-green-50" id="ovRow' + idx + '"><input type="checkbox" class="ov-check mt-0.5 accent-green-700 w-4 h-4 flex-shrink-0 cursor-pointer" data-idx="' + idx + '" checked onchange="ovRecalc()"><span class="text-base flex-shrink-0 mt-0.5">🌱</span><div class="flex-1 min-w-0"><p class="text-[13px] font-semibold text-gray-800 leading-snug">' + escH(it.name) + '</p><p class="text-xs text-gray-400 mt-0.5">Qty: ' + it.qty + (hasPrices ? ' · ₹' + it.price.toLocaleString('en-IN') + ' per unit' : '') + '</p></div>' + (hasPrices ? '<span class="text-[13px] font-bold text-green-main flex-shrink-0 mt-0.5">₹' + lineTotal.toLocaleString('en-IN') + '</span>' : '') + '</label>';
+    }).join('');
+    document.getElementById('ovSaveBtn').classList.remove('hidden');
+    ovRecalc();
+  } else {
+    productsEl.innerHTML = '<div class="text-sm text-gray-500 text-center py-2">No item breakdown available</div>';
+    document.getElementById('ovSaveBtn').classList.add('hidden');
+    document.getElementById('ovTotal').textContent = '₹' + Math.round(parseFloat(d.total) || 0).toLocaleString('en-IN');
+  }
+  document.getElementById('orderViewOverlay').classList.remove('hidden');
+  document.getElementById('orderViewModal').classList.remove('hidden');
+}
+
+function ovRecalc() {
+  var checks = document.querySelectorAll('.ov-check');
+  var newTotal = 0, removedNames = [];
+  checks.forEach(function(cb) {
+    var idx = parseInt(cb.dataset.idx);
+    var it = _ovItems[idx];
+    var row = document.getElementById('ovRow' + idx);
+    if (cb.checked) {
+      newTotal += it.price * it.qty;
+      if (row) { row.className = row.className.replace('border-red-200 bg-red-50',''); row.classList.add('border-green-200','bg-green-50'); }
+    } else {
+      removedNames.push(it.name);
+      if (row) { row.classList.remove('border-green-200','bg-green-50'); row.classList.add('border-red-200','bg-red-50'); }
+    }
+  });
+  document.getElementById('ovTotal').textContent = '₹' + newTotal.toLocaleString('en-IN');
+  var noteEl = document.getElementById('ovRemovedNote');
+  if (removedNames.length) { noteEl.textContent = 'Removing: ' + removedNames.join(', '); noteEl.classList.remove('hidden'); }
+  else noteEl.classList.add('hidden');
+}
+
+function saveAvailableItems() {
+  var checks = document.querySelectorAll('.ov-check');
+  var kept = [], removed = [], newTotal = 0;
+  checks.forEach(function(cb) {
+    var it = _ovItems[parseInt(cb.dataset.idx)];
+    if (cb.checked) { kept.push(it.itemStr); newTotal += it.price * it.qty; }
+    else removed.push(it.name + ' ×' + it.qty);
+  });
+  var saveBtn = document.getElementById('ovSaveBtn');
+  var msgEl   = document.getElementById('ovSaveMsg');
+  saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
+  var body = new URLSearchParams();
+  body.append('order_id', _ovOrderId);
+  kept.forEach(function(s){ body.append('kept_items', s); });
+  removed.forEach(function(s){ body.append('removed_items', s); });
+  body.append('new_total', newTotal);
+  fetch('/admin/update-order-items', { method:'POST', body: body })
+    .then(function(r){ return r.json(); })
+    .then(function(res) {
+      if (res.success) {
+        msgEl.textContent = '✅ Order updated successfully! Page will refresh.';
+        msgEl.className = 'text-center text-sm font-semibold py-2 rounded-xl bg-green-50 text-green-700';
+        msgEl.classList.remove('hidden');
+        setTimeout(function(){ window.location.reload(); }, 1500);
+      } else throw new Error(res.error || 'Update failed');
+    })
+    .catch(function(err) {
+      msgEl.textContent = '❌ ' + err.message;
+      msgEl.className = 'text-center text-sm font-semibold py-2 rounded-xl bg-red-50 text-red-600';
+      msgEl.classList.remove('hidden');
+      saveBtn.disabled = false; saveBtn.textContent = '✅ Confirm Available Items & Update Order';
+    });
+}
+
+function closeOrderView() {
+  document.getElementById('orderViewOverlay').classList.add('hidden');
+  document.getElementById('orderViewModal').classList.add('hidden');
+}
+
+// ── Password toggle ────────────────────────────────────────────────────────────
+function togglePass(inputId, btn) {
+  var inp = document.getElementById(inputId);
+  var show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.innerHTML = show
+    ? '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+    : '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+}
+
+// ── Keyboard shortcuts ─────────────────────────────────────────────────────────
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDeleteModal(); });
+
+// ── Init on load ───────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  loadCounts();
+
+  var qp = new URLSearchParams(window.location.search);
+
+  if (document.getElementById('ordersPanel')) {
+    _curStatus = qp.get('status') || 'all';
+    _curSearch = qp.get('q') || '';
+    var si = document.getElementById('searchInput');
+    if (si && _curSearch) si.value = _curSearch;
+    updateClearBtn();
+    loadOrders(_curStatus, _curSearch);
+
+  } else if (document.getElementById('messagesPanel')) {
+    loadMessages();
+
+  } else if (document.getElementById('productsPanel')) {
+    loadProducts();
+    var is = qp.get('import_success');
+    if (is) { document.getElementById('importSuccessMsg').textContent = decodeURIComponent(is); document.getElementById('importSuccessAlert').classList.remove('hidden'); }
+    var ie = qp.get('import_error');
+    if (ie) { document.getElementById('importErrorMsg').textContent = decodeURIComponent(ie); document.getElementById('importErrorAlert').classList.remove('hidden'); }
+
+  } else if (document.getElementById('changepassPanel')) {
+    var err = qp.get('error');
+    var errMsgs = { wrong_current: 'Current password is incorrect.', too_short: 'New password must be at least 6 characters.', mismatch: 'Passwords do not match.' };
+    if (err && errMsgs[err]) {
+      document.getElementById('cpErrorMsg').textContent = errMsgs[err];
+      document.getElementById('cpErrorAlert').classList.remove('hidden');
+    }
+    if (qp.get('success') === '1') {
+      document.getElementById('cpSuccessAlert').classList.remove('hidden');
+    }
+  }
+});
+</script>
 
 </body>
 </html>
