@@ -183,6 +183,25 @@ async function initDb() {
       "The perfect place for bulk orders. Competitive pricing and always on-time delivery. Their free agronomist helpline is very helpful — an expert is always available whenever you need guidance.",
     ]);
   }
+  // Seed all hardcoded products on first run
+  const prodCount = await pool.query('SELECT COUNT(*) FROM products');
+  if (parseInt(prodCount.rows[0].count) === 0) {
+    const seedPath = path.join(__dirname, 'tmp', 'seed_products.json');
+    if (fs.existsSync(seedPath)) {
+      const seedData = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
+      const now = new Date().toISOString();
+      for (const p of seedData) {
+        await pool.query(
+          `INSERT INTO products (slug, name, category, price, emoji, image, description, badge_text, seed_cat, in_stock, quantity, created_at)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+           ON CONFLICT (slug) DO NOTHING`,
+          [p.slug, p.name, p.category, p.price || 0, p.emoji || '', p.image || '', p.desc || '', '', p.seed_cat || '', true, 100, now]
+        );
+      }
+      console.log(`✅ Seeded ${seedData.length} products into DB`);
+    }
+  }
+
   // Seed password hash if not set
   const row = await pool.query("SELECT value FROM admin_config WHERE key='password_hash'");
   if (row.rows.length === 0) {

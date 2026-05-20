@@ -1,0 +1,1811 @@
+[
+  {
+    "category": "garden",
+    "seed_cat": "",
+    "image": "rose.png",
+    "name": "Rose Plant",
+    "price": 120,
+    "desc": "Flowering plant for garden decoration.",
+    "slug": "rose"
+  },
+  {
+    "category": "garden",
+    "seed_cat": "",
+    "image": "tulsi.png",
+    "name": "Tulsi Plant",
+    "price": 80,
+    "desc": "Medicinal and easy to grow plant.",
+    "slug": "tulsi"
+  },
+  {
+    "category": "garden",
+    "seed_cat": "",
+    "image": "moneyPlant.png",
+    "name": "Money Plant",
+    "price": 60,
+    "desc": "Indoor & outdoor decorative plant.",
+    "slug": "money"
+  },
+  {
+    "category": "garden",
+    "seed_cat": "",
+    "image": "croton.png",
+    "name": "Croton",
+    "price": 150,
+    "desc": "Colorful foliage plant for decoration.",
+    "slug": "croton"
+  },
+  {
+    "category": "garden",
+    "seed_cat": "",
+    "image": "hedgePlants.png",
+    "name": "Hedge Plants",
+    "price": 90,
+    "desc": "Perfect for boundary and landscaping.",
+    "slug": "hedge"
+  },
+  {
+    "category": "garden",
+    "seed_cat": "",
+    "image": "aglaonema.png",
+    "name": "Aglaonema",
+    "price": 180,
+    "desc": "Indoor decorative plant with patterned leaves.",
+    "slug": "aglaonema"
+  },
+  {
+    "category": "garden",
+    "seed_cat": "",
+    "image": "DIEFFENBACHIA.png",
+    "name": "Dieffenbachia",
+    "price": 170,
+    "desc": "Large leaf indoor plant.",
+    "slug": "dieffenbachia"
+  },
+  {
+    "category": "garden",
+    "seed_cat": "",
+    "image": "snakePlant.png",
+    "name": "Snake Plant",
+    "price": 140,
+    "desc": "Air purifying plant, low maintenance.",
+    "slug": "snake"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Tecoma Seeds – Yellow Bell Flower",
+    "price": 79,
+    "desc": "Yellow trumpet-shaped flowers. Fast-growing ornamental shrub.",
+    "slug": "tecoma_yellow"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌿",
+    "name": "Coleus – Wizard Series F1",
+    "price": 69,
+    "desc": "Award-winning F1 coleus in bold mixed foliage colours.",
+    "slug": "coleus_wizard"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Celosia – Plumosa Fashion Look Series F1",
+    "price": 69,
+    "desc": "Vivid feathery plumes in bold red, orange & yellow. Heat tolerant.",
+    "slug": "celosia_fashion"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "💙",
+    "name": "Myosotis – Sylva Mix F1",
+    "price": 59,
+    "desc": "Forget-me-not flowers in soft blue, pink & white. Spring beds.",
+    "slug": "myosotis_sylva"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Marigold – French Hot Pack Series F1",
+    "price": 69,
+    "desc": "Bold bicolour French marigold F1. Profuse blooming all season.",
+    "slug": "marigold_hot_pack"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Clarkia (Double Mix)",
+    "price": 49,
+    "desc": "Double-flowered clarkia in pink, red, lavender & white mix.",
+    "slug": "clarkia_double"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Marigold – French Bonanza Series F1",
+    "price": 69,
+    "desc": "Compact French marigold F1 with large bicolour blooms.",
+    "slug": "marigold_bonanza"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Stock – Dwarf Vintage Series F1",
+    "price": 89,
+    "desc": "Intensely fragrant dwarf stock in pastel mixed shades.",
+    "slug": "stock_vintage"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Begonia – Semperflorens Super Olympia Series F1",
+    "price": 79,
+    "desc": "Vigorous wax begonia F1 with extra-large blooms. Shade pots.",
+    "slug": "begonia_olympia"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Petunia – Grandiflora Success HD Series F1",
+    "price": 89,
+    "desc": "Large-flowered F1 petunia in vivid HD mixed shades.",
+    "slug": "petunia_success_hd"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Papaver – Garden Gnome Mix F1",
+    "price": 59,
+    "desc": "Compact dwarf poppy in red, pink, orange & white. Double flowers.",
+    "slug": "papaver_gnome"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Begonia – Semperflorens Night Life Series F1",
+    "price": 79,
+    "desc": "Deep bronze-foliaged begonia F1. Vivid red blooms in shade.",
+    "slug": "begonia_nightlife"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Petunia – Multiflora Mirage Mix F1",
+    "price": 79,
+    "desc": "Weather-resistant multiflora petunia F1 in vivid mixed shades.",
+    "slug": "petunia_mirage"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🤍",
+    "name": "Alyssum – Clear Crystal Series F1",
+    "price": 59,
+    "desc": "Premium F1 alyssum in crystal white, pink & purple mats.",
+    "slug": "alyssum_crystal"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Marigold – French Cresta Series F1",
+    "price": 69,
+    "desc": "Crested double-flowered French marigold F1 in mixed colours.",
+    "slug": "marigold_cresta"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Celosia – Plumosa Century Series F1",
+    "price": 69,
+    "desc": "Tall branching celosia F1 with large plumes. Excellent cut flower.",
+    "slug": "celosia_century"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Verbena – Special Dwarf Mix F1",
+    "price": 69,
+    "desc": "Compact dwarf verbena F1 in pink, purple, red & white.",
+    "slug": "verbena_dwarf"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Antirrhinum – Tall Liberty Classic F1",
+    "price": 89,
+    "desc": "Tall snapdragon F1 with long straight stems. Premium cut flower.",
+    "slug": "antirrhinum_liberty"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Stock – Dwarf Cinderella Mix F1",
+    "price": 89,
+    "desc": "Compact fragrant dwarf stock F1 in white, pink, red & purple.",
+    "slug": "stock_cinderella"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Celosia – Plumosa Kimono Series F1",
+    "price": 69,
+    "desc": "Dwarf uniform celosia F1 in vibrant mixed shades. Ideal for pots.",
+    "slug": "celosia_kimono"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "✨",
+    "name": "Aster – Matador Series F1",
+    "price": 79,
+    "desc": "Vigorous F1 aster with large blooms. Ideal for cut flower production.",
+    "slug": "aster_matador"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Petunia – Grandiflora Success 360 Series F1",
+    "price": 89,
+    "desc": "360° spreading F1 petunia. Excellent for hanging baskets.",
+    "slug": "petunia_success_360"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Petunia – Grandiflora Falcon Mix F1",
+    "price": 79,
+    "desc": "Large-flowered F1 petunia in vivid falcon mixed shades.",
+    "slug": "petunia_falcon"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Marigold – French Alumina Series F1",
+    "price": 69,
+    "desc": "Metallic copper-bronze French marigold F1. Unusual colour tones.",
+    "slug": "marigold_alumina"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Celosia – Plumosa New Look Red F1",
+    "price": 69,
+    "desc": "Scarlet-red plume celosia F1 on dark bronzy foliage.",
+    "slug": "celosia_new_look"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Antirrhinum – Snapshot Mix F1",
+    "price": 79,
+    "desc": "Semi-dwarf F1 snapdragon in a rich mix. Early-flowering.",
+    "slug": "antirrhinum_snapshot"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Marigold – French Super Hero Series F1",
+    "price": 69,
+    "desc": "Super-vigorous French marigold F1 with extra-large blooms.",
+    "slug": "marigold_superhero"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Salvia – Splendens Mojave Red F1",
+    "price": 79,
+    "desc": "Brilliant scarlet salvia F1. Extra-early dense flower spikes.",
+    "slug": "salvia_mojave"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Petunia – Grandiflora Dreams Series F1",
+    "price": 79,
+    "desc": "Dreamy pastel F1 petunia in soft pink, lavender & white.",
+    "slug": "petunia_dreams"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Tithonia – Red Flame F1",
+    "price": 59,
+    "desc": "Mexican sunflower F1 with blazing orange-red blooms. Tall statement.",
+    "slug": "tithonia_red"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Marigold – French Flamenco F1",
+    "price": 69,
+    "desc": "Bold scarlet-gold bicolour French marigold F1. Long-flowering.",
+    "slug": "marigold_flamenco"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Antirrhinum – Semi-Tall Rocket Mix F1",
+    "price": 59,
+    "desc": "Rocket snapdragon series in mixed colours. Ideal for cut flowers.",
+    "slug": "antirrhinum_rocket"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🤍",
+    "name": "Gomphrena – Globosa Buddy White F1",
+    "price": 69,
+    "desc": "Pure white globe amaranth F1. Blooms retain colour when dried.",
+    "slug": "gomphrena_buddy"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Celosia – Plumosa Fresh Look Series F1",
+    "price": 69,
+    "desc": "Neat compact celosia F1 in vivid red, orange & yellow plumes.",
+    "slug": "celosia_fresh"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Gomphrena – QIS Mix F1",
+    "price": 59,
+    "desc": "Globe amaranth F1 in pink, purple, white & orange. Great for drying.",
+    "slug": "gomphrena_qis"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Salvia – Splendens Salsa Series F1",
+    "price": 69,
+    "desc": "Award-winning F1 salvia in red, pink, salmon & white.",
+    "slug": "salvia_salsa"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Petunia – Grandiflora Prism Series F1",
+    "price": 69,
+    "desc": "Large-flowered petunia F1 in vibrant mixed shades.",
+    "slug": "petunia_prism"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Marigold – French Happy Series F1",
+    "price": 59,
+    "desc": "Super-compact F1 French marigold. Early-flowering, weather tolerant.",
+    "slug": "marigold_happy"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🤍",
+    "name": "Lobularia Maritima – Wonderland Mix Raw F1",
+    "price": 69,
+    "desc": "Sweet alyssum F1 in white, pink & purple. Honey-scented mat.",
+    "slug": "lobularia_wonderland"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Limonium – QIS Rose F1",
+    "price": 89,
+    "desc": "Rose-pink statice F1 on long straight stems. Excellent dried flower.",
+    "slug": "limonium_qis"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Limonium – Sinuatum Hipster Rose F1",
+    "price": 89,
+    "desc": "Hipster series statice F1 in dusty rose-pink hues. Long-lasting.",
+    "slug": "limonium_hipster"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Petunia – Grandiflora TriTunia Series F1",
+    "price": 89,
+    "desc": "Tricolour F1 petunia with striking three-tone blooms.",
+    "slug": "petunia_tritunia"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Celosia – Plumosa Bright Sparks Series F1",
+    "price": 69,
+    "desc": "Bright sparks celosia F1 in vivid mixed shades. Multiple plumes.",
+    "slug": "celosia_bright"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "Calendula – Bon Bon Series F1",
+    "price": 69,
+    "desc": "Premium F1 calendula in orange, yellow & apricot. Double blooms.",
+    "slug": "calendula_bonbon"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Bellis – Tasso Mix F1",
+    "price": 79,
+    "desc": "Fully double English daisy F1 in pink, red & white.",
+    "slug": "bellis_tasso"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Bada – Series F1",
+    "price": 79,
+    "desc": "Compact ornamental in vivid mixed shades. Continuous blooms.",
+    "slug": "bada_series"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Stock – Hot Cakes Mix Formula F1",
+    "price": 89,
+    "desc": "Formula stock F1 in bold red, pink, white & purple. Outstanding fragrance.",
+    "slug": "stock_hot_cakes"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Salvia – Splendens Flamex F1",
+    "price": 79,
+    "desc": "Flame-red salvia F1 with extra-long flower spikes.",
+    "slug": "salvia_flamex"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Salvia – Splendens Cover Girl F1",
+    "price": 79,
+    "desc": "Elegant bicolour salvia F1 with red-white flower spikes.",
+    "slug": "salvia_cover_girl"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Petunia – Grandiflora Daddy Series F1",
+    "price": 89,
+    "desc": "Extra-large veined blooms in deep purple, pink & orchid.",
+    "slug": "petunia_daddy"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Salvia – Lighthouse Red F1",
+    "price": 79,
+    "desc": "Tall stately salvia F1 with long scarlet spikes. Back-of-border.",
+    "slug": "salvia_lighthouse"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Begonia Semperflorens – Cocktail Mix Pelleted F1",
+    "price": 99,
+    "desc": "Pelleted F1 begonia — easy sowing. Cocktail mix for shade beds.",
+    "slug": "begonia_cocktail"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Marigold – French Safari Series F1",
+    "price": 69,
+    "desc": "Safari French marigold F1 in orange, yellow & tangerine.",
+    "slug": "marigold_safari"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Godetia – Dwarf Special Mix F1",
+    "price": 69,
+    "desc": "Silky cup-shaped blooms in pink, red, white & bicolour mix.",
+    "slug": "godetia_dwarf"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "vegetable",
+    "emoji": "🍅",
+    "name": "Okra Seeds (Lady Finger) भिंडी बीज",
+    "price": 89,
+    "desc": "High-yield, disease-resistant. 92% germination.",
+    "slug": "tomato"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "vegetable",
+    "emoji": "🍆",
+    "name": "Ridge Gourd (तोरई) F-1 Hybrid Seeds",
+    "price": 59,
+    "desc": "Long purple variety, 88% germination. Kharif season.",
+    "slug": "brinjal"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "vegetable",
+    "emoji": "🌶️",
+    "name": "Bitter Gourd (Long) F-1 Hybrid Seeds",
+    "price": 79,
+    "desc": "Long red fruits, high capsaicin. 90% germination.",
+    "slug": "chilli"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Aprajita Mix Seeds | Butterfly Pea",
+    "price": 149,
+    "desc": "Butterfly pea. Blue & white blooms for fences & herbal tea.",
+    "slug": "aprajita"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "Chrysanthemum (Paludo Mix)",
+    "price": 49,
+    "desc": "Vibrant mixed colour pompons. Natural charm for garden beds.",
+    "slug": "chrysanthemum"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "African Marigold (Sondesh Mix)",
+    "price": 49,
+    "desc": "Large mixed pompons. Repels pests. Popular for festive garlands.",
+    "slug": "marigold_sondesh_mix"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "✨",
+    "name": "Aster (Formula Mix)",
+    "price": 49,
+    "desc": "Star-shaped blooms in mixed hues. Long vase life for cut flowers.",
+    "slug": "aster_formula"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "💜",
+    "name": "Lavender Seeds",
+    "price": 149,
+    "desc": "Fragrant purple spikes. Stress-relieving aroma for terrace gardens.",
+    "slug": "lavender_seeds"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "French Marigold (KS Spl Scarlet Red)",
+    "price": 49,
+    "desc": "Compact scarlet-red. Great for edging & natural pest control.",
+    "slug": "french_marigold_red"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Nemophilia (KS Spl Mix)",
+    "price": 49,
+    "desc": "Baby blue eyes flowers. Delicate blooms for borders. 82% germ.",
+    "slug": "nemophilia"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "Daisy (KS Spl Mix)",
+    "price": 49,
+    "desc": "Classic daisy blooms in mixed shades. Cheerful, easy to grow.",
+    "slug": "daisy"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Osteospermum (Dwarf Mix)",
+    "price": 49,
+    "desc": "African daisy in vivid mixed colours. Compact for balcony pots.",
+    "slug": "osteospermum"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Pansy (KS Spl Mix)",
+    "price": 49,
+    "desc": "Richly coloured faces in mixed shades. Cool season bloomer.",
+    "slug": "pansy"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Balsam (KS Spl Rose)",
+    "price": 49,
+    "desc": "Rose-shaped double blooms. Pink shades, thrives in warm weather.",
+    "slug": "balsam"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Dahlia (Top Mix)",
+    "price": 49,
+    "desc": "Showy mixed colour dahlias. Excellent for cut flower gardens.",
+    "slug": "dahlia"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🎁",
+    "name": "10 All Season Vegetable Seeds Kit",
+    "price": 199,
+    "desc": "Curated 10-variety all-season vegetable seeds kit. Ideal for beginners.",
+    "slug": "all-season-veg-kit"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Petunia (KS Spl Mix)",
+    "price": 49,
+    "desc": "Mixed colour petunias. Excellent for trailing baskets. 83% germ.",
+    "slug": "petunia_ks"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Carnation (KS Spl Mix)",
+    "price": 49,
+    "desc": "Classic fragrant carnations. Long-lasting cut flowers. 80% germ.",
+    "slug": "carnation"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "Harsingar Seeds",
+    "price": 49,
+    "desc": "Sacred night jasmine. Fragrant white-orange blooms at dawn.",
+    "slug": "harsingar"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "💜",
+    "name": "Larkspur (KS Spl Mix)",
+    "price": 49,
+    "desc": "Tall spires of delphinium-like blooms. Excellent cut flower.",
+    "slug": "larkspur"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Dianthus (Baby Mix)",
+    "price": 49,
+    "desc": "Compact fringed petals in mixed shades. Fragrant, long-flowering.",
+    "slug": "dianthus"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "African Marigold (Sondesh Yellow)",
+    "price": 49,
+    "desc": "Bright yellow pompons. Prolific bloomer for garlands & borders.",
+    "slug": "marigold_sondesh_yellow"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Hollyhock (KS Spl Mix)",
+    "price": 49,
+    "desc": "Tall cottage classic. Ruffled blooms in pink, red, white, purple.",
+    "slug": "hollyhock"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Helichrysum (Dwarf Mix)",
+    "price": 49,
+    "desc": "Everlasting straw flower. Blooms retain colour when dried.",
+    "slug": "helichrysum"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌿",
+    "name": "20 Winter Vegetable Seeds Combo Pack",
+    "price": 299,
+    "desc": "Complete winter garden kit. 20 cool-season vegetables, 1000+ seeds.",
+    "slug": "winter-20-herb-pack"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Antirrhinum (Semi Tall Mix)",
+    "price": 49,
+    "desc": "Classic snapdragon in mixed shades. Perfect for cut flowers.",
+    "slug": "antirrhinum"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "Nasturtium (Carn Mix)",
+    "price": 49,
+    "desc": "Edible flowers & leaves. Easy climber, great for containers.",
+    "slug": "nasturtium"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Red Kaner Seeds",
+    "price": 49,
+    "desc": "Vibrant red oleander-type blooms. Ideal for Indian gardens.",
+    "slug": "red_kaner"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "☀️",
+    "name": "Gazania (Suns Mix)",
+    "price": 49,
+    "desc": "Sun-loving daisy-like blooms. Yellow, orange & bronze shades.",
+    "slug": "gazania"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Verbena (Ideal Mix) – Premium Open Pollinated",
+    "price": 49,
+    "desc": "Trailing verbena in pink, purple, red & white. Great for baskets.",
+    "slug": "verbena"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Phlox (Beauty Mix)",
+    "price": 49,
+    "desc": "Fragrant annual phlox in mixed shades. Colourful carpets for beds.",
+    "slug": "phlox"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Sweet Pea (KS Spl Mix)",
+    "price": 59,
+    "desc": "Intensely fragrant climbing sweet pea in pastel shades.",
+    "slug": "sweet_pea"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "Calendula (Dwarf Mix)",
+    "price": 49,
+    "desc": "Pot marigold in orange & yellow. Medicinal, edible blooms.",
+    "slug": "calendula_mix"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Cineraria (Dwarf Mix)",
+    "price": 59,
+    "desc": "Jewel-bright daisy blooms in blue, purple, pink & red.",
+    "slug": "cineraria"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🪷",
+    "name": "Lotus Flower Seeds – Pink &amp; White Varieties",
+    "price": 99,
+    "desc": "Sacred pink & white aquatic lotus. Grows in pots with water.",
+    "slug": "lotus_seeds"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Lupin (Pixie Mix)",
+    "price": 49,
+    "desc": "Compact lupin spikes in pink, purple, blue & white mix.",
+    "slug": "lupin"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌿",
+    "name": "Kale (Orna Colourwise)",
+    "price": 59,
+    "desc": "Ornamental kale in pink, purple & white rosette foliage.",
+    "slug": "kale_orna"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Mesembryanthemum (KS Spl Mix)",
+    "price": 49,
+    "desc": "Ice plant with glistening blooms. Drought-hardy ground cover.",
+    "slug": "mesembry"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Salvia (KS Spl Red)",
+    "price": 49,
+    "desc": "Brilliant scarlet sage. Long-blooming, attracts butterflies.",
+    "slug": "salvia_ks"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🤍",
+    "name": "Dimorphotheca (KS Spl White)",
+    "price": 49,
+    "desc": "Pure white African daisy with dark centres. Thrives in full sun.",
+    "slug": "dimorphotheca"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Candytuft (KS Spl Mix)",
+    "price": 49,
+    "desc": "Fragrant flat-topped clusters in mixed shades. For rockeries.",
+    "slug": "candytuft"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "Calendula (Dwarf Yellow)",
+    "price": 49,
+    "desc": "Compact dwarf pot marigold in bright yellow. Edible petals.",
+    "slug": "calendula_yellow"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "💜",
+    "name": "Digitalis – Purpurea Mix F1",
+    "price": 59,
+    "desc": "Foxglove with tall tubular spires. Stunning cottage garden plant.",
+    "slug": "digitalis"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "Calendula (FG Mix)",
+    "price": 49,
+    "desc": "Mixed yellow-orange pot marigold with medicinal value. 88% germ.",
+    "slug": "calendula_fg"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Nemesia (KS Spl Mix)",
+    "price": 49,
+    "desc": "Cheerful bicolour blooms. Compact, perfect for pots. 83% germ.",
+    "slug": "nemesia"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🤍",
+    "name": "Alyssum – Easter Bonnet Series F1",
+    "price": 49,
+    "desc": "Honey-scented clusters. Ground cover, attracts butterflies.",
+    "slug": "alyssum_easter"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Zinnia – Juliette Mix F1",
+    "price": 59,
+    "desc": "Premium F1 zinnia, vivid colours. Large blooms, ideal for cutting.",
+    "slug": "zinnia_juliette"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "✨",
+    "name": "Aster – Dwarf Special Mix F1",
+    "price": 59,
+    "desc": "Compact F1 aster in vivid mixed colours. Long-lasting cut flower.",
+    "slug": "aster_dwarf"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Zinnia – Oklahoma Series F1",
+    "price": 59,
+    "desc": "Strong-stemmed zinnia. Heat tolerant, prolific bloomer. 86% germ.",
+    "slug": "zinnia_oklahoma"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🤍",
+    "name": "Alyssum (Snow White)",
+    "price": 49,
+    "desc": "White honey-scented carpet. Great edging & filler plant.",
+    "slug": "alyssum_white"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🤍",
+    "name": "Iberis (Candytuft) Snow Flurries F1",
+    "price": 69,
+    "desc": "White candytuft with dense snowball clusters. Great for edging.",
+    "slug": "iberis"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌻",
+    "name": "Marigold – French Durango Series F1",
+    "price": 59,
+    "desc": "Extra-large French marigold blooms. Heat & disease tolerant.",
+    "slug": "marigold_durango"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🖤",
+    "name": "Coleus – Black Dragon F1",
+    "price": 69,
+    "desc": "Deep burgundy foliage. Dramatic ornamental for shaded gardens.",
+    "slug": "coleus"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌼",
+    "name": "Portulaca – Happy Hour Series F1",
+    "price": 59,
+    "desc": "Premium moss rose. Stays open longer, drought hardy. 85% germ.",
+    "slug": "portulaca_happy"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌺",
+    "name": "Begonia – Semperflorens Sprint PLUS Maxi Series F1",
+    "price": 59,
+    "desc": "Wax begonia with pink-red-white blooms. Excellent for shade pots.",
+    "slug": "begonia"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "✨",
+    "name": "Aster – Benary's Princess F1",
+    "price": 59,
+    "desc": "Tall F1 aster in vivid mixed colours. Premium cut flower variety.",
+    "slug": "aster_benary"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower",
+    "emoji": "🌸",
+    "name": "Sweet William (KS Spl Mix)",
+    "price": 49,
+    "desc": "Fragrant bicolour blooms. Excellent cottage garden plant.",
+    "slug": "sweet_william"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "vegetable",
+    "emoji": "🥬",
+    "name": "Palak (Spinach)",
+    "price": 49,
+    "desc": "Dark iron-rich leaves, ready in 30–35 days. 93% germ.",
+    "slug": "palak"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🌿",
+    "name": "Amaranthus Red (लाल चौलाई माइक्रोग्रीन)",
+    "price": 99,
+    "desc": "Vibrant red stems, mild earthy flavor. Rich in calcium & iron. 92% germ. 7–10 days.",
+    "slug": "amaranthus-red-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🌱",
+    "name": "Radish (मूली माइक्रोग्रीन)",
+    "price": 89,
+    "desc": "Spicy, peppery taste. Ready in 5–7 days. Fastest microgreen. 96% germ.",
+    "slug": "radish-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🥬",
+    "name": "Spinach (पालक माइक्रोग्रीन)",
+    "price": 99,
+    "desc": "Mild flavor, packed with iron & Vitamin K. Great for smoothies. 88% germ. 10–12 days.",
+    "slug": "spinach-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🥦",
+    "name": "Broccoli Green (ब्रोकोली माइक्रोग्रीन)",
+    "price": 109,
+    "desc": "Loaded with sulforaphane. Superfood microgreen. 90% germ. 7–10 days.",
+    "slug": "broccoli-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🟣",
+    "name": "Beetroot-DDR (MICROGREEN)",
+    "price": 119,
+    "desc": "Deep red stems, earthy sweet flavor. Rich in iron & antioxidants. 85% germ. 10–12 days.",
+    "slug": "beetroot-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🌱",
+    "name": "Mustard (सरसों माइक्रोग्रीन)",
+    "price": 79,
+    "desc": "Pungent, spicy flavor. Fast growing. Excellent for wraps & salads. 93% germ. 5–7 days.",
+    "slug": "mustard-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🌻",
+    "name": "Sunflower Microgreens Seeds",
+    "price": 129,
+    "desc": "Crunchy, nutty flavor. High in Vitamin E. Great for salads & garnish. 95% germ. 7–10 days.",
+    "slug": "sunflower-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🌾",
+    "name": "Wheatgrass (गेंहू घास माइक्रोग्रीन)",
+    "price": 99,
+    "desc": "Detox chlorophyll-rich grass. Immunity-boosting juice. 94% germ. 7–9 days.",
+    "slug": "wheatgrass-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🥗",
+    "name": "Rocket (रॉकेट माइक्रोग्रीन)",
+    "price": 109,
+    "desc": "Peppery arugula flavor, rich in Vitamin C. Ideal for pizza & pasta. 90% germ. 7–10 days.",
+    "slug": "rocket-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🧅",
+    "name": "Onion (MICROGREEN)",
+    "price": 119,
+    "desc": "Mild onion flavor. Rich in flavonoids & prebiotics. 85% germ. 10–14 days.",
+    "slug": "onion-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🌈",
+    "name": "Swiss Chard IND (MICROGREEN)",
+    "price": 129,
+    "desc": "Rainbow stems, mild earthy flavor. Ornamental & nutritious. 87% germ. 10–12 days.",
+    "slug": "swiss-chard-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🥕",
+    "name": "Carrot Desi Lalima (MICROGREEN)",
+    "price": 119,
+    "desc": "Delicate, slightly sweet carrot flavor. High in beta-carotene. 88% germ. 10–14 days.",
+    "slug": "carrot-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "💜",
+    "name": "Basil Dark Opal Purple (MICROGREEN)",
+    "price": 149,
+    "desc": "Deep purple leaves, sweet anise flavor. Rich in antioxidants. 88% germ. 10–12 days.",
+    "slug": "basil-dark-opal-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🌿",
+    "name": "Celery (MICROGREEN)",
+    "price": 139,
+    "desc": "Strong aromatic celery flavor. Rich in Vitamin K. Great for juicing & soups. 85% germ. 12–14 days.",
+    "slug": "celery-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🍀",
+    "name": "Clover Microgreen Seeds",
+    "price": 109,
+    "desc": "Delicate sweet flavor. Contains isoflavones. Great for salads & sandwiches. 92% germ. 7–10 days.",
+    "slug": "clover-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🟣",
+    "name": "Knol-Khol Purple (MICROGREEN)",
+    "price": 129,
+    "desc": "Mild sweet kohlrabi flavor, vibrant purple stems. High in Vitamin C. 87% germ. 8–12 days.",
+    "slug": "knol-khol-purple-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🌱",
+    "name": "6-in-1 Microgreens Seeds Combo Pack",
+    "price": 399,
+    "desc": "6 top varieties in one pack — radish, sunflower, broccoli, mustard, wheatgrass & spinach. Best value.",
+    "slug": "micro-combo-6in1"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "microgreens",
+    "emoji": "🥦",
+    "name": "Knol-Khol Green (MICROGREEN)",
+    "price": 119,
+    "desc": "Crisp mild kohlrabi flavor. Loaded with Vitamin C & calcium. 87% germ. 8–12 days.",
+    "slug": "knol-khol-green-micro"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌿",
+    "name": "All Season Vegetable Seeds Kit",
+    "price": 199,
+    "desc": "10 popular all-season vegetables in one kit. Tomato, bhindi, capsicum, cucumber & more. Great for beginners.",
+    "slug": "all-season-veg-kit"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "❄️",
+    "name": "20 Winter Vegetable Seeds Combo",
+    "price": 349,
+    "desc": "20 cool-season varieties, 1000+ seeds. Spinach, peas, radish, carrot, methi, broccoli & more. Oct–Feb sowing.",
+    "slug": "winter-20-veg-combo"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🫘",
+    "name": "Beans Yellow (बीन्स पीली) Seeds",
+    "price": 69,
+    "desc": "Golden-yellow stringless wax beans. Bush type, no staking. Milder & butterier than green beans. 50–55 days.",
+    "slug": "beans-yellow"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥬",
+    "name": "Best 6 Leafy Seeds Winter Combo",
+    "price": 149,
+    "desc": "6 essential winter leafy greens — spinach, methi, lal saag, mustard, dill & coriander. First harvest in 20–25 days.",
+    "slug": "leafy-6-winter-combo"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥦",
+    "name": "Broccoli (ब्रोकोली) Hybrid Seeds",
+    "price": 89,
+    "desc": "F1 hybrid, firm dark-green heads 500g–1kg. Rich in sulforaphane & vitamin C. Side shoots continue after main harvest.",
+    "slug": "broccoli-hybrid"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🫑",
+    "name": "Capsicum Purple Bell 15 Seeds",
+    "price": 99,
+    "desc": "Rare deep purple-violet bell pepper. Sweet, thick-walled, no heat. Rich in anthocyanins. Exotic variety. 75% germ.",
+    "slug": "capsicum-purple-bell"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🫑",
+    "name": "Capsicum Red (लाल शिमला मिर्च)",
+    "price": 89,
+    "desc": "Sweet-tangy red bell pepper. Ripens green to glossy red. High in vitamins A & C. 78% germ, 75–90 days.",
+    "slug": "capsicum-red-ev"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🫑",
+    "name": "Capsicum Yellow (पीली शिमला मिर्च)",
+    "price": 89,
+    "desc": "Sweetest bell pepper. Deep golden-yellow at maturity. Highest vitamin C of all capsicum colours. 78% germ.",
+    "slug": "capsicum-yellow-ev"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🍅",
+    "name": "Cherry Tomato Yellow F1 Hybrid",
+    "price": 99,
+    "desc": "Sweet golden cherry tomatoes, clusters of 8–12. Low acidity. Indeterminate — continuous harvest 3–4 months. 82% germ.",
+    "slug": "cherry-tomato-yellow-f1"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥬",
+    "name": "Chinese Cabbage Seeds",
+    "price": 69,
+    "desc": "Napa-type elongated head (1–2 kg). Mild sweet flavour. For kimchi, stir-fries & soups. 100 seeds, 60–70 days.",
+    "slug": "chinese-cabbage"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌶️",
+    "name": "Desi Pepper Hot Bhaji Seeds",
+    "price": 59,
+    "desc": "Traditional long green chilli for stuffed mirchi bhaji. Medium heat. High-yield desi variety. 80% germ, 60–70 days.",
+    "slug": "desi-pepper-hot"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🫘",
+    "name": "French Beans (Green Beans) Seeds",
+    "price": 69,
+    "desc": "Bush-type stringless green beans. No staking needed. Rich in fibre & folate. 82% germ, ready in 50–55 days.",
+    "slug": "french-beans"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥦",
+    "name": "Knol-Khol F-1 Hybrid Seeds",
+    "price": 79,
+    "desc": "Crisp sweet kohlrabi globes above soil. Both globe & leaves edible. F1 hybrid, 83% germ, 55–65 days.",
+    "slug": "knol-khol-f1-ev"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌿",
+    "name": "Leek (American Flag) Seeds",
+    "price": 79,
+    "desc": "Gourmet leek with long white shanks, mild sweet onion flavour. 100 seeds, 78% germ, 100–120 days harvest.",
+    "slug": "leek-american-flag"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥗",
+    "name": "Lettuce Iceberg (लेट्यूस आइसबर्ग) Seeds",
+    "price": 69,
+    "desc": "Tight crisp pale-green heads (300–500g). 200 seeds for succession planting. 80% germ, 70–80 days harvest.",
+    "slug": "lettuce-iceberg"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥗",
+    "name": "Lettuce Romaine (सलाद पत्ते) Seeds",
+    "price": 69,
+    "desc": "Upright heads, crisp inner heart. More nutritious than iceberg. 200 seeds. Caesar salad essential. 65–75 days.",
+    "slug": "lettuce-romaine"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌶️",
+    "name": "Ornamental Chilli Pointed Mix 30 Seeds",
+    "price": 79,
+    "desc": "Multi-colour upward-pointing fruits in 5 colours. Compact 25–35 cm. Edible & hot. Perfect decorative gift plant.",
+    "slug": "ornamental-chilli-pointed"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🫑",
+    "name": "Ornamental Chilli Round Mix",
+    "price": 79,
+    "desc": "Cherry-like round fruits in green→yellow→orange→red. Living traffic-light display. Compact 30–40 cm. Great for pickling.",
+    "slug": "ornamental-chilli-round"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥬",
+    "name": "Pak Choi (Hybrid) Seeds",
+    "price": 79,
+    "desc": "Ultra-fast hybrid bok choy. Glossy green leaves & crisp white stems. Both edible. 85% germ, ready in 35–40 days.",
+    "slug": "pak-choi-hybrid"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌶️",
+    "name": "Pepper Red Cherry (लाल चेरी मिर्च) Seeds",
+    "price": 79,
+    "desc": "Round bright-red 3–4 cm sweet-spicy peppers. Excellent for pickling & stuffing. Prolifically fruiting, 70–80 days.",
+    "slug": "pepper-red-cherry"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌶️",
+    "name": "Pepper SB Type Seeds",
+    "price": 69,
+    "desc": "Shimla-Bhaji type, 12–18 cm, medium heat. Dual purpose — stuffing & sabzi. Very high yield, 65–75 days harvest.",
+    "slug": "pepper-sb-type"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌱",
+    "name": "Radish Scarlet Globe (मूली लाल) Seeds",
+    "price": 59,
+    "desc": "Round scarlet-red European radish. World's fastest vegetable — harvest in 22–25 days. 100 seeds, 85% germ.",
+    "slug": "radish-scarlet-globe"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥬",
+    "name": "Red Cabbage (लाल गोभी) Seeds",
+    "price": 79,
+    "desc": "Rich purple-red heads with 10x more vitamin C than green cabbage. 1–2 kg dense heads, 100 seeds, 90–100 days.",
+    "slug": "red-cabbage"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🍅",
+    "name": "Red Cherry Tomato F1 Hybrid Seeds",
+    "price": 99,
+    "desc": "F1 indeterminate — trusses of 8–12 intensely sweet red fruits. Continuous harvest 3–4 months. Best balcony tomato. 85% germ.",
+    "slug": "red-cherry-tomato-f1"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌿",
+    "name": "Red Okra (लाल भिंडी) Seeds",
+    "price": 89,
+    "desc": "Exotic deep-burgundy pods, stems & leaves. Rich in anthocyanins. Ornamental & edible. Grows like green bhindi. 80% germ.",
+    "slug": "red-okra"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌽",
+    "name": "Sweet Corn (स्वीट कॉर्न) Seeds",
+    "price": 79,
+    "desc": "Extra-sweet hybrid corn. 1–2 cobs per plant, 70–80 days. Grow in blocks for pollination. 85% germ.",
+    "slug": "sweet-corn-ev"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🌱",
+    "name": "Turnip (शलजम) Seeds",
+    "price": 59,
+    "desc": "Classic winter shalgam. Root & greens both edible. Cold-hardy, 45–60 days. 200 seeds for succession sowing. 85% germ.",
+    "slug": "turnip-ev"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥒",
+    "name": "Zucchini Green Seeds (ज़ुकीनी ग्रीन)",
+    "price": 89,
+    "desc": "Italian dark-green courgette. Bush plant, 8–15 fruits per season. Tender mild flesh. Edible flowers bonus. 82% germ, 45–55 days.",
+    "slug": "zucchini-green"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-veggies",
+    "emoji": "🥒",
+    "name": "Zucchini Yellow Seeds (ज़ुकीनी पीली)",
+    "price": 89,
+    "desc": "Golden-yellow courgette, sweeter & more buttery than green. Dramatic colour on plant & plate. 82% germ, 45–55 days.",
+    "slug": "zucchini-yellow"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "🌿",
+    "name": "All Season Vegetable Seeds Kit (10 सब्जियों के बीज किट)",
+    "price": 199,
+    "desc": "10 popular vegetables in one kit. 85%+ germ, all season starter pack for kitchen gardens.",
+    "slug": "all-season-veg-kit"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "🥬",
+    "name": "20 Winter Vegetable Seeds Combo Pack – 1000+ Seeds",
+    "price": 299,
+    "desc": "20 winter varieties, 1000+ seeds. Spinach, fenugreek, radish, carrot, peas & more. 85%+ germ.",
+    "slug": "winter-20-herb-pack"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "🌿",
+    "name": "Basil Green (तुलसी) Seeds",
+    "price": 89,
+    "desc": "Sweet fragrant basil for chutneys, teas & pasta. 88% germ, ready in 21–30 days.",
+    "slug": "basil-green"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "🌾",
+    "name": "Fennel Herb Seeds (सौंफ)",
+    "price": 59,
+    "desc": "Aromatic fennel — leaves, seeds & bulb all edible. 82% germ, 200 seeds, classic digestive herb.",
+    "slug": "fennel-herb"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "💜",
+    "name": "Lavender | लैवेंडर के बीज – 50 Seeds",
+    "price": 149,
+    "desc": "Fragrant purple spikes. Stress-relieving, repels mosquitoes. Perennial. 72% germ, 50 seeds.",
+    "slug": "lavender-50"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "🌿",
+    "name": "Oregano (अजवायन) Seeds",
+    "price": 79,
+    "desc": "Pungent pizza & pasta herb. Perennial, drought-tolerant. 80% germ, harvest year-round.",
+    "slug": "oregano-herb"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "🌶️",
+    "name": "Ornamental Chilli Choice Pointed Mix – 30 Seeds",
+    "price": 99,
+    "desc": "Colourful upright fruits — white, purple, orange & red on one plant. Edible & decorative. 78% germ.",
+    "slug": "ornamental-chilli-choice"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "🌿",
+    "name": "Parsley (Cress Curled) Seeds",
+    "price": 69,
+    "desc": "Classic curly-leaf garnish herb. Rich in Vit C & K. 75% germ, 150 seeds for months of harvest.",
+    "slug": "parsley-curled"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "🌿",
+    "name": "Rosemary Seeds (रोज़मेरी)",
+    "price": 129,
+    "desc": "Woody aromatic perennial herb for roasts & herbal teas. 65% germ, 50 seeds, grows for years.",
+    "slug": "rosemary-herb"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "exotic-herbs",
+    "emoji": "🌿",
+    "name": "Thyme (थाइम) Seeds",
+    "price": 99,
+    "desc": "Classic kitchen herb for soups & roasts. Perennial, bee-friendly shrub. 75% germ, 100 seeds.",
+    "slug": "thyme-herb"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower-bulbs",
+    "emoji": "🌷",
+    "name": "Freesia 6 Color Flower Bulbs (फ्रीसिया 6 कलर बल्ब्स)",
+    "price": 199,
+    "desc": "Fragrant funnel-shaped blooms in 6 colours. 6 bulbs, blooms in 60–75 days. Sweet exquisite fragrance.",
+    "slug": "freesia-6color"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower-bulbs",
+    "emoji": "🤍",
+    "name": "Rajnigandha | रजनीगन्धा बल्ब – (20 Bulbs)",
+    "price": 149,
+    "desc": "Classic Indian Tuberose — intensely fragrant white blooms. 20 bulbs, used in garlands & puja.",
+    "slug": "rajnigandha-20"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower-bulbs",
+    "emoji": "🪷",
+    "name": "Lotus Flower Seeds – Pink & White Varieties (5 Seeds)",
+    "price": 149,
+    "desc": "Sacred lotus — pink & white. Grow in water pots or ponds. 5 seeds, blooms in 90–120 days.",
+    "slug": "lotus-pink-white"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower-bulbs",
+    "emoji": "🌸",
+    "name": "Freesia Mix Flower Bulbs (फ्रीसिया मिक्स बल्ब्स)",
+    "price": 179,
+    "desc": "Mixed freesia assortment — surprise colour blend, same sweet fragrance. Great for borders & bouquets.",
+    "slug": "freesia-mix"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower-bulbs",
+    "emoji": "🤍",
+    "name": "Chinchirinchi Flower Bulbs (चिंचिरिंची बल्ब्स)",
+    "price": 199,
+    "desc": "White star-shaped Ornithogalum blooms. 3–4 week vase life. Excellent cut flower, South African origin.",
+    "slug": "chinchirinchi"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower-bulbs",
+    "emoji": "🌺",
+    "name": "Axia Hybrid Flower Bulbs (एक्सिया हाइब्रिड बल्ब्स)",
+    "price": 199,
+    "desc": "Ixia hybrid — vibrant star-shaped blooms in pink, red, orange & bicolours. Multiple spikes per bulb.",
+    "slug": "axia-hybrid"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower-bulbs",
+    "emoji": "🤍",
+    "name": "Tritonia White Flower Bulbs (ट्राइटोनिया व्हाइट बल्ब्स)",
+    "price": 179,
+    "desc": "Elegant white cup-shaped Tritonia blooms on graceful arching stems. Long vase life cut flower.",
+    "slug": "tritonia-white"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "flower-bulbs",
+    "emoji": "🌺",
+    "name": "Axia Top Flower Bulbs (एक्सिया टॉप बल्ब्स)",
+    "price": 219,
+    "desc": "Premium top-grade Axia bulbs — superior bloom size & vibrant colours. Multiple flower spikes per bulb.",
+    "slug": "axia-top"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌸",
+    "name": "Cassia Javanica – Apple Blossom Tree Seeds",
+    "price": 99,
+    "desc": "Pink & white bicolour canopy. Ornamental avenue tree. 78% germ, 10 seeds.",
+    "slug": "cassia-javanica"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌸",
+    "name": "Tabebuia Rosea – Pink Trumpet Tree Seeds",
+    "price": 99,
+    "desc": "Large pink trumpet flowers. Beautiful Indian avenue tree. 75% germ, 10 seeds.",
+    "slug": "tabebuia-rosea"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌼",
+    "name": "Cassia Fistula – Golden Shower Tree Seeds",
+    "price": 79,
+    "desc": "Cascading yellow flowers. Amaltas / Bahava. 82% germ, 15 seeds. Drought-hardy.",
+    "slug": "cassia-fistula"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "💜",
+    "name": "Jacaranda mimosifolia – Blue Jacaranda Seeds",
+    "price": 129,
+    "desc": "Iconic lavender-blue canopy. Famous in Bengaluru & Pune. 70% germ, 10 seeds.",
+    "slug": "jacaranda"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌺",
+    "name": "Bombax Ceiba – Silk Cotton Tree Seeds",
+    "price": 79,
+    "desc": "Semal — scarlet-red flowers. Sacred Indian tree, bird habitat. 80% germ, 15 seeds.",
+    "slug": "bombax-ceiba"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🎋",
+    "name": "Bambusa vulgaris – Bamboo Calio Seeds",
+    "price": 99,
+    "desc": "Golden-green striped culms. Privacy screen & erosion control. 72% germ, 20 seeds.",
+    "slug": "bambusa-vulgaris"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🎋",
+    "name": "Bambusa stricta – Bamboo Strictus Seeds",
+    "price": 99,
+    "desc": "Solid-stemmed Calcutta bamboo for construction & fencing. 72% germ, 20 seeds.",
+    "slug": "bambusa-stricta"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌸",
+    "name": "Bauhinia Purpurea – Orchid Tree Seeds",
+    "price": 79,
+    "desc": "Purple-pink orchid-like flowers. Widely planted ornamental tree. 82% germ, 15 seeds.",
+    "slug": "bauhinia-purpurea"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🔥",
+    "name": "Delonix Regia – Flame Tree Seeds",
+    "price": 79,
+    "desc": "Gulmohar — blazing red-orange canopy. World's most beautiful tree. 78% germ, 10 seeds.",
+    "slug": "delonix-regia"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌸",
+    "name": "Lagerstroemia Speciosa – Queen's Crape Myrtle Seeds",
+    "price": 99,
+    "desc": "Pride of India — lavender-purple clusters. Medicinal & ornamental. 75% germ, 10 seeds.",
+    "slug": "lagerstroemia"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌳",
+    "name": "Albizia Saman – Monkey Pod Seeds",
+    "price": 89,
+    "desc": "Rain Tree — massive umbrella canopy, pink flowers. Excellent shade tree. 78% germ, 10 seeds.",
+    "slug": "albizia-saman"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌼",
+    "name": "Nyctanthes arbor-tristis – हरसिंगार बीज (20 Seeds)",
+    "price": 89,
+    "desc": "Parijat / Harsingar — night-fragrant sacred Indian tree. 75% germ, 20 seeds.",
+    "slug": "harsingar"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🟤",
+    "name": "Elaeocarpus ganitrus – रुद्राक्ष के बीज (10 Seeds)",
+    "price": 199,
+    "desc": "Sacred Rudraksha tree. Himalayan evergreen. 60% germ, 10 seeds.",
+    "slug": "rudraksha"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🫐",
+    "name": "Phyllanthus emblica – आंवला के बीज (15 Seeds)",
+    "price": 79,
+    "desc": "Indian Gooseberry (Amla) — Vitamin C superfood. Ayurvedic. 75% germ, 15 seeds.",
+    "slug": "amla"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌿",
+    "name": "Aegle marmelos – बेल पत्र Seeds (10 Seeds)",
+    "price": 79,
+    "desc": "Bael — sacred to Shiva. Medicinal fruits, puja use. 78% germ, 10 seeds.",
+    "slug": "bael-tree"
+  },
+  {
+    "category": "seeds",
+    "seed_cat": "forest",
+    "emoji": "🌿",
+    "name": "Santalum album – सफेद चंदन के बीज",
+    "price": 299,
+    "desc": "White Sandalwood — world's most valued aromatic wood. Sacred & medicinal. 55% germ, 5 seeds.",
+    "slug": "sandalwood"
+  }
+]
