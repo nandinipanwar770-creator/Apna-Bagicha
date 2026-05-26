@@ -144,6 +144,7 @@ async function initDb() {
     )
   `);
   await pool.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS quantity INTEGER NOT NULL DEFAULT 0`);
+  await pool.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS grow_cat TEXT DEFAULT ''`);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quotes (
       id         SERIAL PRIMARY KEY,
@@ -192,13 +193,34 @@ async function initDb() {
       const now = new Date().toISOString();
       for (const p of seedData) {
         await pool.query(
-          `INSERT INTO products (slug, name, category, price, emoji, image, description, badge_text, seed_cat, in_stock, quantity, created_at)
-           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+          `INSERT INTO products (slug, name, category, price, emoji, image, description, badge_text, seed_cat, grow_cat, in_stock, quantity, created_at)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
            ON CONFLICT (slug) DO NOTHING`,
-          [p.slug, p.name, p.category, p.price || 0, p.emoji || '', p.image || '', p.desc || '', '', p.seed_cat || '', p.in_stock !== false, p.quantity != null ? p.quantity : 100, now]
+          [p.slug, p.name, p.category, p.price || 0, p.emoji || '', p.image || '', p.desc || '', '', p.seed_cat || '', p.grow_cat || '', p.in_stock !== false, p.quantity != null ? p.quantity : 100, now]
         );
       }
       console.log(`✅ Seeded ${seedData.length} products into DB`);
+    }
+  }
+
+  // One-time: seed growbags + tools (added after initial seed)
+  const extraSeedFlag = await pool.query("SELECT value FROM admin_config WHERE key='growbags_tools_seeded'");
+  if (extraSeedFlag.rows.length === 0) {
+    const seedPath = path.join(__dirname, 'tmp', 'seed_products.json');
+    if (fs.existsSync(seedPath)) {
+      const seedData = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
+      const now = new Date().toISOString();
+      const extra = seedData.filter(p => p.category === 'growbags' || p.category === 'tools');
+      for (const p of extra) {
+        await pool.query(
+          `INSERT INTO products (slug, name, category, price, emoji, image, description, badge_text, seed_cat, grow_cat, in_stock, quantity, created_at)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+           ON CONFLICT (slug) DO NOTHING`,
+          [p.slug, p.name, p.category, p.price || 0, p.emoji || '', p.image || '', p.desc || '', '', '', p.grow_cat || '', true, 100, now]
+        );
+      }
+      await pool.query("INSERT INTO admin_config (key, value) VALUES ('growbags_tools_seeded', '1')");
+      console.log(`✅ Seeded ${extra.length} growbags & tools products`);
     }
   }
 
