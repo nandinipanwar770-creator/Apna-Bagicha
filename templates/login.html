@@ -64,9 +64,7 @@
     .tab-inactive { background:transparent; color:#6b7280; }
 
     /* Left panel hero overlay */
-    .hero-overlay {
-      background: linear-gradient(135deg, rgba(20,45,16,0.82) 0%, rgba(40,80,32,0.75) 60%, rgba(30,65,24,0.85) 100%);
-    }
+    .hero-overlay { background: transparent; }
 
     /* Scrollable right panel */
     .right-scroll { overflow-y:auto; max-height:100vh; }
@@ -79,31 +77,9 @@
   <!-- ═══════════════════════════════════════════════════════════
        LEFT PANEL — hero image + brand story (hidden on mobile)
   ════════════════════════════════════════════════════════════ -->
-  <div class="hidden lg:flex lg:w-[42%] xl:w-[44%] relative flex-col" style="height:100vh;overflow:hidden;flex-shrink:0;"
-       style="background:url('/images/about-hero.jpg') center/cover no-repeat;">
+  <div class="hidden lg:flex lg:w-[42%] xl:w-[44%] relative flex-col" style="height:100vh;overflow:hidden;flex-shrink:0;background:linear-gradient(160deg,#1e3d1a 0%,#2d5a27 50%,#1a3516 100%);">
     <!-- overlay -->
-    <div class="hero-overlay absolute inset-0"></div>
-
-    <!-- Trust badges — right edge -->
-    <div class="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-20">
-      <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl px-3 py-2 text-center text-white w-[90px]">
-        <div class="text-xl mb-0.5">🔒</div>
-        <div class="font-bold text-[11px] leading-tight">100% Secure</div>
-        <div class="text-[9.5px] opacity-80 mt-0.5 leading-tight">Your data is safe with us</div>
-      </div>
-      <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl px-3 py-2 text-center text-white w-[90px]">
-        <div class="text-xl mb-0.5">🌿</div>
-        <div class="font-bold text-[11px] leading-tight">100% Natural</div>
-        <div class="text-[9.5px] opacity-80 mt-0.5 leading-tight">Good for You, Good for Nature</div>
-      </div>
-      <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl px-3 py-2 text-center text-white w-[90px]">
-        <div class="text-xl mb-0.5">⭐</div>
-        <div class="font-bold text-[11px] leading-tight">Best Quality</div>
-        <div class="text-[9.5px] opacity-80 mt-0.5 leading-tight">Sourced with care</div>
-      </div>
-    </div>
-
-    <!-- Main content -->
+    <div class="hero-overlay absolute inset-0"></div>  <!-- Main content -->
     <div class="relative z-10 flex flex-col justify-between h-full p-7 xl:p-9 pr-16 xl:pr-20">
 
       <!-- Logo -->
@@ -172,14 +148,13 @@
   <!-- ═══════════════════════════════════════════════════════════
        RIGHT PANEL — auth card
   ════════════════════════════════════════════════════════════ -->
-  <div class="flex-1 flex flex-col items-center justify-center px-4 py-4 relative" style="height:100vh;overflow-y:auto;overflow-x:hidden;min-width:0;"
-       style="background: linear-gradient(145deg, #f0faf0 0%, #e8f5e2 40%, #f4fbf4 70%, #edf7ed 100%);">
+  <div class="flex-1 flex flex-col items-center px-4 py-5 relative" style="height:100vh;overflow-y:auto;overflow-x:hidden;min-width:0;background:linear-gradient(145deg,#f0faf0 0%,#e8f5e2 40%,#f4fbf4 70%,#edf7ed 100%);">
 
     <!-- decorative blobs -->
     <div class="absolute top-0 right-0 w-40 h-40 rounded-full opacity-25 pointer-events-none" style="background:radial-gradient(circle, #a8d5a2 0%, transparent 70%); transform:translate(20%,-20%);"></div>
     <div class="absolute bottom-0 left-0 w-44 h-44 rounded-full opacity-15 pointer-events-none" style="background:radial-gradient(circle, #3a7032 0%, transparent 70%); transform:translate(-25%,25%);"></div>
 
-    <div class="card w-full max-w-[400px] relative z-10">
+    <div class="card w-full max-w-[400px] relative z-10 my-auto">
 
       <!-- Logo (always visible on mobile, small on desktop) -->
       <div class="text-center mb-3">
