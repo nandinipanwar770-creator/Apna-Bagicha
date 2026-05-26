@@ -28,13 +28,13 @@
     .shake      { animation: shake  0.4s  ease; }
 
     .form-input {
-      width:100%; border:1.5px solid #e5e7eb; border-radius:10px;
-      padding:10px 14px; font-size:14.5px; outline:none;
+      width:100%; border:1.5px solid #e5e7eb; border-radius:9px;
+      padding:8px 12px; font-size:13.5px; outline:none;
       transition:border-color 0.2s, box-shadow 0.2s;
       font-family:'DM Sans',sans-serif; color:#111827; background:#fff;
     }
-    .form-input:focus { border-color:#3a7032; box-shadow:0 0 0 3px rgba(58,112,50,0.1); }
-    .form-input.error { border-color:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,0.1); }
+    .form-input:focus { border-color:#3a7032; box-shadow:0 0 0 2px rgba(58,112,50,0.12); }
+    .form-input.error { border-color:#ef4444; box-shadow:0 0 0 2px rgba(239,68,68,0.1); }
 
     .otp-input {
       width:44px; height:50px; text-align:center; font-size:22px; font-weight:700;
@@ -74,96 +74,96 @@
     .right-scroll::-webkit-scrollbar-thumb { background:#d1d5db; border-radius:4px; }
   </style>
 </head>
-<body class="min-h-screen flex font-sans bg-gray-50">
+<body class="h-screen flex font-sans bg-gray-50 overflow-hidden">
 
   <!-- ═══════════════════════════════════════════════════════════
        LEFT PANEL — hero image + brand story (hidden on mobile)
   ════════════════════════════════════════════════════════════ -->
-  <div class="hidden lg:flex lg:w-[52%] xl:w-[55%] relative flex-col min-h-screen"
+  <div class="hidden lg:flex lg:w-[42%] xl:w-[44%] relative flex-col" style="height:100vh;overflow:hidden;flex-shrink:0;"
        style="background:url('/images/about-hero.jpg') center/cover no-repeat;">
     <!-- overlay -->
     <div class="hero-overlay absolute inset-0"></div>
 
     <!-- Trust badges — right edge -->
-    <div class="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-20">
-      <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl px-4 py-3 text-center text-white w-[110px]">
-        <div class="text-2xl mb-1">🔒</div>
-        <div class="font-bold text-[13px] leading-tight">100% Secure</div>
-        <div class="text-[10.5px] opacity-80 mt-0.5 leading-tight">Your data is safe with us</div>
+    <div class="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-20">
+      <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl px-3 py-2 text-center text-white w-[90px]">
+        <div class="text-xl mb-0.5">🔒</div>
+        <div class="font-bold text-[11px] leading-tight">100% Secure</div>
+        <div class="text-[9.5px] opacity-80 mt-0.5 leading-tight">Your data is safe with us</div>
       </div>
-      <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl px-4 py-3 text-center text-white w-[110px]">
-        <div class="text-2xl mb-1">🌿</div>
-        <div class="font-bold text-[13px] leading-tight">100% Natural</div>
-        <div class="text-[10.5px] opacity-80 mt-0.5 leading-tight">Good for You, Good for Nature</div>
+      <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl px-3 py-2 text-center text-white w-[90px]">
+        <div class="text-xl mb-0.5">🌿</div>
+        <div class="font-bold text-[11px] leading-tight">100% Natural</div>
+        <div class="text-[9.5px] opacity-80 mt-0.5 leading-tight">Good for You, Good for Nature</div>
       </div>
-      <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl px-4 py-3 text-center text-white w-[110px]">
-        <div class="text-2xl mb-1">⭐</div>
-        <div class="font-bold text-[13px] leading-tight">Best Quality Products</div>
-        <div class="text-[10.5px] opacity-80 mt-0.5 leading-tight">Sourced with care</div>
+      <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl px-3 py-2 text-center text-white w-[90px]">
+        <div class="text-xl mb-0.5">⭐</div>
+        <div class="font-bold text-[11px] leading-tight">Best Quality</div>
+        <div class="text-[9.5px] opacity-80 mt-0.5 leading-tight">Sourced with care</div>
       </div>
     </div>
 
     <!-- Main content -->
-    <div class="relative z-10 flex flex-col justify-between h-full p-10 xl:p-14 pr-20 xl:pr-24">
+    <div class="relative z-10 flex flex-col justify-between h-full p-7 xl:p-9 pr-16 xl:pr-20">
 
       <!-- Logo -->
       <div>
-        <a href="/" class="inline-flex items-center gap-2.5 no-underline mb-10">
-          <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Logo" class="w-11 h-11 object-contain">
-          <span class="font-bold text-[1.45rem] leading-none">
+        <a href="/" class="inline-flex items-center gap-2 no-underline mb-1">
+          <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Logo" class="w-9 h-9 object-contain">
+          <span class="font-bold text-[1.25rem] leading-none">
             <span style="font-family:'Dancing Script',cursive;color:#a8d5a2;">Apna</span>
             <span style="font-family:'Dancing Script',cursive;color:#f97316;">Bagicha</span>
           </span>
         </a>
-        <p class="text-green-100/80 text-[13px] -mt-8 mb-10 ml-[54px]">India's trusted plant & farming store</p>
+        <p class="text-green-100/80 text-[12px] mb-5 ml-[44px]">India's trusted plant & farming store</p>
 
         <!-- Headline -->
-        <h1 class="text-white font-bold text-[2.6rem] xl:text-[3rem] leading-[1.15] mb-4">
-          Better Farming.<br>Better Future.<span class="ml-2">🌿</span>
+        <h1 class="text-white font-bold text-[2rem] xl:text-[2.3rem] leading-[1.15] mb-2">
+          Better Farming.<br>Better Future.<span class="ml-1">🌿</span>
         </h1>
-        <p class="text-green-100/80 text-[15px] leading-relaxed max-w-[340px] mb-10">
-          Quality seeds, plants and farming products<br>delivered to your doorstep.
+        <p class="text-green-100/80 text-[13px] leading-relaxed max-w-[300px] mb-5">
+          Quality seeds, plants and farming products delivered to your doorstep.
         </p>
 
         <!-- Feature list -->
-        <div class="flex flex-col gap-4">
-          <div class="flex items-start gap-3">
-            <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 text-lg">🌾</div>
+        <div class="flex flex-col gap-2.5">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 text-base">🌾</div>
             <div>
-              <div class="text-white font-semibold text-[14px]">High Quality Products</div>
-              <div class="text-green-100/70 text-[12.5px]">Quality selected for best results</div>
+              <div class="text-white font-semibold text-[13px]">High Quality Products</div>
+              <div class="text-green-100/70 text-[11.5px]">Quality selected for best results</div>
             </div>
           </div>
-          <div class="flex items-start gap-3">
-            <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 text-lg">🎓</div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 text-base">🎓</div>
             <div>
-              <div class="text-white font-semibold text-[14px]">Expert Guidance</div>
-              <div class="text-green-100/70 text-[12.5px]">Tips and support for every farmer</div>
+              <div class="text-white font-semibold text-[13px]">Expert Guidance</div>
+              <div class="text-green-100/70 text-[11.5px]">Tips and support for every farmer</div>
             </div>
           </div>
-          <div class="flex items-start gap-3">
-            <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 text-lg">🚚</div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 text-base">🚚</div>
             <div>
-              <div class="text-white font-semibold text-[14px]">Fast & Safe Delivery</div>
-              <div class="text-green-100/70 text-[12.5px]">Fresh products delivered safely</div>
+              <div class="text-white font-semibold text-[13px]">Fast & Safe Delivery</div>
+              <div class="text-green-100/70 text-[11.5px]">Fresh products delivered safely</div>
             </div>
           </div>
-          <div class="flex items-start gap-3">
-            <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 text-lg">👥</div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 text-base">👥</div>
             <div>
-              <div class="text-white font-semibold text-[14px]">Trusted by Farmers</div>
-              <div class="text-green-100/70 text-[12.5px]">Join thousands of happy growers</div>
+              <div class="text-white font-semibold text-[13px]">Trusted by Farmers</div>
+              <div class="text-green-100/70 text-[11.5px]">Join thousands of happy growers</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Bottom stat -->
-      <div class="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-5 py-3.5 w-fit mt-10">
-        <div class="text-3xl">🧑‍🌾</div>
+      <div class="flex items-center gap-2.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2.5 w-fit mt-6">
+        <div class="text-2xl">🧑‍🌾</div>
         <div>
-          <div class="text-white font-bold text-[18px] leading-tight">10,000+ Farmers</div>
-          <div class="text-green-100/75 text-[12px]">Trust us for better farming</div>
+          <div class="text-white font-bold text-[15px] leading-tight">10,000+ Farmers</div>
+          <div class="text-green-100/75 text-[11px]">Trust us for better farming</div>
         </div>
       </div>
     </div>
@@ -172,27 +172,34 @@
   <!-- ═══════════════════════════════════════════════════════════
        RIGHT PANEL — auth card
   ════════════════════════════════════════════════════════════ -->
-  <div class="flex-1 right-scroll flex items-start lg:items-center justify-center bg-gray-50 px-4 py-8 lg:py-6">
+  <div class="flex-1 flex flex-col items-center justify-center px-4 py-4 relative" style="height:100vh;overflow-y:auto;overflow-x:hidden;min-width:0;"
+       style="background: linear-gradient(145deg, #f0faf0 0%, #e8f5e2 40%, #f4fbf4 70%, #edf7ed 100%);">
 
-    <div class="card w-full max-w-[420px]">
+    <!-- decorative blobs -->
+    <div class="absolute top-0 right-0 w-40 h-40 rounded-full opacity-25 pointer-events-none" style="background:radial-gradient(circle, #a8d5a2 0%, transparent 70%); transform:translate(20%,-20%);"></div>
+    <div class="absolute bottom-0 left-0 w-44 h-44 rounded-full opacity-15 pointer-events-none" style="background:radial-gradient(circle, #3a7032 0%, transparent 70%); transform:translate(-25%,25%);"></div>
+
+    <div class="card w-full max-w-[400px] relative z-10">
 
       <!-- Logo (always visible on mobile, small on desktop) -->
-      <div class="text-center mb-5">
+      <div class="text-center mb-3">
         <a href="/" class="inline-flex items-center gap-2 no-underline">
-          <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Logo" class="w-10 h-10 object-contain">
-          <span class="font-bold text-[1.35rem] leading-none">
+          <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Logo" class="w-8 h-8 object-contain">
+          <span class="font-bold text-[1.2rem] leading-none">
             <span style="font-family:'Dancing Script',cursive;color:#2d5a27;">Apna</span>
             <span style="font-family:'Dancing Script',cursive;color:#f97316;">Bagicha</span>
           </span>
         </a>
-        <p class="text-gray-400 text-[12px] mt-1">India's trusted plant & farming store</p>
+        <p class="text-gray-400 text-[11px] mt-0.5">India's trusted plant & farming store</p>
       </div>
 
       <!-- White card -->
-      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+      <div class="bg-white rounded-2xl shadow-lg border border-green-100 overflow-hidden">
+        <!-- green top accent -->
+        <div class="h-1 w-full flex-shrink-0" style="background:linear-gradient(90deg,#3a7032,#6ab04c,#3a7032);"></div>
 
         <!-- Auth method tabs -->
-        <div class="px-5 pt-5 pb-0">
+        <div class="px-5 pt-4 pb-0 sticky top-0 bg-white z-10">
           <div class="flex bg-gray-100 rounded-xl p-1 gap-1">
             <button id="tabOtp" onclick="switchAuthTab('otp')"
               class="flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all tab-active">
@@ -211,16 +218,15 @@
 
         <!-- Error / info banner -->
         <div id="msgBanner" class="hidden px-5 mt-3"></div>
-
-        <!-- ── STEP 1: Mobile number ── -->
-        <div id="step1" class="px-5 py-5">
+<!-- ── STEP 1: Mobile number ── -->
+        <div id="step1" class="px-4 py-3.5">
           <div class="mb-4">
             <p class="text-[11.5px] font-semibold text-gray-400 mb-0.5 uppercase tracking-wider">Step 1 of 2</p>
             <h2 class="text-[1.15rem] font-bold text-gray-800">Enter your mobile number</h2>
             <p class="text-[13px] text-gray-500 mt-0.5">We'll send a 6-digit OTP to verify</p>
           </div>
           <div class="mb-4">
-            <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Mobile Number</label>
+            <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Mobile Number</label>
             <div class="relative">
               <span class="phone-prefix">+91</span>
               <input id="phoneInput" type="tel" inputmode="numeric" maxlength="10"
@@ -255,7 +261,7 @@
             <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="5" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
           </div>
           <div id="nameField" class="hidden mb-4">
-            <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Your Name <span class="text-red-400">*</span></label>
+            <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Your Name <span class="text-red-400">*</span></label>
             <input id="nameInput" type="text" class="form-input" placeholder="Ramesh Kumar" oninput="updateVerifyBtn()">
             <p class="text-[11.5px] text-gray-400 mt-1">Looks like you're new! What should we call you?</p>
           </div>
@@ -273,15 +279,15 @@
           <div id="loginForm">
             <h2 class="text-[1.15rem] font-bold text-gray-800 mb-0.5">Sign in</h2>
             <p class="text-[13px] text-gray-500 mb-4">Use your email or registered mobile number</p>
-            <form method="POST" action="/login" id="loginPassForm" novalidate class="space-y-3.5">
+            <form method="POST" action="/login" id="loginPassForm" novalidate class="space-y-2.5">
               <input type="hidden" name="next" value="{{ next }}">
               <div>
-                <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Email or Mobile Number</label>
+                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Email or Mobile Number</label>
                 <input type="text" name="email" id="loginEmail" class="form-input" placeholder="you@email.com or 98765 43210" autofocus>
                 <span id="loginEmailErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
               </div>
               <div>
-                <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Password</label>
+                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Password</label>
                 <div class="relative">
                   <input type="password" name="password" id="passInput" class="form-input pr-10" placeholder="Enter your password">
                   <button type="button" onclick="togglePass()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 bg-transparent border-0 cursor-pointer p-0">
@@ -290,7 +296,7 @@
                 </div>
                 <span id="loginPassErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
               </div>
-              <button type="submit" class="btn-primary !mt-4">Log In →</button>
+              <button type="submit" class="btn-primary !mt-3">Log In →</button>
             </form>
             <p class="text-center text-[13px] text-gray-500 mt-4">
               New user? <button onclick="showRegisterForm()" class="text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans">Create an account</button>
@@ -305,34 +311,34 @@
             </button>
             <h2 class="text-[1.15rem] font-bold text-gray-800 mb-0.5">Create Account</h2>
             <p class="text-[13px] text-gray-500 mb-4">It's free — takes less than a minute</p>
-            <form method="POST" action="/register" id="registerPassForm" novalidate class="space-y-3">
+            <form method="POST" action="/register" id="registerPassForm" novalidate class="space-y-2">
               <input type="hidden" name="next" value="{{ next }}">
               <div>
-                <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
+                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Full Name <span class="text-red-400">*</span></label>
                 <input type="text" name="name" id="regPName" class="form-input" placeholder="Ramesh Kumar">
                 <span id="regPNameErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
               </div>
               <div>
-                <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Email Address <span class="text-red-400">*</span></label>
+                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Email Address <span class="text-red-400">*</span></label>
                 <input type="email" name="email" id="regPEmail" class="form-input" placeholder="you@email.com">
                 <span id="regPEmailErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
               </div>
               <div>
-                <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Mobile Number <span class="text-[11px] font-normal text-gray-400">(optional)</span></label>
+                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Mobile Number <span class="text-[11px] font-normal text-gray-400">(optional)</span></label>
                 <input type="tel" name="phone" id="regPPhone" class="form-input" placeholder="98765 43210" maxlength="10">
                 <span id="regPPhoneErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
               </div>
               <div>
-                <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Password <span class="text-red-400">*</span></label>
+                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Password <span class="text-red-400">*</span></label>
                 <input type="password" name="password" id="regPPass" class="form-input" placeholder="Minimum 6 characters">
                 <span id="regPPassErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
               </div>
               <div>
-                <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Confirm Password <span class="text-red-400">*</span></label>
+                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Confirm Password <span class="text-red-400">*</span></label>
                 <input type="password" name="confirm_password" id="regPConfirm" class="form-input" placeholder="Repeat your password">
                 <span id="regPConfirmErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
               </div>
-              <button type="submit" class="btn-primary !mt-4">Create Account →</button>
+              <button type="submit" class="btn-primary !mt-3">Create Account →</button>
             </form>
             <p class="text-center text-[13px] text-gray-500 mt-4">
               Already have an account? <button onclick="showLoginForm()" class="text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans">Sign in</button>
@@ -344,34 +350,34 @@
         <div id="regPanel" class="px-5 py-5 hidden">
           <h2 class="text-[1.15rem] font-bold text-gray-800 mb-0.5">Create Account</h2>
           <p class="text-[13px] text-gray-500 mb-4">It's free — takes less than a minute</p>
-          <form method="POST" action="/register" id="registerRegForm" novalidate class="space-y-3">
+          <form method="POST" action="/register" id="registerRegForm" novalidate class="space-y-2">
             <input type="hidden" name="next" value="{{ next }}">
             <div>
-              <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
+              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Full Name <span class="text-red-400">*</span></label>
               <input type="text" name="name" id="regRName" class="form-input" placeholder="Ramesh Kumar">
               <span id="regRNameErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
             </div>
             <div>
-              <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Email Address <span class="text-red-400">*</span></label>
+              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Email Address <span class="text-red-400">*</span></label>
               <input type="email" name="email" id="regREmail" class="form-input" placeholder="you@email.com">
               <span id="regREmailErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
             </div>
             <div>
-              <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Mobile Number <span class="text-[11px] font-normal text-gray-400">(optional)</span></label>
+              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Mobile Number <span class="text-[11px] font-normal text-gray-400">(optional)</span></label>
               <input type="tel" name="phone" id="regRPhone" class="form-input" placeholder="98765 43210" maxlength="10">
               <span id="regRPhoneErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
             </div>
             <div>
-              <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Password <span class="text-red-400">*</span></label>
+              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Password <span class="text-red-400">*</span></label>
               <input type="password" name="password" id="regRPass" class="form-input" placeholder="Minimum 6 characters">
               <span id="regRPassErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
             </div>
             <div>
-              <label class="block text-[13px] font-semibold text-gray-700 mb-1.5">Confirm Password <span class="text-red-400">*</span></label>
+              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Confirm Password <span class="text-red-400">*</span></label>
               <input type="password" name="confirm_password" id="regRConfirm" class="form-input" placeholder="Repeat your password">
               <span id="regRConfirmErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
             </div>
-            <button type="submit" class="btn-primary !mt-4">Create Account →</button>
+            <button type="submit" class="btn-primary !mt-3">Create Account →</button>
           </form>
           <p class="text-center text-[13px] text-gray-500 mt-4">
             Already have an account? <button onclick="switchAuthTab('pass')" class="text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans">Sign in</button>
@@ -379,12 +385,13 @@
         </div>
 
         <!-- Footer -->
-        <div class="border-t border-gray-100 py-3 text-center">
+        <div class="border-t border-gray-100 py-2.5 text-center">
           <a href="/" class="text-[12px] text-gray-400 hover:text-gray-600 transition-colors no-underline">← Back to Website</a>
         </div>
 
       </div><!-- /white card -->
     </div><!-- /max-w -->
+
   </div><!-- /right panel -->
 
 </body>
