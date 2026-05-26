@@ -327,8 +327,9 @@
           <div style="width:40px;height:40px;border:4px solid #e5e7eb;border-top-color:#16a34a;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
           <p class="text-gray-400 text-sm">Loading products…</p>
         </div>
+      </div>
 
-            <!-- Pagination -->
+      <!-- Pagination -->
       <div id="pagination" class="hidden flex flex-wrap items-center justify-center gap-2 mt-10"></div>
 
       <!-- No results msg (hidden by default) -->
@@ -339,7 +340,6 @@
         </p>
       </div>
 
-    </div>
   </section>
 
   <!-- ========== BULK ORDER BANNER ========== -->
@@ -706,9 +706,10 @@
         ? '<span style="background:#fee2e2;color:#991b1b;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;display:inline-block;margin-left:6px;">Out of Stock</span>'
         : '';
 
+      var safeSlug = escHP(p.slug || '');
       var buyHtml = isOOS
         ? '<button disabled style="padding:7px 14px;font-size:12.5px;font-weight:600;border-radius:8px;background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb;cursor:not-allowed;">Out of Stock</button>'
-        : '<button class="card-buy-btn" onclick="addToCart(' + JSON.stringify(p.name) + ',' + priceNum + ')">'
+        : '<button class="card-buy-btn" onclick="openProductPanel(\'' + safeSlug + '\')">'
           + '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'
           + '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>'
           + '<path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>'
@@ -730,6 +731,8 @@
       return card;
     }
 
+    var _productsMap = {};
+
     function loadAllProducts() {
       var spinner = document.getElementById('productsLoadSpinner');
       if (spinner) spinner.style.display = 'flex';
@@ -739,7 +742,10 @@
           if (spinner) spinner.remove();
           if (!products || !products.length) return;
           var grid = document.getElementById('productGrid');
-          products.forEach(function(p) { grid.appendChild(buildProductCard(p)); });
+          products.forEach(function(p) {
+            _productsMap[p.slug] = p;
+            grid.appendChild(buildProductCard(p));
+          });
           applyFilters();
         })
         .catch(function() {
@@ -1725,6 +1731,49 @@
         <div class="detail-section"><h4 class="section-title">⭐ Special Features</h4><ul class="detail-list">${d.special.map(f=>`<li>${f}</li>`).join('')}</ul></div>
         ${d.faqs && d.faqs.length ? `<div class="detail-section"><h4 class="section-title">❓ FAQs</h4>${d.faqs.map(faq=>`<p class="faq-q">Q: ${faq.q}</p><p class="faq-a">A: ${faq.a}</p>`).join('')}</div>` : ''}
         <p class="text-[11px] text-gray-400 mt-2 italic">Note: Images are for reference only. Product may vary slightly.</p>`;
+    }
+
+    function openProductPanel(slug) {
+      var p = _productsMap[slug];
+      if (!p) return;
+      var priceNum = parseFloat(p.price) || 0;
+      var priceStr = '₹' + Math.round(priceNum).toLocaleString('en-IN');
+      var isOOS = !p.in_stock || parseInt(p.quantity) === 0;
+      var catLabel = {garden:'Garden Plant', seeds:'Seeds', growbags:'Grow Bag', tools:'Garden Tool'}[p.category] || p.category;
+
+      document.getElementById('panelIcon').textContent = p.emoji || '🌱';
+      document.getElementById('panelTitle').textContent = p.name;
+      document.getElementById('panelBody').innerHTML =
+        '<div class="panel-meta-pills">'
+        + '<span class="panel-meta-pill" style="background:#e8f5e2;color:#166534;">' + priceStr + '</span>'
+        + (isOOS
+          ? '<span class="panel-meta-pill" style="background:#fee2e2;color:#991b1b;">Out of Stock</span>'
+          : '<span class="panel-meta-pill" style="background:#f3f4f6;color:#374151;">In Stock</span>')
+        + '</div>'
+        + '<div class="detail-section">'
+        + '<h4 class="section-title">🏷️ Category</h4>'
+        + '<p class="text-[12.5px] text-gray-600 leading-relaxed">' + escHP(catLabel) + (p.seed_cat ? ' — ' + escHP(p.seed_cat) : '') + (p.grow_cat ? ' — ' + escHP(p.grow_cat) : '') + '</p>'
+        + '</div>'
+        + (p.description ? '<div class="detail-section"><h4 class="section-title">📋 Description</h4><p class="text-[12.5px] text-gray-600 leading-relaxed">' + escHP(p.description) + '</p></div>' : '');
+
+      var waMsg = encodeURIComponent('Hi, I\'m interested in ordering: ' + p.name + ' (' + priceStr + '). Please share availability and delivery details.');
+      document.getElementById('panelWhatsapp').href = 'https://wa.me/919876543210?text=' + waMsg;
+
+      var buyBtn = document.getElementById('panelBuyNow');
+      if (isOOS) {
+        buyBtn.style.display = 'none';
+      } else {
+        buyBtn.style.display = '';
+        buyBtn.innerHTML = '🛒 Add to Cart';
+        buyBtn.onclick = function(e) {
+          e.preventDefault();
+          addToCart(p.name, priceNum);
+          closePanel();
+        };
+      }
+
+      document.getElementById('productPanel').classList.remove('translate-x-full');
+      document.getElementById('panelOverlay').classList.remove('hidden');
     }
 
     function openDetails(product) {

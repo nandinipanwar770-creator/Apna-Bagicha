@@ -178,20 +178,22 @@
           <h2 class="text-xl font-bold text-gray-800">Sign in</h2>
           <p class="text-sm text-gray-500 mt-1">Use your email or registered mobile number</p>
         </div>
-        <form method="POST" action="/login" class="space-y-4">
+        <form method="POST" action="/login" id="loginPassForm" novalidate class="space-y-4">
           <input type="hidden" name="next" value="{{ next }}">
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email or Mobile Number</label>
-            <input type="text" name="email" class="form-input" placeholder="you@email.com or 98765 43210" required autofocus>
+            <input type="text" name="email" id="loginEmail" class="form-input" placeholder="you@email.com or 98765 43210" autofocus>
+            <span id="loginEmailErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
             <div class="relative">
-              <input type="password" name="password" id="passInput" class="form-input pr-11" placeholder="Enter your password" required>
+              <input type="password" name="password" id="passInput" class="form-input pr-11" placeholder="Enter your password">
               <button type="button" onclick="togglePass()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 bg-transparent border-0 cursor-pointer p-0">
                 <svg id="eyeIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               </button>
             </div>
+            <span id="loginPassErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
           </div>
           <button type="submit" class="btn-primary mt-2">Log In →</button>
         </form>
@@ -211,27 +213,32 @@
           <h2 class="text-xl font-bold text-gray-800">Create Account</h2>
           <p class="text-sm text-gray-500 mt-1">It's free — takes less than a minute</p>
         </div>
-        <form method="POST" action="/register" class="space-y-3">
+        <form method="POST" action="/register" id="registerPassForm" novalidate class="space-y-3">
           <input type="hidden" name="next" value="{{ next }}">
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
-            <input type="text" name="name" class="form-input" placeholder="Ramesh Kumar" required>
+            <input type="text" name="name" id="regPName" class="form-input" placeholder="Ramesh Kumar">
+            <span id="regPNameErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address <span class="text-red-400">*</span></label>
-            <input type="email" name="email" class="form-input" placeholder="you@email.com" required>
+            <input type="email" name="email" id="regPEmail" class="form-input" placeholder="you@email.com">
+            <span id="regPEmailErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Mobile Number <span class="text-xs font-normal text-gray-400">(optional)</span></label>
-            <input type="tel" name="phone" class="form-input" placeholder="98765 43210">
+            <input type="tel" name="phone" id="regPPhone" class="form-input" placeholder="98765 43210" maxlength="10">
+            <span id="regPPhoneErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password <span class="text-red-400">*</span></label>
-            <input type="password" name="password" class="form-input" placeholder="Minimum 6 characters" required minlength="6">
+            <input type="password" name="password" id="regPPass" class="form-input" placeholder="Minimum 6 characters">
+            <span id="regPPassErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Confirm Password <span class="text-red-400">*</span></label>
-            <input type="password" name="confirm_password" class="form-input" placeholder="Repeat your password" required>
+            <input type="password" name="confirm_password" id="regPConfirm" class="form-input" placeholder="Repeat your password">
+            <span id="regPConfirmErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
           </div>
           <button type="submit" class="btn-primary !mt-4">Create Account →</button>
         </form>
@@ -249,27 +256,32 @@
         <h2 class="text-xl font-bold text-gray-800">Create Account</h2>
         <p class="text-sm text-gray-500 mt-1">It's free — takes less than a minute</p>
       </div>
-      <form method="POST" action="/register" class="space-y-3">
+      <form method="POST" action="/register" id="registerRegForm" novalidate class="space-y-3">
         <input type="hidden" name="next" value="{{ next }}">
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
-          <input type="text" name="name" class="form-input" placeholder="Ramesh Kumar" required autofocus>
+          <input type="text" name="name" id="regRName" class="form-input" placeholder="Ramesh Kumar" autofocus>
+          <span id="regRNameErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
         </div>
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address <span class="text-red-400">*</span></label>
-          <input type="email" name="email" class="form-input" placeholder="you@email.com" required>
+          <input type="email" name="email" id="regREmail" class="form-input" placeholder="you@email.com">
+          <span id="regREmailErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
         </div>
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1.5">Mobile Number <span class="text-xs font-normal text-gray-400">(optional)</span></label>
-          <input type="tel" name="phone" class="form-input" placeholder="98765 43210">
+          <input type="tel" name="phone" id="regRPhone" class="form-input" placeholder="98765 43210" maxlength="10">
+          <span id="regRPhoneErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
         </div>
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password <span class="text-red-400">*</span></label>
-          <input type="password" name="password" class="form-input" placeholder="Minimum 6 characters" required minlength="6">
+          <input type="password" name="password" id="regRPass" class="form-input" placeholder="Minimum 6 characters">
+          <span id="regRPassErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
         </div>
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1.5">Confirm Password <span class="text-red-400">*</span></label>
-          <input type="password" name="confirm_password" class="form-input" placeholder="Repeat your password" required>
+          <input type="password" name="confirm_password" id="regRConfirm" class="form-input" placeholder="Repeat your password">
+          <span id="regRConfirmErr" class="err-msg hidden text-xs text-red-500 mt-1 block"></span>
         </div>
         <button type="submit" class="btn-primary !mt-4">Create Account →</button>
       </form>
@@ -514,6 +526,120 @@ function goBack() {
   document.getElementById('sendOtpBtn').disabled = false;
   document.getElementById('sendOtpBtn').innerHTML = 'Send OTP →';
 }
+
+/* ── Form Validation ─────────────────────────────────────────────────────── */
+function isValidEmail(v) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+}
+function isValidPhone(v) {
+  return /^\d{10}$/.test(v.trim());
+}
+function fieldErr(inputEl, spanId, msg) {
+  inputEl.classList.add('error');
+  var s = document.getElementById(spanId);
+  s.textContent = msg;
+  s.classList.remove('hidden');
+  return false;
+}
+function fieldOk(inputEl, spanId) {
+  inputEl.classList.remove('error');
+  var s = document.getElementById(spanId);
+  s.textContent = '';
+  s.classList.add('hidden');
+}
+
+// Clear error on input
+['loginEmail','passInput','regPName','regPEmail','regPPhone','regPPass','regPConfirm',
+ 'regRName','regREmail','regRPhone','regRPass','regRConfirm'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('input', function() {
+    this.classList.remove('error');
+    var errEl = document.getElementById(id.replace(/([A-Z])/g, function(m){ return m; }) + 'Err');
+    if (!errEl) {
+      // Try common pattern: append 'Err' to id
+      var span = document.querySelector('[id="' + id + 'Err"]');
+      if (span) { span.textContent = ''; span.classList.add('hidden'); }
+    } else {
+      errEl.textContent = ''; errEl.classList.add('hidden');
+    }
+  });
+});
+
+// ── Login form ──
+document.getElementById('loginPassForm').addEventListener('submit', function(e) {
+  var ok = true;
+  var email = document.getElementById('loginEmail');
+  var pass  = document.getElementById('passInput');
+  var ev = email.value.trim();
+  fieldOk(email, 'loginEmailErr');
+  fieldOk(pass,  'loginPassErr');
+
+  if (!ev) {
+    fieldErr(email, 'loginEmailErr', 'Please enter your email or mobile number.'); ok = false;
+  } else if (!isValidEmail(ev) && !isValidPhone(ev)) {
+    fieldErr(email, 'loginEmailErr', 'Enter a valid email (you@example.com) or 10-digit mobile number.'); ok = false;
+  }
+  if (!pass.value) {
+    fieldErr(pass, 'loginPassErr', 'Password is required.'); ok = false;
+  }
+  if (!ok) e.preventDefault();
+});
+
+// ── Shared register validation ──
+function validateRegisterForm(prefix) {
+  var name    = document.getElementById(prefix + 'Name');
+  var email   = document.getElementById(prefix + 'Email');
+  var phone   = document.getElementById(prefix + 'Phone');
+  var pass    = document.getElementById(prefix + 'Pass');
+  var confirm = document.getElementById(prefix + 'Confirm');
+  var ok = true;
+
+  fieldOk(name,    prefix + 'NameErr');
+  fieldOk(email,   prefix + 'EmailErr');
+  fieldOk(phone,   prefix + 'PhoneErr');
+  fieldOk(pass,    prefix + 'PassErr');
+  fieldOk(confirm, prefix + 'ConfirmErr');
+
+  var nv = name.value.trim();
+  if (!nv) {
+    fieldErr(name, prefix + 'NameErr', 'Full name is required.'); ok = false;
+  } else if (nv.length < 2) {
+    fieldErr(name, prefix + 'NameErr', 'Name must be at least 2 characters.'); ok = false;
+  }
+
+  var ev = email.value.trim();
+  if (!ev) {
+    fieldErr(email, prefix + 'EmailErr', 'Email address is required.'); ok = false;
+  } else if (!isValidEmail(ev)) {
+    fieldErr(email, prefix + 'EmailErr', 'Enter a valid email address (e.g. you@example.com).'); ok = false;
+  }
+
+  var pv = phone.value.trim();
+  if (pv && !isValidPhone(pv)) {
+    fieldErr(phone, prefix + 'PhoneErr', 'Mobile number must be exactly 10 digits.'); ok = false;
+  }
+
+  var pw = pass.value;
+  if (!pw) {
+    fieldErr(pass, prefix + 'PassErr', 'Password is required.'); ok = false;
+  } else if (pw.length < 6) {
+    fieldErr(pass, prefix + 'PassErr', 'Password must be at least 6 characters.'); ok = false;
+  }
+
+  if (!confirm.value) {
+    fieldErr(confirm, prefix + 'ConfirmErr', 'Please confirm your password.'); ok = false;
+  } else if (confirm.value !== pass.value) {
+    fieldErr(confirm, prefix + 'ConfirmErr', 'Passwords do not match.'); ok = false;
+  }
+  return ok;
+}
+
+document.getElementById('registerPassForm').addEventListener('submit', function(e) {
+  if (!validateRegisterForm('regP')) e.preventDefault();
+});
+document.getElementById('registerRegForm').addEventListener('submit', function(e) {
+  if (!validateRegisterForm('regR')) e.preventDefault();
+});
 </script>
 </body>
 </html>
