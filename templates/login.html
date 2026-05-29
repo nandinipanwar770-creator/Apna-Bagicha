@@ -7,12 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          colors: { 'green-dark': '#2d5a27', 'green-main': '#3a7032' },
-          fontFamily: { 'sans': ['DM Sans', 'sans-serif'] }
-        }
-      }
+      theme: { extend: { colors: { 'green-dark':'#2d5a27','green-main':'#3a7032' }, fontFamily:{ 'sans':['DM Sans','sans-serif'] } } }
     }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
@@ -21,25 +16,24 @@
     @keyframes slideIn { from{opacity:0;transform:translateX(24px)}  to{opacity:1;transform:translateX(0)} }
     @keyframes spin    { to { transform:rotate(360deg); } }
     @keyframes shake   { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-5px)} 40%,80%{transform:translateX(5px)} }
-
-    .card       { animation: fadeIn  0.35s ease both; }
-    .step-slide { animation: slideIn 0.3s  ease both; }
+    .card       { animation: fadeIn  0.4s ease both; }
+    .step-slide { animation: slideIn 0.3s ease both; }
     .spinner    { animation: spin    0.8s linear infinite; }
-    .shake      { animation: shake  0.4s  ease; }
+    .shake      { animation: shake  0.4s ease; }
 
     .form-input {
       width:100%; border:1.5px solid #e5e7eb; border-radius:9px;
       padding:8px 12px; font-size:13.5px; outline:none;
-      transition:border-color 0.2s, box-shadow 0.2s;
+      transition:border-color 0.2s,box-shadow 0.2s;
       font-family:'DM Sans',sans-serif; color:#111827; background:#fff;
     }
     .form-input:focus { border-color:#3a7032; box-shadow:0 0 0 2px rgba(58,112,50,0.12); }
     .form-input.error { border-color:#ef4444; box-shadow:0 0 0 2px rgba(239,68,68,0.1); }
 
     .otp-input {
-      width:44px; height:50px; text-align:center; font-size:22px; font-weight:700;
+      width:42px; height:48px; text-align:center; font-size:20px; font-weight:700;
       border:1.5px solid #e5e7eb; border-radius:10px; outline:none;
-      transition:border-color 0.2s, box-shadow 0.2s;
+      transition:border-color 0.2s,box-shadow 0.2s;
       font-family:'DM Sans',sans-serif; color:#111827;
     }
     .otp-input:focus { border-color:#3a7032; box-shadow:0 0 0 3px rgba(58,112,50,0.12); }
@@ -47,557 +41,352 @@
 
     .btn-primary {
       width:100%; background:#3a7032; color:white; font-weight:700;
-      padding:12px; border-radius:10px; border:none; font-size:14.5px;
-      cursor:pointer; transition:background 0.2s, transform 0.1s;
-      font-family:'DM Sans',sans-serif; letter-spacing:0.01em;
+      padding:11px; border-radius:10px; border:none; font-size:14px;
+      cursor:pointer; transition:background 0.2s,transform 0.1s;
+      font-family:'DM Sans',sans-serif;
     }
     .btn-primary:hover   { background:#2d5a27; }
     .btn-primary:active  { transform:scale(0.98); }
     .btn-primary:disabled{ background:#9ca3af; cursor:not-allowed; transform:none; }
 
     .phone-prefix {
-      position:absolute; left:14px; top:50%; transform:translateY(-50%);
-      font-size:14.5px; font-weight:600; color:#374151; pointer-events:none;
+      position:absolute; left:12px; top:50%; transform:translateY(-50%);
+      font-size:13.5px; font-weight:600; color:#374151; pointer-events:none;
     }
-
-    .tab-active   { background:#3a7032; color:white; box-shadow:0 2px 6px rgba(58,112,50,0.25); }
+    .tab-active   { background:#3a7032; color:white; box-shadow:0 2px 6px rgba(58,112,50,0.3); }
     .tab-inactive { background:transparent; color:#6b7280; }
 
-    /* Left panel hero overlay */
-    .hero-overlay { background: transparent; }
+    .card-scroll { overflow-y:auto; max-height:calc(100vh - 160px); }
+    .card-scroll::-webkit-scrollbar { width:3px; }
+    .card-scroll::-webkit-scrollbar-thumb { background:#d1d5db; border-radius:4px; }
 
-    /* Scrollable right panel */
-    .right-scroll { overflow-y:auto; max-height:100vh; }
-    .right-scroll::-webkit-scrollbar { width:4px; }
-    .right-scroll::-webkit-scrollbar-thumb { background:#d1d5db; border-radius:4px; }
+    /* ── Responsive ── */
   </style>
 </head>
-<body class="h-screen flex font-sans bg-gray-50 overflow-hidden">
+<body class="font-sans" style="margin:0;padding:0;background:url('/images/backgroundImage2.png') left top / 52% 100% no-repeat fixed, linear-gradient(160deg,#f0faf0,#e8f5e2);">
 
-  <!-- ═══════════════════════════════════════════════════════════
-       LEFT PANEL — hero image + brand story (hidden on mobile)
-  ════════════════════════════════════════════════════════════ -->
-  <div class="hidden lg:flex lg:w-[42%] xl:w-[44%] relative flex-col" style="height:100vh;overflow:hidden;flex-shrink:0;background:linear-gradient(160deg,#1e3d1a 0%,#2d5a27 50%,#1a3516 100%);">
-    <!-- overlay -->
-    <div class="hero-overlay absolute inset-0"></div>  <!-- Main content -->
-    <div class="relative z-10 flex flex-col justify-between h-full p-7 xl:p-9 pr-16 xl:pr-20">
+  <!-- Main layout -->
+  <div style="position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;">
 
-      <!-- Logo -->
+    <!-- Card row -->
+    <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;padding:1.5rem 4rem 1rem 1rem;gap:16px;flex-wrap:wrap;">
+
+      <!-- Card + trust badges -->
+      <div style="display:flex;align-items:flex-start;gap:12px;flex-shrink:0;">
+
+        <!-- White auth card -->
+        <div class="card" style="background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);width:360px;overflow:hidden;">
+
+          <!-- Green top bar -->
+          <div style="height:4px;background:linear-gradient(90deg,#3a7032,#6ab04c,#3a7032);"></div>
+
+          <!-- Logo inside card -->
+          <div style="text-align:center;padding:14px 20px 0;">
+            <a href="/" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
+              <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Logo" style="width:32px;height:32px;object-fit:contain;">
+              <span style="font-weight:700;font-size:1.15rem;line-height:1;">
+                <span style="font-family:'Dancing Script',cursive;color:#2d5a27;">Apna</span>
+                <span style="font-family:'Dancing Script',cursive;color:#f97316;">Bagicha</span>
+              </span>
+            </a>
+            <p style="color:#9ca3af;font-size:11px;margin:3px 0 0;">India's trusted plant &amp; farming store</p>
+          </div>
+
+          <!-- Tabs -->
+          <div style="padding:10px 16px 0;position:sticky;top:0;background:white;z-index:10;">
+            <div style="display:flex;background:#f3f4f6;border-radius:12px;padding:3px;gap:3px;">
+              <button id="tabOtp" onclick="switchAuthTab('otp')" class="tab-active" style="flex:1;padding:7px 0;font-size:12.5px;font-weight:600;border-radius:9px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;">📱 OTP</button>
+              <button id="tabPass" onclick="switchAuthTab('pass')" class="tab-inactive" style="flex:1;padding:7px 0;font-size:12.5px;font-weight:600;border-radius:9px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;">🔑 Login</button>
+              <button id="tabReg" onclick="openRegisterModal()" class="tab-inactive" style="flex:1;padding:7px 0;font-size:12.5px;font-weight:600;border-radius:9px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;">✏️ Register</button>
+            </div>
+          </div>
+
+          <!-- Banner -->
+          <div id="msgBanner" class="hidden" style="margin:8px 16px 0;"></div>
+
+          <!-- Scrollable form area -->
+          <div class="card-scroll">
+
+            <!-- OTP Step 1 -->
+            <div id="step1" style="padding:14px 16px 16px;">
+              <p style="font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Step 1 of 2</p>
+              <h2 style="font-size:1.1rem;font-weight:700;color:#111827;margin:0 0 3px;">Enter your mobile number</h2>
+              <p style="font-size:12.5px;color:#6b7280;margin:0 0 12px;">We'll send a 6-digit OTP to verify</p>
+              <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Mobile Number</label>
+              <div style="position:relative;">
+                <span class="phone-prefix">+91</span>
+                <input id="phoneInput" type="tel" inputmode="numeric" maxlength="10" class="form-input" style="padding-left:46px;" placeholder="98765 43210"
+                  oninput="this.value=this.value.replace(/\D/g,'').slice(0,10);updateSendBtn()">
+              </div>
+              <button id="sendOtpBtn" class="btn-primary" style="margin-top:12px;" disabled onclick="sendOtp()">Send OTP →</button>
+              <p style="text-align:center;font-size:11px;color:#9ca3af;margin:10px 0 0;">By continuing you agree to our <a href="/about" style="color:#3a7032;">Terms &amp; Privacy Policy</a></p>
+            </div>
+
+            <!-- OTP Step 2 -->
+            <div id="step2" style="padding:14px 16px 16px;" class="hidden">
+              <button onclick="goBack()" style="display:flex;align-items:center;gap:5px;font-size:12.5px;color:#9ca3af;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:10px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> Change number
+              </button>
+              <p style="font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Step 2 of 2</p>
+              <h2 style="font-size:1.1rem;font-weight:700;color:#111827;margin:0 0 3px;">Enter OTP</h2>
+              <p style="font-size:12.5px;color:#6b7280;margin:0 0 12px;">Sent to <span id="phoneMask" style="font-weight:600;color:#374151;"></span></p>
+              <div id="otpBoxes" style="display:flex;gap:8px;justify-content:space-between;margin-bottom:12px;">
+                <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="0" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
+                <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="1" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
+                <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="2" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
+                <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="3" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
+                <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="4" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
+                <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="5" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
+              </div>
+              <div id="nameField" class="hidden" style="margin-bottom:10px;">
+                <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Your Name <span style="color:#ef4444;">*</span></label>
+                <input id="nameInput" type="text" class="form-input" placeholder="Ramesh Kumar" oninput="updateVerifyBtn()">
+                <p style="font-size:11px;color:#9ca3af;margin:4px 0 0;">New user! What should we call you?</p>
+              </div>
+              <button id="verifyBtn" class="btn-primary" style="margin-bottom:10px;" disabled onclick="verifyOtp()">Verify &amp; Login →</button>
+              <div style="text-align:center;font-size:12.5px;color:#6b7280;">
+                <span id="resendTimer">Resend OTP in <span id="timerCount" style="font-weight:600;color:#3a7032;">30s</span></span>
+                <button id="resendBtn" class="hidden" onclick="resendOtp()" style="color:#3a7032;font-weight:600;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;">Resend OTP</button>
+              </div>
+            </div>
+
+            <!-- Password Login -->
+            <div id="passPanel" class="hidden" style="padding:14px 16px 16px;">
+              <div id="loginForm">
+                <h2 style="font-size:1.1rem;font-weight:700;color:#111827;margin:0 0 2px;">Sign in</h2>
+                <p style="font-size:12.5px;color:#6b7280;margin:0 0 12px;">Use your email or registered mobile number</p>
+                <form method="POST" action="/login" id="loginPassForm" novalidate>
+                  <input type="hidden" name="next" value="{{ next }}">
+                  <div style="margin-bottom:10px;">
+                    <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Email or Mobile Number</label>
+                    <input type="text" name="email" id="loginEmail" class="form-input" placeholder="you@email.com or 98765 43210" autofocus>
+                    <span id="loginEmailErr" class="hidden" style="font-size:11px;color:#ef4444;display:block;margin-top:3px;"></span>
+                  </div>
+                  <div style="margin-bottom:12px;">
+                    <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Password</label>
+                    <div style="position:relative;">
+                      <input type="password" name="password" id="passInput" class="form-input" style="padding-right:38px;" placeholder="Enter your password">
+                      <button type="button" onclick="togglePass()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9ca3af;padding:0;">
+                        <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      </button>
+                    </div>
+                    <span id="loginPassErr" class="hidden" style="font-size:11px;color:#ef4444;display:block;margin-top:3px;"></span>
+                  </div>
+                  <button type="submit" class="btn-primary">Log In →</button>
+                </form>
+                <p style="text-align:center;font-size:12.5px;color:#6b7280;margin:10px 0 0;">New user? <button onclick="openRegisterModal()" style="color:#3a7032;font-weight:600;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;">Create an account</button></p>
+              </div>
+            </div>
+
+          </div><!-- /card-scroll -->
+
+          <!-- Card footer -->
+          <div style="border-top:1px solid #f3f4f6;padding:8px;text-align:center;">
+            <a href="/" style="font-size:11.5px;color:#9ca3af;text-decoration:none;">← Back to Website</a>
+          </div>
+
+        </div><!-- /white card -->
+
+        <!-- Trust badges -->
+        <div style="display:flex;flex-direction:column;gap:10px;padding-top:20px;">
+          <div style="background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.25);border-radius:14px;padding:10px 12px;text-align:center;color:white;width:95px;">
+            <div style="font-size:20px;margin-bottom:4px;">🔒</div>
+            <div style="font-weight:700;font-size:11px;line-height:1.3;">100% Secure</div>
+            <div style="font-size:9.5px;opacity:0.75;margin-top:2px;line-height:1.3;">Your data is safe with us</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.25);border-radius:14px;padding:10px 12px;text-align:center;color:white;width:95px;">
+            <div style="font-size:20px;margin-bottom:4px;">🌿</div>
+            <div style="font-weight:700;font-size:11px;line-height:1.3;">100% Natural</div>
+            <div style="font-size:9.5px;opacity:0.75;margin-top:2px;line-height:1.3;">Good for You, Good for Nature</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.25);border-radius:14px;padding:10px 12px;text-align:center;color:white;width:95px;">
+            <div style="font-size:20px;margin-bottom:4px;">⭐</div>
+            <div style="font-weight:700;font-size:11px;line-height:1.3;">Best Quality Products</div>
+            <div style="font-size:9.5px;opacity:0.75;margin-top:2px;line-height:1.3;">Sourced with care</div>
+          </div>
+        </div>
+
+      </div><!-- /card+badges -->
+
+    </div><!-- /card row -->
+
+  </div><!-- /main layout -->
+
+<!-- Register Modal Popup -->
+<div id="registerModal" style="display:none;position:fixed;inset:0;z-index:100;align-items:center;justify-content:center;padding:20px;">
+  <div onclick="closeRegisterModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);"></div>
+  <div class="card" style="position:relative;z-index:1;background:white;border-radius:20px;box-shadow:0 24px 64px rgba(0,0,0,0.45);width:100%;max-width:390px;overflow:hidden;">
+    <div style="height:4px;background:linear-gradient(90deg,#3a7032,#6ab04c,#3a7032);"></div>
+    <div style="padding:16px 20px 0;display:flex;justify-content:space-between;align-items:flex-start;">
       <div>
-        <a href="/" class="inline-flex items-center gap-2 no-underline mb-1">
-          <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Logo" class="w-9 h-9 object-contain">
-          <span class="font-bold text-[1.25rem] leading-none">
-            <span style="font-family:'Dancing Script',cursive;color:#a8d5a2;">Apna</span>
-            <span style="font-family:'Dancing Script',cursive;color:#f97316;">Bagicha</span>
-          </span>
-        </a>
-        <p class="text-green-100/80 text-[12px] mb-5 ml-[44px]">India's trusted plant & farming store</p>
-
-        <!-- Headline -->
-        <h1 class="text-white font-bold text-[2rem] xl:text-[2.3rem] leading-[1.15] mb-2">
-          Better Farming.<br>Better Future.<span class="ml-1">🌿</span>
-        </h1>
-        <p class="text-green-100/80 text-[13px] leading-relaxed max-w-[300px] mb-5">
-          Quality seeds, plants and farming products delivered to your doorstep.
-        </p>
-
-        <!-- Feature list -->
-        <div class="flex flex-col gap-2.5">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 text-base">🌾</div>
-            <div>
-              <div class="text-white font-semibold text-[13px]">High Quality Products</div>
-              <div class="text-green-100/70 text-[11.5px]">Quality selected for best results</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 text-base">🎓</div>
-            <div>
-              <div class="text-white font-semibold text-[13px]">Expert Guidance</div>
-              <div class="text-green-100/70 text-[11.5px]">Tips and support for every farmer</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 text-base">🚚</div>
-            <div>
-              <div class="text-white font-semibold text-[13px]">Fast & Safe Delivery</div>
-              <div class="text-green-100/70 text-[11.5px]">Fresh products delivered safely</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 text-base">👥</div>
-            <div>
-              <div class="text-white font-semibold text-[13px]">Trusted by Farmers</div>
-              <div class="text-green-100/70 text-[11.5px]">Join thousands of happy growers</div>
-            </div>
-          </div>
-        </div>
+        <h2 style="font-size:1.15rem;font-weight:700;color:#111827;margin:0 0 2px;">Create Account</h2>
+        <p style="font-size:12.5px;color:#6b7280;margin:0;">It's free — takes less than a minute</p>
       </div>
-
-      <!-- Bottom stat -->
-      <div class="flex items-center gap-2.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2.5 w-fit mt-6">
-        <div class="text-2xl">🧑‍🌾</div>
-        <div>
-          <div class="text-white font-bold text-[15px] leading-tight">10,000+ Farmers</div>
-          <div class="text-green-100/75 text-[11px]">Trust us for better farming</div>
-        </div>
-      </div>
+      <button onclick="closeRegisterModal()" style="background:none;border:none;cursor:pointer;color:#9ca3af;padding:4px;margin-top:2px;line-height:1;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="regModalBanner" class="hidden" style="margin:8px 20px 0;font-size:12.5px;padding:8px 12px;border-radius:10px;"></div>
+    <div style="overflow-y:auto;max-height:calc(90vh - 100px);padding:12px 20px 18px;">
+      <form method="POST" action="/register" id="registerRegForm" novalidate style="display:flex;flex-direction:column;gap:9px;">
+        <input type="hidden" name="next" value="{{ next }}">
+        <div><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;">Full Name <span style="color:#ef4444;">*</span></label><input type="text" name="name" id="regRName" class="form-input" placeholder="Ramesh Kumar"><span id="regRNameErr" class="hidden" style="font-size:11px;color:#ef4444;display:block;margin-top:2px;"></span></div>
+        <div><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;">Email Address <span style="color:#ef4444;">*</span></label><input type="email" name="email" id="regREmail" class="form-input" placeholder="you@email.com"><span id="regREmailErr" class="hidden" style="font-size:11px;color:#ef4444;display:block;margin-top:2px;"></span></div>
+        <div><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;">Mobile <span style="font-size:11px;font-weight:400;color:#9ca3af;">(optional)</span></label><input type="tel" name="phone" id="regRPhone" class="form-input" placeholder="98765 43210" maxlength="10"><span id="regRPhoneErr" class="hidden" style="font-size:11px;color:#ef4444;display:block;margin-top:2px;"></span></div>
+        <div><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;">Password <span style="color:#ef4444;">*</span></label><input type="password" name="password" id="regRPass" class="form-input" placeholder="Min 6 characters"><span id="regRPassErr" class="hidden" style="font-size:11px;color:#ef4444;display:block;margin-top:2px;"></span></div>
+        <div><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;">Confirm Password <span style="color:#ef4444;">*</span></label><input type="password" name="confirm_password" id="regRConfirm" class="form-input" placeholder="Repeat password"><span id="regRConfirmErr" class="hidden" style="font-size:11px;color:#ef4444;display:block;margin-top:2px;"></span></div>
+        <button type="submit" class="btn-primary" style="margin-top:4px;">Create Account →</button>
+      </form>
+      <p style="text-align:center;font-size:12px;color:#6b7280;margin:10px 0 0;">Already have an account? <button onclick="closeRegisterModal();switchAuthTab('pass')" style="color:#3a7032;font-weight:600;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;">Sign in</button></p>
     </div>
   </div>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       RIGHT PANEL — auth card
-  ════════════════════════════════════════════════════════════ -->
-  <div class="flex-1 flex flex-col items-center px-4 py-5 relative" style="height:100vh;overflow-y:auto;overflow-x:hidden;min-width:0;background:linear-gradient(145deg,#f0faf0 0%,#e8f5e2 40%,#f4fbf4 70%,#edf7ed 100%);">
-
-    <!-- decorative blobs -->
-    <div class="absolute top-0 right-0 w-40 h-40 rounded-full opacity-25 pointer-events-none" style="background:radial-gradient(circle, #a8d5a2 0%, transparent 70%); transform:translate(20%,-20%);"></div>
-    <div class="absolute bottom-0 left-0 w-44 h-44 rounded-full opacity-15 pointer-events-none" style="background:radial-gradient(circle, #3a7032 0%, transparent 70%); transform:translate(-25%,25%);"></div>
-
-    <div class="card w-full max-w-[400px] relative z-10 my-auto">
-
-      <!-- Logo (always visible on mobile, small on desktop) -->
-      <div class="text-center mb-3">
-        <a href="/" class="inline-flex items-center gap-2 no-underline">
-          <img src="/images/logo.svg" onerror="this.src='/images/logo.png'" alt="Logo" class="w-8 h-8 object-contain">
-          <span class="font-bold text-[1.2rem] leading-none">
-            <span style="font-family:'Dancing Script',cursive;color:#2d5a27;">Apna</span>
-            <span style="font-family:'Dancing Script',cursive;color:#f97316;">Bagicha</span>
-          </span>
-        </a>
-        <p class="text-gray-400 text-[11px] mt-0.5">India's trusted plant & farming store</p>
-      </div>
-
-      <!-- White card -->
-      <div class="bg-white rounded-2xl shadow-lg border border-green-100 overflow-hidden">
-        <!-- green top accent -->
-        <div class="h-1 w-full flex-shrink-0" style="background:linear-gradient(90deg,#3a7032,#6ab04c,#3a7032);"></div>
-
-        <!-- Auth method tabs -->
-        <div class="px-5 pt-4 pb-0 sticky top-0 bg-white z-10">
-          <div class="flex bg-gray-100 rounded-xl p-1 gap-1">
-            <button id="tabOtp" onclick="switchAuthTab('otp')"
-              class="flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all tab-active">
-              📱 OTP
-            </button>
-            <button id="tabPass" onclick="switchAuthTab('pass')"
-              class="flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all tab-inactive">
-              🔑 Login
-            </button>
-            <button id="tabReg" onclick="switchAuthTab('reg')"
-              class="flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all tab-inactive">
-              ✏️ Register
-            </button>
-          </div>
-        </div>
-
-        <!-- Error / info banner -->
-        <div id="msgBanner" class="hidden px-5 mt-3"></div>
-<!-- ── STEP 1: Mobile number ── -->
-        <div id="step1" class="px-4 py-3.5">
-          <div class="mb-4">
-            <p class="text-[11.5px] font-semibold text-gray-400 mb-0.5 uppercase tracking-wider">Step 1 of 2</p>
-            <h2 class="text-[1.15rem] font-bold text-gray-800">Enter your mobile number</h2>
-            <p class="text-[13px] text-gray-500 mt-0.5">We'll send a 6-digit OTP to verify</p>
-          </div>
-          <div class="mb-4">
-            <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Mobile Number</label>
-            <div class="relative">
-              <span class="phone-prefix">+91</span>
-              <input id="phoneInput" type="tel" inputmode="numeric" maxlength="10"
-                class="form-input pl-12" placeholder="98765 43210"
-                oninput="this.value=this.value.replace(/\D/g,'').slice(0,10); updateSendBtn()">
-            </div>
-          </div>
-          <button id="sendOtpBtn" class="btn-primary" disabled onclick="sendOtp()">Send OTP →</button>
-          <p class="text-center text-[11.5px] text-gray-400 mt-3">
-            By continuing you agree to our
-            <a href="/about" class="text-green-main hover:underline">Terms & Privacy Policy</a>
-          </p>
-        </div>
-
-        <!-- ── STEP 2: OTP verify ── -->
-        <div id="step2" class="px-5 py-5 hidden">
-          <div class="mb-4">
-            <button onclick="goBack()" class="flex items-center gap-1.5 text-[13px] text-gray-400 hover:text-gray-600 mb-3 bg-transparent border-0 cursor-pointer font-sans p-0">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-              Change number
-            </button>
-            <p class="text-[11.5px] font-semibold text-gray-400 mb-0.5 uppercase tracking-wider">Step 2 of 2</p>
-            <h2 class="text-[1.15rem] font-bold text-gray-800">Enter OTP</h2>
-            <p class="text-[13px] text-gray-500 mt-0.5">Sent to <span id="phoneMask" class="font-semibold text-gray-700"></span></p>
-          </div>
-          <div class="flex gap-2 justify-between mb-4" id="otpBoxes">
-            <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="0" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
-            <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="1" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
-            <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="2" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
-            <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="3" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
-            <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="4" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
-            <input class="otp-input" type="text" inputmode="numeric" maxlength="1" data-idx="5" oninput="otpInput(this)" onkeydown="otpKeydown(event,this)" onpaste="otpPaste(event)">
-          </div>
-          <div id="nameField" class="hidden mb-4">
-            <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Your Name <span class="text-red-400">*</span></label>
-            <input id="nameInput" type="text" class="form-input" placeholder="Ramesh Kumar" oninput="updateVerifyBtn()">
-            <p class="text-[11.5px] text-gray-400 mt-1">Looks like you're new! What should we call you?</p>
-          </div>
-          <button id="verifyBtn" class="btn-primary mb-3" disabled onclick="verifyOtp()">Verify & Login →</button>
-          <div class="text-center text-[13px] text-gray-500">
-            <span id="resendTimer">Resend OTP in <span id="timerCount" class="font-semibold text-green-main">30s</span></span>
-            <button id="resendBtn" class="hidden text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans" onclick="resendOtp()">Resend OTP</button>
-          </div>
-        </div>
-
-        <!-- ── Password login panel ── -->
-        <div id="passPanel" class="px-5 py-5 hidden">
-
-          <!-- Login form -->
-          <div id="loginForm">
-            <h2 class="text-[1.15rem] font-bold text-gray-800 mb-0.5">Sign in</h2>
-            <p class="text-[13px] text-gray-500 mb-4">Use your email or registered mobile number</p>
-            <form method="POST" action="/login" id="loginPassForm" novalidate class="space-y-2.5">
-              <input type="hidden" name="next" value="{{ next }}">
-              <div>
-                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Email or Mobile Number</label>
-                <input type="text" name="email" id="loginEmail" class="form-input" placeholder="you@email.com or 98765 43210" autofocus>
-                <span id="loginEmailErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-              </div>
-              <div>
-                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Password</label>
-                <div class="relative">
-                  <input type="password" name="password" id="passInput" class="form-input pr-10" placeholder="Enter your password">
-                  <button type="button" onclick="togglePass()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 bg-transparent border-0 cursor-pointer p-0">
-                    <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  </button>
-                </div>
-                <span id="loginPassErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-              </div>
-              <button type="submit" class="btn-primary !mt-3">Log In →</button>
-            </form>
-            <p class="text-center text-[13px] text-gray-500 mt-4">
-              New user? <button onclick="showRegisterForm()" class="text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans">Create an account</button>
-            </p>
-          </div>
-
-          <!-- Register form (inside pass panel) -->
-          <div id="registerForm" class="hidden">
-            <button onclick="showLoginForm()" class="flex items-center gap-1.5 text-[13px] text-gray-400 hover:text-gray-600 mb-3 bg-transparent border-0 cursor-pointer font-sans p-0">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-              Back to login
-            </button>
-            <h2 class="text-[1.15rem] font-bold text-gray-800 mb-0.5">Create Account</h2>
-            <p class="text-[13px] text-gray-500 mb-4">It's free — takes less than a minute</p>
-            <form method="POST" action="/register" id="registerPassForm" novalidate class="space-y-2">
-              <input type="hidden" name="next" value="{{ next }}">
-              <div>
-                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Full Name <span class="text-red-400">*</span></label>
-                <input type="text" name="name" id="regPName" class="form-input" placeholder="Ramesh Kumar">
-                <span id="regPNameErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-              </div>
-              <div>
-                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Email Address <span class="text-red-400">*</span></label>
-                <input type="email" name="email" id="regPEmail" class="form-input" placeholder="you@email.com">
-                <span id="regPEmailErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-              </div>
-              <div>
-                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Mobile Number <span class="text-[11px] font-normal text-gray-400">(optional)</span></label>
-                <input type="tel" name="phone" id="regPPhone" class="form-input" placeholder="98765 43210" maxlength="10">
-                <span id="regPPhoneErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-              </div>
-              <div>
-                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Password <span class="text-red-400">*</span></label>
-                <input type="password" name="password" id="regPPass" class="form-input" placeholder="Minimum 6 characters">
-                <span id="regPPassErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-              </div>
-              <div>
-                <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Confirm Password <span class="text-red-400">*</span></label>
-                <input type="password" name="confirm_password" id="regPConfirm" class="form-input" placeholder="Repeat your password">
-                <span id="regPConfirmErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-              </div>
-              <button type="submit" class="btn-primary !mt-3">Create Account →</button>
-            </form>
-            <p class="text-center text-[13px] text-gray-500 mt-4">
-              Already have an account? <button onclick="showLoginForm()" class="text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans">Sign in</button>
-            </p>
-          </div>
-        </div>
-
-        <!-- ── Register tab panel ── -->
-        <div id="regPanel" class="px-5 py-5 hidden">
-          <h2 class="text-[1.15rem] font-bold text-gray-800 mb-0.5">Create Account</h2>
-          <p class="text-[13px] text-gray-500 mb-4">It's free — takes less than a minute</p>
-          <form method="POST" action="/register" id="registerRegForm" novalidate class="space-y-2">
-            <input type="hidden" name="next" value="{{ next }}">
-            <div>
-              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Full Name <span class="text-red-400">*</span></label>
-              <input type="text" name="name" id="regRName" class="form-input" placeholder="Ramesh Kumar">
-              <span id="regRNameErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-            </div>
-            <div>
-              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Email Address <span class="text-red-400">*</span></label>
-              <input type="email" name="email" id="regREmail" class="form-input" placeholder="you@email.com">
-              <span id="regREmailErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-            </div>
-            <div>
-              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Mobile Number <span class="text-[11px] font-normal text-gray-400">(optional)</span></label>
-              <input type="tel" name="phone" id="regRPhone" class="form-input" placeholder="98765 43210" maxlength="10">
-              <span id="regRPhoneErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-            </div>
-            <div>
-              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Password <span class="text-red-400">*</span></label>
-              <input type="password" name="password" id="regRPass" class="form-input" placeholder="Minimum 6 characters">
-              <span id="regRPassErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-            </div>
-            <div>
-              <label class="block text-[12.5px] font-semibold text-gray-700 mb-1">Confirm Password <span class="text-red-400">*</span></label>
-              <input type="password" name="confirm_password" id="regRConfirm" class="form-input" placeholder="Repeat your password">
-              <span id="regRConfirmErr" class="err-msg hidden text-[11.5px] text-red-500 mt-1 block"></span>
-            </div>
-            <button type="submit" class="btn-primary !mt-3">Create Account →</button>
-          </form>
-          <p class="text-center text-[13px] text-gray-500 mt-4">
-            Already have an account? <button onclick="switchAuthTab('pass')" class="text-green-main font-semibold hover:underline bg-transparent border-0 cursor-pointer font-sans">Sign in</button>
-          </p>
-        </div>
-
-        <!-- Footer -->
-        <div class="border-t border-gray-100 py-2.5 text-center">
-          <a href="/" class="text-[12px] text-gray-400 hover:text-gray-600 transition-colors no-underline">← Back to Website</a>
-        </div>
-
-      </div><!-- /white card -->
-    </div><!-- /max-w -->
-
-  </div><!-- /right panel -->
-
-</body>
+</div>
 
 <script>
-var currentPhone = '';
-var isNewUser    = false;
-var resendTimer  = null;
-var nextUrl      = '{{ next }}' || '/';
+var currentPhone='', isNewUser=false, resendTimer=null;
+var nextUrl='{{ next }}'||'/';
 
-/* ── Tab switching ── */
 function switchAuthTab(tab) {
-  document.getElementById('tabOtp').className  = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (tab === 'otp'  ? 'tab-active' : 'tab-inactive');
-  document.getElementById('tabPass').className = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (tab === 'pass' ? 'tab-active' : 'tab-inactive');
-  document.getElementById('tabReg').className  = 'flex-1 py-2 text-[13px] font-semibold rounded-lg transition-all ' + (tab === 'reg'  ? 'tab-active' : 'tab-inactive');
-  document.getElementById('step1').classList.toggle('hidden', tab !== 'otp');
+  ['otp','pass','reg'].forEach(function(t){
+    var btn=document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(!btn) return;
+    btn.className=(t===tab&&t!=='reg'?'tab-active':'tab-inactive');
+    btn.style.cssText='flex:1;padding:7px 0;font-size:12.5px;font-weight:600;border-radius:9px;border:none;cursor:pointer;font-family:\'DM Sans\',sans-serif;transition:all 0.2s;';
+  });
+  document.getElementById('step1').classList.toggle('hidden',tab!=='otp');
   document.getElementById('step2').classList.add('hidden');
-  document.getElementById('passPanel').classList.toggle('hidden', tab !== 'pass');
-  document.getElementById('regPanel').classList.toggle('hidden', tab !== 'reg');
+  document.getElementById('passPanel').classList.toggle('hidden',tab!=='pass');
   hideMsg();
 }
 
-function togglePass() {
-  var inp  = document.getElementById('passInput');
-  var show = inp.type === 'password';
-  inp.type = show ? 'text' : 'password';
-  document.getElementById('eyeIcon').innerHTML = show
-    ? '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
-    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+function togglePass(){
+  var inp=document.getElementById('passInput'),show=inp.type==='password';
+  inp.type=show?'text':'password';
+  document.getElementById('eyeIcon').innerHTML=show
+    ?'<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    :'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
 }
 
-var urlError = new URLSearchParams(window.location.search).get('error');
-if (urlError) { switchAuthTab('pass'); showMsg(urlError, 'error'); }
+var urlError=new URLSearchParams(window.location.search).get('error');
+if(urlError){switchAuthTab('pass');showMsg(urlError,'error');}
 
-/* ── Utility ── */
-function showMsg(text, type) {
-  var b = document.getElementById('msgBanner');
-  var isErr = type === 'error';
-  b.className = 'px-5 mt-3 flex items-start gap-2 text-[13px] px-4 py-3 rounded-xl mx-0 '
-    + (isErr ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700');
-  b.innerHTML = (isErr
-    ? '<svg class="flex-shrink-0 mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
-    : '<svg class="flex-shrink-0 mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>'
-  ) + '<span>' + text + '</span>';
+function showMsg(text,type){
+  var b=document.getElementById('msgBanner'),isErr=type==='error';
+  b.style.cssText='margin:8px 16px 0;display:flex;align-items:start;gap:6px;font-size:12.5px;padding:8px 12px;border-radius:10px;'+(isErr?'background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;':'background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;');
+  b.innerHTML=(isErr?'<svg style="flex-shrink:0;margin-top:1px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>':'<svg style="flex-shrink:0;margin-top:1px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>')+'<span>'+text+'</span>';
   b.classList.remove('hidden');
 }
-function hideMsg() { document.getElementById('msgBanner').classList.add('hidden'); }
+function hideMsg(){document.getElementById('msgBanner').classList.add('hidden');}
 
-function setLoading(btnId, loading, label) {
-  var btn = document.getElementById(btnId);
-  if (loading) {
-    btn.disabled = true;
-    btn.innerHTML = '<svg class="spinner inline w-4 h-4 mr-2 -mt-0.5" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M12 2a10 10 0 0110 10" opacity=".75"/></svg>Please wait…';
-  } else {
-    btn.innerHTML = label;
-  }
+function setLoading(btnId,loading,label){
+  var btn=document.getElementById(btnId);
+  if(loading){btn.disabled=true;btn.innerHTML='<svg class="spinner" style="display:inline;width:14px;height:14px;margin-right:6px;vertical-align:middle;" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M12 2a10 10 0 0110 10" opacity=".75"/></svg>Please wait…';}
+  else{btn.disabled=false;btn.innerHTML=label;}
 }
 
-function updateSendBtn() {
-  var v = document.getElementById('phoneInput').value.replace(/\D/g,'');
-  document.getElementById('sendOtpBtn').disabled = v.length !== 10;
-}
+function updateSendBtn(){document.getElementById('sendOtpBtn').disabled=document.getElementById('phoneInput').value.replace(/\D/g,'').length!==10;}
 
-function sendOtp() {
-  var phone = document.getElementById('phoneInput').value.replace(/\D/g,'');
-  if (phone.length !== 10) return;
-  hideMsg();
-  setLoading('sendOtpBtn', true, 'Send OTP →');
-  fetch('/api/otp/send', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({phone}) })
-  .then(function(r){ return r.json(); })
+function sendOtp(){
+  var phone=document.getElementById('phoneInput').value.replace(/\D/g,'');
+  if(phone.length!==10)return;
+  hideMsg();setLoading('sendOtpBtn',true,'Send OTP →');
+  fetch('/api/otp/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})})
+  .then(function(r){return r.json();})
   .then(function(d){
-    if (!d.success) { showMsg(d.error||'Failed to send OTP.','error'); setLoading('sendOtpBtn',false,'Send OTP →'); document.getElementById('sendOtpBtn').disabled=false; return; }
-    currentPhone = phone; isNewUser = d.is_new;
-    document.getElementById('phoneMask').textContent = '+91 '+phone.slice(0,5)+' '+phone.slice(5);
-    document.getElementById('nameField').classList.toggle('hidden', !isNewUser);
+    if(!d.success){showMsg(d.error||'Failed to send OTP.','error');setLoading('sendOtpBtn',false,'Send OTP →');return;}
+    currentPhone=phone;isNewUser=d.is_new;
+    document.getElementById('phoneMask').textContent='+91 '+phone.slice(0,5)+' '+phone.slice(5);
+    document.getElementById('nameField').classList.toggle('hidden',!isNewUser);
     document.getElementById('step1').classList.add('hidden');
     document.getElementById('step2').classList.remove('hidden');
     document.getElementById('step2').classList.add('step-slide');
-    startResendTimer();
-    document.querySelector('.otp-input').focus();
-    if (d.otp) showMsg('Dev mode — OTP: '+d.otp,'success');
+    startResendTimer();document.querySelector('.otp-input').focus();
+    if(d.otp)showMsg('Dev mode — OTP: '+d.otp,'success');
   })
-  .catch(function(){ showMsg('Network error. Please try again.','error'); setLoading('sendOtpBtn',false,'Send OTP →'); document.getElementById('sendOtpBtn').disabled=false; });
+  .catch(function(){showMsg('Network error. Please try again.','error');setLoading('sendOtpBtn',false,'Send OTP →');});
 }
 
-function otpInput(el) {
-  el.value = el.value.replace(/\D/g,'');
-  el.classList.toggle('filled', el.value !== '');
-  var idx = parseInt(el.dataset.idx);
-  if (el.value && idx < 5) document.querySelectorAll('.otp-input')[idx+1].focus();
-  updateVerifyBtn();
-}
-function otpKeydown(e, el) {
-  var idx = parseInt(el.dataset.idx);
-  if (e.key === 'Backspace' && !el.value && idx > 0) {
-    var prev = document.querySelectorAll('.otp-input')[idx-1];
-    prev.value=''; prev.classList.remove('filled'); prev.focus(); updateVerifyBtn();
-  }
-}
-function otpPaste(e) {
-  e.preventDefault();
-  var text = (e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
-  var boxes = document.querySelectorAll('.otp-input');
-  text.split('').forEach(function(ch,i){ if(boxes[i]){boxes[i].value=ch;boxes[i].classList.add('filled');} });
-  if (boxes[Math.min(text.length,5)]) boxes[Math.min(text.length,5)].focus();
-  updateVerifyBtn();
-}
-function getOtp() { return Array.from(document.querySelectorAll('.otp-input')).map(function(b){return b.value;}).join(''); }
-function updateVerifyBtn() {
-  var otp=getOtp(), name=document.getElementById('nameInput').value.trim();
-  document.getElementById('verifyBtn').disabled = !(otp.length===6 && (!isNewUser||name.length>=2));
-}
+function otpInput(el){el.value=el.value.replace(/\D/g,'');el.classList.toggle('filled',el.value!=='');var idx=parseInt(el.dataset.idx);if(el.value&&idx<5)document.querySelectorAll('.otp-input')[idx+1].focus();updateVerifyBtn();}
+function otpKeydown(e,el){var idx=parseInt(el.dataset.idx);if(e.key==='Backspace'&&!el.value&&idx>0){var prev=document.querySelectorAll('.otp-input')[idx-1];prev.value='';prev.classList.remove('filled');prev.focus();updateVerifyBtn();}}
+function otpPaste(e){e.preventDefault();var text=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);var boxes=document.querySelectorAll('.otp-input');text.split('').forEach(function(ch,i){if(boxes[i]){boxes[i].value=ch;boxes[i].classList.add('filled');}});if(boxes[Math.min(text.length,5)])boxes[Math.min(text.length,5)].focus();updateVerifyBtn();}
+function getOtp(){return Array.from(document.querySelectorAll('.otp-input')).map(function(b){return b.value;}).join('');}
+function updateVerifyBtn(){var otp=getOtp(),name=document.getElementById('nameInput').value.trim();document.getElementById('verifyBtn').disabled=!(otp.length===6&&(!isNewUser||name.length>=2));}
 
-function verifyOtp() {
-  var otp=getOtp(), name=document.getElementById('nameInput').value.trim();
-  if (otp.length!==6) return;
-  hideMsg(); setLoading('verifyBtn',true,'Verify & Login →');
-  fetch('/api/otp/verify', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({phone:currentPhone,otp,name}) })
+function verifyOtp(){
+  var otp=getOtp(),name=document.getElementById('nameInput').value.trim();
+  if(otp.length!==6)return;
+  hideMsg();setLoading('verifyBtn',true,'Verify & Login →');
+  fetch('/api/otp/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:currentPhone,otp,name})})
   .then(function(r){return r.json();})
   .then(function(d){
-    if (!d.success) { showMsg(d.error||'Verification failed.','error'); setLoading('verifyBtn',false,'Verify & Login →'); updateVerifyBtn(); document.getElementById('otpBoxes').classList.add('shake'); setTimeout(function(){document.getElementById('otpBoxes').classList.remove('shake');},500); return; }
+    if(!d.success){showMsg(d.error||'Verification failed.','error');setLoading('verifyBtn',false,'Verify & Login →');updateVerifyBtn();document.getElementById('otpBoxes').classList.add('shake');setTimeout(function(){document.getElementById('otpBoxes').classList.remove('shake');},500);return;}
     try{localStorage.setItem('abUserCache',JSON.stringify({user:d.user,ts:Date.now()}));}catch(e){}
-    window.location.href = nextUrl;
+    window.location.href=nextUrl;
   })
-  .catch(function(){ showMsg('Network error. Please try again.','error'); setLoading('verifyBtn',false,'Verify & Login →'); updateVerifyBtn(); });
+  .catch(function(){showMsg('Network error.','error');setLoading('verifyBtn',false,'Verify & Login →');updateVerifyBtn();});
 }
 
-function startResendTimer() {
+function startResendTimer(){
   var secs=30;
-  document.getElementById('resendTimer').classList.remove('hidden');
-  document.getElementById('resendBtn').classList.add('hidden');
+  document.getElementById('resendTimer').classList.remove('hidden');document.getElementById('resendBtn').classList.add('hidden');
   clearInterval(resendTimer);
-  resendTimer = setInterval(function(){
-    secs--;
-    document.getElementById('timerCount').textContent=secs+'s';
-    if(secs<=0){clearInterval(resendTimer);document.getElementById('resendTimer').classList.add('hidden');document.getElementById('resendBtn').classList.remove('hidden');}
-  },1000);
+  resendTimer=setInterval(function(){secs--;document.getElementById('timerCount').textContent=secs+'s';if(secs<=0){clearInterval(resendTimer);document.getElementById('resendTimer').classList.add('hidden');document.getElementById('resendBtn').classList.remove('hidden');}},1000);
 }
-function resendOtp() {
-  currentPhone=document.getElementById('phoneInput').value.replace(/\D/g,'');
-  document.querySelectorAll('.otp-input').forEach(function(b){b.value='';b.classList.remove('filled');});
-  hideMsg(); sendOtpRequest();
-}
-function sendOtpRequest() {
+function resendOtp(){currentPhone=document.getElementById('phoneInput').value.replace(/\D/g,'');document.querySelectorAll('.otp-input').forEach(function(b){b.value='';b.classList.remove('filled');});hideMsg();sendOtpRequest();}
+function sendOtpRequest(){
   fetch('/api/otp/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:currentPhone})})
   .then(function(r){return r.json();})
-  .then(function(d){
-    if(d.success){showMsg('OTP resent successfully!','success');startResendTimer();if(d.otp)showMsg('Dev mode — OTP: '+d.otp,'success');}
-    else{showMsg(d.error||'Failed to resend OTP.','error');}
-  })
-  .catch(function(){showMsg('Network error. Try again.','error');});
+  .then(function(d){if(d.success){showMsg('OTP resent!','success');startResendTimer();if(d.otp)showMsg('Dev mode — OTP: '+d.otp,'success');}else{showMsg(d.error||'Failed.','error');}})
+  .catch(function(){showMsg('Network error.','error');});
 }
 
-function showRegisterForm() { document.getElementById('loginForm').classList.add('hidden'); document.getElementById('registerForm').classList.remove('hidden'); hideMsg(); }
-function showLoginForm()    { document.getElementById('registerForm').classList.add('hidden'); document.getElementById('loginForm').classList.remove('hidden'); hideMsg(); }
-
-if (new URLSearchParams(window.location.search).get('mode')==='register') switchAuthTab('reg');
-
-function goBack() {
-  clearInterval(resendTimer); hideMsg();
-  document.getElementById('step2').classList.add('hidden');
-  document.getElementById('step1').classList.remove('hidden');
-  document.querySelectorAll('.otp-input').forEach(function(b){b.value='';b.classList.remove('filled');});
-  document.getElementById('sendOtpBtn').disabled=false;
-  document.getElementById('sendOtpBtn').innerHTML='Send OTP →';
+function openRegisterModal(){
+  document.getElementById('registerModal').style.display='flex';
+  document.body.style.overflow='hidden';
 }
-
-/* ── Form Validation ── */
-function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); }
-function isValidPhone(v) { return /^\d{10}$/.test(v.trim()); }
-
-function fieldErr(inputEl, spanId, msg) {
-  inputEl.classList.add('error');
-  var s=document.getElementById(spanId); s.textContent=msg; s.classList.remove('hidden');
-  return false;
+function closeRegisterModal(){
+  document.getElementById('registerModal').style.display='none';
+  document.body.style.overflow='';
 }
-function fieldOk(inputEl, spanId) {
-  inputEl.classList.remove('error');
-  var s=document.getElementById(spanId); s.textContent=''; s.classList.add('hidden');
-}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeRegisterModal();});
+if(new URLSearchParams(window.location.search).get('mode')==='register'){switchAuthTab('pass');openRegisterModal();}
 
-['loginEmail','passInput','regPName','regPEmail','regPPhone','regPPass','regPConfirm',
- 'regRName','regREmail','regRPhone','regRPass','regRConfirm'].forEach(function(id){
+function goBack(){clearInterval(resendTimer);hideMsg();document.getElementById('step2').classList.add('hidden');document.getElementById('step1').classList.remove('hidden');document.querySelectorAll('.otp-input').forEach(function(b){b.value='';b.classList.remove('filled');});document.getElementById('sendOtpBtn').disabled=false;document.getElementById('sendOtpBtn').innerHTML='Send OTP →';}
+
+/* ── Validation ── */
+function isValidEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());}
+function isValidPhone(v){return /^\d{10}$/.test(v.trim());}
+function fieldErr(el,spanId,msg){el.classList.add('error');var s=document.getElementById(spanId);s.textContent=msg;s.classList.remove('hidden');s.style.display='block';}
+function fieldOk(el,spanId){el.classList.remove('error');var s=document.getElementById(spanId);s.textContent='';s.classList.add('hidden');s.style.display='none';}
+
+['loginEmail','passInput','regRName','regREmail','regRPhone','regRPass','regRConfirm'].forEach(function(id){
   var el=document.getElementById(id);
-  if(el) el.addEventListener('input',function(){
-    this.classList.remove('error');
-    var s=document.getElementById(id+'Err');
-    if(s){s.textContent='';s.classList.add('hidden');}
-  });
+  if(el)el.addEventListener('input',function(){this.classList.remove('error');var s=document.getElementById(id+'Err');if(s){s.textContent='';s.classList.add('hidden');s.style.display='none';}});
 });
 
 document.getElementById('loginPassForm').addEventListener('submit',function(e){
-  var ok=true;
-  var email=document.getElementById('loginEmail'), pass=document.getElementById('passInput');
-  var ev=email.value.trim();
-  fieldOk(email,'loginEmailErr'); fieldOk(pass,'loginPassErr');
-  if(!ev){ fieldErr(email,'loginEmailErr','Please enter your email or mobile number.'); ok=false; }
-  else if(!isValidEmail(ev)&&!isValidPhone(ev)){ fieldErr(email,'loginEmailErr','Enter a valid email or 10-digit mobile number.'); ok=false; }
-  if(!pass.value){ fieldErr(pass,'loginPassErr','Password is required.'); ok=false; }
-  if(!ok) e.preventDefault();
+  var ok=true,email=document.getElementById('loginEmail'),pass=document.getElementById('passInput'),ev=email.value.trim();
+  fieldOk(email,'loginEmailErr');fieldOk(pass,'loginPassErr');
+  if(!ev){fieldErr(email,'loginEmailErr','Please enter your email or mobile number.');ok=false;}
+  else if(!isValidEmail(ev)&&!isValidPhone(ev)){fieldErr(email,'loginEmailErr','Enter a valid email or 10-digit mobile number.');ok=false;}
+  if(!pass.value){fieldErr(pass,'loginPassErr','Password is required.');ok=false;}
+  if(!ok)e.preventDefault();
 });
 
-function validateRegisterForm(prefix) {
-  var name=document.getElementById(prefix+'Name'), email=document.getElementById(prefix+'Email'),
-      phone=document.getElementById(prefix+'Phone'), pass=document.getElementById(prefix+'Pass'),
-      confirm=document.getElementById(prefix+'Confirm');
-  var ok=true;
-  fieldOk(name,prefix+'NameErr'); fieldOk(email,prefix+'EmailErr');
-  fieldOk(phone,prefix+'PhoneErr'); fieldOk(pass,prefix+'PassErr'); fieldOk(confirm,prefix+'ConfirmErr');
-
+function validateRegForm(prefix){
+  var name=document.getElementById(prefix+'Name'),email=document.getElementById(prefix+'Email'),phone=document.getElementById(prefix+'Phone'),pass=document.getElementById(prefix+'Pass'),confirm=document.getElementById(prefix+'Confirm'),ok=true;
+  fieldOk(name,prefix+'NameErr');fieldOk(email,prefix+'EmailErr');fieldOk(phone,prefix+'PhoneErr');fieldOk(pass,prefix+'PassErr');fieldOk(confirm,prefix+'ConfirmErr');
   var nv=name.value.trim();
-  if(!nv){ fieldErr(name,prefix+'NameErr','Full name is required.'); ok=false; }
-  else if(nv.length<2){ fieldErr(name,prefix+'NameErr','Name must be at least 2 characters.'); ok=false; }
-
+  if(!nv){fieldErr(name,prefix+'NameErr','Full name is required.');ok=false;}else if(nv.length<2){fieldErr(name,prefix+'NameErr','Name must be at least 2 characters.');ok=false;}
   var ev=email.value.trim();
-  if(!ev){ fieldErr(email,prefix+'EmailErr','Email address is required.'); ok=false; }
-  else if(!isValidEmail(ev)){ fieldErr(email,prefix+'EmailErr','Enter a valid email (e.g. you@example.com).'); ok=false; }
-
+  if(!ev){fieldErr(email,prefix+'EmailErr','Email is required.');ok=false;}else if(!isValidEmail(ev)){fieldErr(email,prefix+'EmailErr','Enter a valid email (e.g. you@example.com).');ok=false;}
   var pv=phone.value.trim();
-  if(pv&&!isValidPhone(pv)){ fieldErr(phone,prefix+'PhoneErr','Mobile number must be exactly 10 digits.'); ok=false; }
-
+  if(pv&&!isValidPhone(pv)){fieldErr(phone,prefix+'PhoneErr','Mobile number must be exactly 10 digits.');ok=false;}
   var pw=pass.value;
-  if(!pw){ fieldErr(pass,prefix+'PassErr','Password is required.'); ok=false; }
-  else if(pw.length<6){ fieldErr(pass,prefix+'PassErr','Password must be at least 6 characters.'); ok=false; }
-
-  if(!confirm.value){ fieldErr(confirm,prefix+'ConfirmErr','Please confirm your password.'); ok=false; }
-  else if(confirm.value!==pass.value){ fieldErr(confirm,prefix+'ConfirmErr','Passwords do not match.'); ok=false; }
+  if(!pw){fieldErr(pass,prefix+'PassErr','Password is required.');ok=false;}else if(pw.length<6){fieldErr(pass,prefix+'PassErr','Password must be at least 6 characters.');ok=false;}
+  if(!confirm.value){fieldErr(confirm,prefix+'ConfirmErr','Please confirm your password.');ok=false;}else if(confirm.value!==pw){fieldErr(confirm,prefix+'ConfirmErr','Passwords do not match.');ok=false;}
   return ok;
 }
-
-document.getElementById('registerPassForm').addEventListener('submit',function(e){ if(!validateRegisterForm('regP')) e.preventDefault(); });
-document.getElementById('registerRegForm').addEventListener('submit',function(e){ if(!validateRegisterForm('regR')) e.preventDefault(); });
+document.getElementById('registerRegForm').addEventListener('submit',function(e){if(!validateRegForm('regR'))e.preventDefault();});
 </script>
 </html>
